@@ -175,4 +175,24 @@ public/og/                               # OG 이미지 (07_SEO)
 | iOS Safari getUserMedia 제약 (PWA/인앱브라우저) | 기능 감지 후 Translate로 폴백 유도 |
 | 디스플레이마다 색 재현 차이 | Find My View 시작 화면에 밝기 안내, 결과를 "Most likely"로만 표현 |
 | 번역 결과가 부자연스러움 | strength 기본 80% + 슬라이더, 당사자 피드백 루프 |
+
+## 9. 구현 현황 (2026-07-20)
+
+현재 브라우저 안에서 동작하는 MVP 기반이 구현되어 있다.
+
+| 영역 | 구현 내용 | 상태 |
+|---|---|---|
+| 색 변환 | sRGB/linear 변환, Machado 기반 Protan·Deutan 시뮬레이션, Tritan 처리, daltonization 및 단위 테스트 | 완료 |
+| Translate / Simulate | 파일 선택·드래그앤드롭·붙여넣기·모바일 카메라 입력, 최대 4096px 리사이즈, Canvas 변환, 비교 슬라이더, PNG 저장 | 완료 |
+| 이미지 전달 | Home에서 선택한 이미지를 세션 한정 `sessionStorage`로 Translate에 전달한 뒤 즉시 제거 | 완료 |
+| Find My View | 12문항 퀵 체크, 답변 보류, 유형 추정, 로컬 기본값 저장 및 Translate/Learn 연결 | 완료 |
+| Live Camera | `getUserMedia`, 전·후면 전환, 중앙 픽셀의 HEX/RGB 표시, 권한 거절 폴백 | 완료 |
+| Learn | 유형별 정적 콘텐츠와 FAQPage 구조화 데이터 | 완료 |
+
+### 다음 구현 우선순위
+
+1. Live Camera의 실시간 Translate/Simulate WebGL 필터와 색 이름 사전
+2. 이미지 변환 Web Worker 및 저사양 기기 메모리 폴백
+3. HEIC 입력 변환, Web Share API, 붙여넣기/모바일 실기기 E2E 검증
+4. Find My View의 런타임 도트 패턴 생성 및 실제 사용자 검증을 통한 문항 보정
 | 대형 이미지 메모리 (구형 모바일) | 4096 → 2048px 단계적 폴백 |

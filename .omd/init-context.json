@@ -1,0 +1,18 @@
+{
+  "reference_id": "airbnb",
+  "reference_secondary_id": "29cm",
+  "description": "사랑하는 사람에게 사진의 아름다움을 '그 사람이 볼 수 있는 색'으로 번역해 선물처럼 전하는 감성적 서비스 (Iris). warm/calm/honest/minimal 톤, 병원·검사지 무드 절대 금지.",
+  "mode": "inspired",
+  "delta_set": {
+    "axes": {},
+    "voiceHints": [
+      "airbnb: photography-first, chrome recedes, warm minimalism, forbids urgency/transactional language",
+      "29cm: whitespace as brand asset, editorial restraint, secondary info (numbers/labels) subordinate to image, ~해요 friendly-formal register"
+    ],
+    "matchedKeywords": ["warm", "editorial", "calm", "soft", "honest", "considered"],
+    "warnings": [
+      "No axis-based color delta applied — project already has fully specified tokens in docs/03_UI_UX.md (warm off-white bg, deep navy primary, warm sand accent). References used for structure/voice/layout philosophy only, not token values."
+    ]
+  },
+  "bootstrapped_at": "2026-07-19"
+}

@@ -26,15 +26,21 @@ M5 ─ 계측 + 베타 + 런칭          (1주)
 - Web Worker 처리, 에러/엣지 케이스 ([02_PRD.md](02_PRD.md) 3.2)
 - ✅ 완료 기준: 모바일 실기기에서 Flow A 전체가 동작
 
+**구현 메모 (2026-07-20):** Translate/Simulate 공용 에디터의 업로드·Canvas 처리·비교·저장까지 구현했다. 홈에서 선택한 이미지는 세션 한정으로 Translate에 이어진다. 실제 모바일 기기 E2E와 HEIC/Web Share 처리는 다음 검증 항목으로 남긴다.
+
 ### M2 — Simulate + Find My View (~8/23)
 - Simulate 페이지 (에디터 컴포넌트 재사용)
 - Find My View: 문항 생성(도트 패턴 SVG, confusion line 색 쌍), 판정, 결과 저장, 공유 링크
 - ✅ 완료 기준: FMV 결과가 Translate 기본값으로 이어지는 Flow B 동작
 
+**구현 메모 (2026-07-20):** Simulate 비교 흐름과 Find My View 12문항/로컬 설정 저장/Translate 연결을 구현했다. 도트 패턴 기반 문항과 실제 사용자 검증은 후속 보정이 필요하다.
+
 ### M3 — Live Camera (~9/2)
 - getUserMedia + WebGL shader 필터(off/translate/simulate), Color Picker + 색 이름
 - iOS Safari 실기기 검증 (최대 리스크 구간 — 안 되면 P1 기능 축소)
 - ✅ 완료 기준: iPhone/Android 실기기에서 30fps 필터 + 색 이름 표시
+
+**구현 메모 (2026-07-20):** 카메라 권한·전후면 전환·중앙 색의 HEX/RGB 표시는 구현했다. 실시간 필터, 색 이름, 모바일 30fps 검증은 아직 남아 있다.
 
 ### M4 — Learn + SEO + 폴리시 (~9/16)
 - Learn 3종 + FAQ (EN/KO), 메타/hreflang/sitemap/structured data/OG ([07_SEO.md](07_SEO.md))

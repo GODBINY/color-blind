@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@theme {
+  /* colors — DESIGN.md §2 */
+  --color-bg: #f8f6f2;
+  --color-surface: #ffffff;
+  --color-primary: #243447;
+  --color-accent: #e6b17e;
+  --color-text-sub: #6b7280;
+  --color-border: #e5e1da;
+  --color-error: #b4534b;
+  --color-success: #4e7a5a;
+
+  /* spacing — DESIGN.md §5, 4px base scale */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 24px;
+  --spacing-6: 32px;
+  --spacing-7: 48px;
+  --spacing-8: 64px;
+  --spacing-9: 96px;
+
+  /* radius — DESIGN.md §5 */
+  --radius-s: 8px;
+  --radius-m: 12px;
+  --radius-l: 20px;
+  --radius-full: 9999px;
+
+  /* shadow — DESIGN.md §6, warm navy-tinted */
+  --shadow-s: 0 1px 2px rgba(36, 52, 71, 0.06);
+  --shadow-m: 0 4px 12px rgba(36, 52, 71, 0.08);
+  --shadow-l: 0 12px 32px rgba(36, 52, 71, 0.12);
+
+  /* motion — DESIGN.md §15 */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 500ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* type — DESIGN.md §3. Self-hosted Pretendard/Inter files not sourced yet,
+     falls back to system-ui until the asset pass adds them. */
+  --font-sans-ko: "Pretendard Variable", system-ui, sans-serif;
+  --font-sans-en: "Inter", system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-primary);
+  font-family: var(--font-sans-ko);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 55%, white);
+  color: var(--color-primary);
+}
+
+a:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent) 72%, white);
+  outline-offset: 3px;
+}
+
+.iris-grid {
+  background-image: linear-gradient(
+      color-mix(in srgb, var(--color-primary) 5%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-primary) 5%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 32px 32px;
+}
+
+.iris-photo {
+  background:
+    radial-gradient(circle at 68% 30%, rgba(255, 255, 255, 0.85) 0 4%, transparent 4.5%),
+    radial-gradient(circle at 66% 33%, #d56f5c 0 7%, transparent 7.5%),
+    radial-gradient(circle at 74% 35%, #c85552 0 8%, transparent 8.5%),
+    radial-gradient(circle at 69% 43%, #dc8163 0 9%, transparent 9.5%),
+    radial-gradient(ellipse at 25% 76%, #5f8a6b 0 20%, transparent 20.5%),
+    radial-gradient(ellipse at 45% 70%, #6c9574 0 23%, transparent 23.5%),
+    linear-gradient(145deg, #dcbf8f 0%, #e7cf9d 34%, #a8bb8b 35%, #789769 100%);
+}
+
+.iris-photo--translated {
+  background:
+    radial-gradient(circle at 68% 30%, rgba(255, 255, 255, 0.85) 0 4%, transparent 4.5%),
+    radial-gradient(circle at 66% 33%, #c978c1 0 7%, transparent 7.5%),
+    radial-gradient(circle at 74% 35%, #a963b0 0 8%, transparent 8.5%),
+    radial-gradient(circle at 69% 43%, #d28ac8 0 9%, transparent 9.5%),
+    radial-gradient(ellipse at 25% 76%, #7d8db3 0 20%, transparent 20.5%),
+    radial-gradient(ellipse at 45% 70%, #8b9bc0 0 23%, transparent 23.5%),
+    linear-gradient(145deg, #d9c69a 0%, #decda6 34%, #9eacc4 35%, #6f82aa 100%);
+}
+
+.iris-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.22), transparent 38%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

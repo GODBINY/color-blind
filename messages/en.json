@@ -1,0 +1,62 @@
+{
+  "Nav": {
+    "brand": "Iris",
+    "languageNav": "Language selection",
+    "privacy": "Your photos never leave this device."
+  },
+  "Home": {
+    "eyebrow": "A little closer, through color",
+    "tagline": "Share the beauty you see —\nin colors they can see.",
+    "intro": "Begin with one photo. Carry the details they might miss into colors they can distinguish.",
+    "cta": "Upload a photo",
+    "uploadError": "Choose a JPG, PNG, or WebP image under 20MB.",
+    "secondaryCta": "See through their eyes",
+    "privacy": "Your photos never leave your device. Every transformation happens here.",
+    "before": "Their view",
+    "after": "Translated",
+    "visualCaption": "Drag to notice what changes",
+    "exploreEyebrow": "Explore Iris",
+    "exploreTitle": "A few ways to share a view",
+    "exploreBody": "Start with a photograph, then get closer to another way of seeing.",
+    "tileSimulate": "Their eyes",
+    "tileSimulateBody": "See the same scene from another view",
+    "tileLive": "Live Camera",
+    "tileLiveBody": "Name the colors around you, right now",
+    "tileFindMyView": "Find My View",
+    "tileFindMyViewBody": "Gently learn how you see color",
+    "tileLearn": "Learn",
+    "tileLearnBody": "Read about the many ways we see"
+  },
+  "RouteStub": {
+    "back": "Back home",
+    "preparing": "This screen is still being prepared",
+    "translate": {
+      "title": "Translate",
+      "body": "We translate your photo into colors they can see"
+    },
+    "simulate": {
+      "title": "Their eyes",
+      "body": "See the world of color the way they see it"
+    },
+    "live": {
+      "title": "Live Camera",
+      "body": "See the colors around you, right now, through the camera"
+    },
+    "findMyView": {
+      "title": "Find My View",
+      "body": "A few questions to find out how your eyes see color"
+    },
+    "learn": {
+      "title": "Learn",
+      "body": "Learn about the many ways people see color"
+    },
+    "learnType": {
+      "title": "Learn",
+      "body": "How each type sees color differently"
+    },
+    "learnFaq": {
+      "title": "FAQ",
+      "body": "Answers to common questions"
+    }
+  }
+}
