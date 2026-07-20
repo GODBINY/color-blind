@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { HomeUpload } from "@/components/ui/HomeUpload";
+import { HeroCompare } from "@/components/ui/HeroCompare";
 
 const TILES = [
   { key: "tileSimulate", href: "/simulate", index: "01" },
@@ -39,19 +40,7 @@ export default async function HomePage({
           <p className="mt-5 text-[13px] leading-5 text-[var(--color-text-sub)]">{t("privacy")}</p>
         </div>
 
-        <div className="relative mx-auto w-full max-w-[560px] rounded-[var(--radius-l)] border border-white/80 bg-white p-3 shadow-[var(--shadow-l)]">
-          <div className="relative aspect-[1.08/1] overflow-hidden rounded-[15px]">
-            <div className="iris-photo absolute inset-0" />
-            <div className="iris-photo iris-photo--translated absolute inset-y-0 right-0 w-[48%]" />
-            <div className="absolute inset-y-0 left-[48%] z-10 w-px bg-white shadow-[0_0_0_1px_rgba(36,52,71,0.13)]" />
-            <div className="absolute left-[calc(48%-18px)] top-1/2 z-20 grid size-9 -translate-y-1/2 place-items-center rounded-full border border-white bg-[var(--color-primary)] text-[11px] text-white shadow-[var(--shadow-m)]">↔</div>
-            <div className="absolute bottom-4 left-4 z-20 rounded-full bg-white/90 px-3 py-1.5 text-[12px] font-medium text-[var(--color-primary)] backdrop-blur">{t("before")}</div>
-            <div className="absolute bottom-4 right-4 z-20 rounded-full bg-[var(--color-primary)] px-3 py-1.5 text-[12px] font-medium text-white">{t("after")}</div>
-          </div>
-          <div className="flex items-center justify-between px-2 pb-1 pt-4 text-[13px] text-[var(--color-text-sub)]">
-            <span>{t("visualCaption")}</span><span aria-hidden="true">↔</span>
-          </div>
-        </div>
+        <HeroCompare before={t("before")} after={t("after")} hint={t("visualCaption")} />
       </section>
 
       <section className="mx-auto max-w-[1184px] px-5 pb-20 md:px-8 md:pb-28">

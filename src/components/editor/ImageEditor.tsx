@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { takePendingImage } from "@/lib/pending-image";
 import {
   clamp01,
   daltonize,
@@ -134,12 +135,8 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
   }, [text.invalid, text.resized, text.tooLarge]);
 
   useEffect(() => {
-    const pending = window.sessionStorage.getItem("iris:pending-image");
-    if (!pending?.startsWith("data:image/")) return;
-    window.sessionStorage.removeItem("iris:pending-image");
-    fetch(pending)
-      .then((response) => response.blob())
-      .then((blob) => loadFile(new File([blob], "iris-photo.png", { type: blob.type || "image/png" })))
+    void takePendingImage()
+      .then((file) => file && loadFile(file))
       .catch(() => setNotice(text.invalid));
   }, [loadFile, text.invalid]);
 
@@ -334,18 +331,29 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
             {mode === "translate" && view === "theirs" && <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#f5e7d8] px-3 py-2 text-[13px] font-medium"><span aria-hidden="true">◉</span>{text.viewing(typeLabels[visionType])}</p>}
             <div className="mb-3 flex items-center justify-between text-[13px] font-medium text-[var(--color-text-sub)]"><span>{leftLabel}</span><span>{rightLabel}</span></div>
             <div
-              className="relative overflow-hidden rounded-[var(--radius-l)] bg-[var(--color-primary)] shadow-[var(--shadow-m)]"
+              role="slider"
+              tabIndex={0}
+              aria-label={text.compareHint}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(divider)}
+              className="relative cursor-ew-resize touch-none select-none overflow-hidden rounded-[var(--radius-l)] bg-[var(--color-primary)] shadow-[var(--shadow-m)] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3"
               style={{ aspectRatio: `${dimensions.width} / ${dimensions.height}` }}
-              onPointerDown={(event) => { setDragging(true); event.currentTarget.setPointerCapture(event.pointerId); updateDivider(event.clientX, event.currentTarget); }}
-              onPointerMove={(event) => { if (dragging) updateDivider(event.clientX, event.currentTarget); }}
-              onPointerUp={() => setDragging(false)}
+              onPointerDown={(event) => { event.preventDefault(); setDragging(true); event.currentTarget.setPointerCapture(event.pointerId); updateDivider(event.clientX, event.currentTarget); }}
+              onPointerMove={(event) => { if (dragging) { event.preventDefault(); updateDivider(event.clientX, event.currentTarget); } }}
+              onPointerUp={(event) => { setDragging(false); event.currentTarget.releasePointerCapture(event.pointerId); }}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowLeft" || event.key === "ArrowDown") { event.preventDefault(); setDivider((value) => Math.max(0, value - 5)); }
+                if (event.key === "ArrowRight" || event.key === "ArrowUp") { event.preventDefault(); setDivider((value) => Math.min(100, value + 5)); }
+                if (event.key === "Home") { event.preventDefault(); setDivider(0); }
+                if (event.key === "End") { event.preventDefault(); setDivider(100); }
+              }}
             >
-              {compareLeft && <img src={compareLeft} alt={leftLabel} className="absolute inset-0 size-full object-contain" />}
-              {compareRight && <img src={compareRight} alt={rightLabel} className="absolute inset-0 size-full object-contain" style={{ clipPath: `inset(0 0 0 ${divider}%)` }} />}
+              {compareLeft && <img src={compareLeft} alt={leftLabel} draggable={false} className="pointer-events-none absolute inset-0 size-full object-contain" />}
+              {compareRight && <img src={compareRight} alt={rightLabel} draggable={false} className="pointer-events-none absolute inset-0 size-full object-contain" style={{ clipPath: `inset(0 0 0 ${divider}%)` }} />}
               <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 z-10 w-px bg-white shadow-[0_0_0_1px_rgba(36,52,71,0.2)]" style={{ left: `${divider}%` }}>
                 <span className="absolute left-1/2 top-1/2 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-[var(--color-border)] bg-white text-[var(--color-primary)] shadow-[var(--shadow-m)]">↔</span>
               </div>
-              <input type="range" min="0" max="100" value={divider} aria-label={text.compareHint} onChange={(event) => setDivider(Number(event.target.value))} className="absolute inset-y-0 z-20 w-11 -translate-x-1/2 cursor-ew-resize opacity-0" style={{ left: `${divider}%` }} />
             </div>
             <p className="mt-3 text-[13px] leading-5 text-[var(--color-text-sub)]">{text.compareHint}</p>
             <p className="mt-6 flex items-center gap-2 text-[13px] leading-5 text-[var(--color-text-sub)]"><span aria-hidden="true">⌁</span>{text.privacy}</p>
