@@ -2,7 +2,9 @@
   "Nav": {
     "brand": "NUNBIT",
     "languageNav": "Elegir idioma",
-    "privacy": "Tus fotos no salen de este dispositivo."
+    "privacy": "Tus fotos no salen de este dispositivo.",
+    "supportMessage": "Si NUNBIT te ayudó a compartir un poco más de color, tu apoyo nos ayuda a seguir creando.",
+    "supportCta": "Apoya a NUNBIT en Ko-fi"
   },
   "Home": {
     "eyebrow": "Un poco más cerca, a través del color",
@@ -29,6 +31,7 @@
     "tileLearn": "Learn",
     "tileLearnBody": "Lee sobre las distintas formas de ver",
     "colorPickCta": "Extract HEX & RGB from an image",
+    "colorPickCtaBody": "Elige un punto de la imagen para guardar su nombre de color y valores HEX y RGB.",
     "tileTranslate": "Translate a photo for their view",
     "tileTranslateBody": "Make color differences easier to distinguish.",
     "tileColorPick": "Image color extraction tool",

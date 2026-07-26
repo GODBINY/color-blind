@@ -79,9 +79,15 @@ export default async function LocaleLayout({
             </nav>
           </header>
           {children}
-          <footer className="mx-auto flex max-w-[1184px] flex-col gap-3 border-t border-[var(--color-border)] px-5 py-8 text-[13px] leading-5 text-[var(--color-text-sub)] md:flex-row md:items-center md:justify-between md:px-8">
+          <footer className="mx-auto flex max-w-[1184px] flex-col gap-6 border-t border-[var(--color-border)] px-5 py-8 text-[13px] leading-5 text-[var(--color-text-sub)] md:flex-row md:items-center md:justify-between md:px-8">
             <p>{t("privacy")}</p>
-            <p>© {new Date().getFullYear()} NUNBIT</p>
+            <div className="flex flex-col items-start gap-3 md:items-end">
+              <p className="max-w-[340px] md:text-right">{t("supportMessage")}</p>
+              <a href="https://ko-fi.com/C1Y623WBYN" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-[var(--radius-s)] border border-[var(--color-border)] bg-[var(--color-surface)] px-4 text-[13px] font-medium text-[var(--color-primary)] transition-colors hover:bg-[var(--color-bg)] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3">
+                <span aria-hidden="true">♡</span>{t("supportCta")}<span aria-hidden="true">↗</span>
+              </a>
+              <p>© {new Date().getFullYear()} NUNBIT</p>
+            </div>
           </footer>
         </NextIntlClientProvider>
       </body>

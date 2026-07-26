@@ -2,7 +2,9 @@
   "Nav": {
     "brand": "NUNBIT",
     "languageNav": "Language selection",
-    "privacy": "Your photos never leave this device."
+    "privacy": "Your photos never leave this device.",
+    "supportMessage": "If NUNBIT helped you share a little more color, your support helps us keep building.",
+    "supportCta": "Support NUNBIT on Ko-fi"
   },
   "Home": {
     "eyebrow": "A little closer, through color",
@@ -18,6 +20,7 @@
     "after": "Translated",
     "visualCaption": "Drag to notice what changes",
     "colorPickCta": "Extract HEX & RGB from an image",
+    "colorPickCtaBody": "Click a point in an image to record its color name, HEX, and RGB values.",
     "exploreEyebrow": "Choose a task",
     "exploreTitle": "What would you like to do?",
     "exploreBody": "See a photo together, check a color, or keep the values you need.",

@@ -2,7 +2,9 @@
   "Nav": {
     "brand": "NUNBIT",
     "languageNav": "選擇語言",
-    "privacy": "相片不會離開這台裝置。"
+    "privacy": "相片不會離開這台裝置。",
+    "supportMessage": "如果 NUNBIT 讓你多分享了一點色彩，歡迎支持我們繼續前進。",
+    "supportCta": "在 Ko-fi 支持 NUNBIT"
   },
   "Home": {
     "eyebrow": "透過色彩，靠近一點",
@@ -29,6 +31,7 @@
     "tileLearn": "Learn",
     "tileLearnBody": "閱讀關於不同色彩視覺的故事",
     "colorPickCta": "Extract HEX & RGB from an image",
+    "colorPickCtaBody": "點選圖片中的位置，記錄顏色名稱、HEX 與 RGB 數值。",
     "tileTranslate": "Translate a photo for their view",
     "tileTranslateBody": "Make color differences easier to distinguish.",
     "tileColorPick": "Image color extraction tool",

@@ -409,3 +409,18 @@ source_context: "src/app/[locale]/page.tsx, src/components/editor/ImageEditor.ts
 ```
 
 Do not expose a separate view-checking entry when it repeats the same upload-and-comparison flow. The homepage should lead with photo translation and image HEX/RGB extraction only.
+
+## 2026-07-26T12:46:04.000Z — keep-external-support-ui-in-nunbit-palette
+
+```omd-meta
+id: pref_ms1skg1h_1e297753
+timestamp: 2026-07-26T12:46:04.000Z
+scope: color
+signal: user-statement
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/layout.tsx"
+```
+
+External support links must use NUNBIT’s own plum, berry, and lavender-white palette rather than the platform’s default brand colours.
