@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getLearnIndex } from "@/lib/learn/content";
 import { getLocalizedLearnName } from "@/lib/learn/content";
@@ -22,6 +22,7 @@ export default async function LearnPage({
   setRequestLocale(locale);
   const isKo = locale === "ko";
   const page = getLearnIndex(locale);
+  const nav = await getTranslations("Nav");
 
   return <main className="mx-auto max-w-[1120px] px-5 pb-20 pt-8 md:px-8 md:pb-28 md:pt-16">
     <section className="max-w-[700px]">
@@ -40,6 +41,10 @@ export default async function LearnPage({
     <section className="mt-16 grid gap-6 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-white p-6 shadow-[var(--shadow-s)] md:grid-cols-[1fr_auto] md:items-center md:p-8">
       <div><p className="text-[13px] font-medium text-[var(--color-text-sub)]">FAQ</p><h2 className="mt-2 text-[22px] font-semibold tracking-[-0.03em]">{isKo ? "궁금한 점을 차분히 풀어봐요" : "A few gentle answers"}</h2><p className="mt-2 text-[14px] leading-6 text-[var(--color-text-sub)]">{isKo ? "색을 다르게 보는 일, 그리고 사진을 함께 나누는 일에 대한 질문을 모았어요." : "Questions about seeing color differently, and sharing a photo with care."}</p></div>
       <Link href="/learn/faq" className="inline-flex min-h-12 items-center justify-center rounded-[var(--radius-m)] border border-[var(--color-border)] px-5 text-[15px] font-medium">{isKo ? "FAQ 보기" : "Read the FAQ"}</Link>
+    </section>
+    <section className="mt-6 flex flex-col gap-5 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 md:flex-row md:items-center md:justify-between md:p-8">
+      <p className="max-w-[580px] text-[16px] leading-[26px] text-[var(--color-text-sub)]">{nav("supportMessage")}</p>
+      <a href="https://ko-fi.com/C1Y623WBYN" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 self-start rounded-[var(--radius-m)] border border-[var(--color-border)] bg-[var(--color-surface)] px-5 text-[15px] font-medium text-[var(--color-primary)] transition-colors hover:bg-white focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3 md:self-auto"><span aria-hidden="true">♡</span>{nav("supportCta")}<span aria-hidden="true">↗</span></a>
     </section>
   </main>;
 }

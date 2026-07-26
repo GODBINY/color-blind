@@ -105,7 +105,7 @@ Shadow (은은하게, 병원 느낌의 flat 회색 금지):
 | `QuizCard` | idle / selected / answered | Find My View 문항. 고정 색값의 자체 제작 3카드 비교를 사용하며, 공식 Ishihara 플레이트나 진단 이미지를 복제하지 않는다. 선택 표시는 테두리 + 화살표 아이콘 |
 | `Toast` | info / error | 하단 중앙, 4s 자동 소멸, 아이콘+문구 |
 | `LangSwitch` | - | EN/KO 토글, 헤더 우측 |
-| `Footer` | - | 프라이버시 문구와 저작권, 그리고 Ko-fi 외부 링크로 열리는 작은 응원 버튼. 플랫폼 기본 파랑 대신 NUNBIT의 plum 잉크·lavender-white 토큰을 사용하고, 응원 문구와 버튼 라벨은 현재 언어에 맞춘다. |
+| `Footer` | - | 프라이버시 문구와 저작권, 그리고 Ko-fi 외부 링크로 열리는 작은 응원 버튼. 플랫폼 기본 파랑 대신 NUNBIT의 plum 잉크·lavender-white 토큰을 사용하고, 응원 문구와 버튼 라벨은 현재 언어에 맞춘다. 홈 히어로의 행동 영역 뒤와 Learn의 FAQ 뒤에도 같은 링크를 맥락에 맞게 한 번씩 노출한다. |
 
 ### Home task menu
 

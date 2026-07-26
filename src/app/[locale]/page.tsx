@@ -40,6 +40,7 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("Home");
+  const nav = await getTranslations("Nav");
   const taskGroups = taskGroupsFor(locale);
   const schema = appSchema(locale as AppLocale);
 
@@ -65,7 +66,11 @@ export default async function HomePage({
               <p className="mt-2 min-h-10 text-[13px] leading-5 text-[var(--color-text-sub)]">{t("colorPickCtaBody")}</p>
             </div>
           </div>
-          <p className="mt-5 text-[13px] leading-5 text-[var(--color-text-sub)]">{t("privacy")}</p>
+          <div className="mt-6 max-w-[440px] border-t border-[var(--color-border)] pt-5">
+            <p className="text-[13px] leading-5 text-[var(--color-text-sub)]">{t("privacy")}</p>
+            <p className="mt-4 text-[14px] leading-6 text-[var(--color-text-sub)]">{nav("supportMessage")}</p>
+            <a href="https://ko-fi.com/C1Y623WBYN" target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-[var(--radius-s)] border border-[var(--color-border)] bg-[var(--color-surface)] px-4 text-[13px] font-medium text-[var(--color-primary)] transition-colors hover:bg-[var(--color-bg)] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3"><span aria-hidden="true">♡</span>{nav("supportCta")}<span aria-hidden="true">↗</span></a>
+          </div>
         </div>
 
         <HeroCompare before={t("before")} after={t("after")} hint={t("visualCaption")} locale={locale} />
