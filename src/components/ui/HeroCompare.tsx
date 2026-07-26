@@ -2,22 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { simulate, type VisionType } from "@/lib/color/simulate";
+import { getVisionLabels } from "@/lib/vision-labels";
 import { clamp01, linearToRGB, rgbToLinear } from "@/lib/color/srgb";
 
 type HeroVisionType = Extract<VisionType, "protan" | "deutan" | "tritan">;
 const HERO_IMAGE = "/images/iris-hero-flower.jpg";
-
-const labelsFor = (locale: string): { group: string; types: Record<HeroVisionType, string> } => {
-  if (locale === "ko") return { group: "색약 유형 선택", types: { protan: "적색약", deutan: "녹색약", tritan: "청황색약" } };
-  if (locale === "ja") return { group: "色覚タイプを選ぶ", types: { protan: "1型色覚", deutan: "2型色覚", tritan: "3型色覚" } };
-  if (locale === "zh-TW") return { group: "選擇色覺類型", types: { protan: "紅色盲", deutan: "綠色盲", tritan: "藍黃色盲" } };
-  if (locale === "de") return { group: "Farbseh-Typ wählen", types: { protan: "Protanopie", deutan: "Deuteranopie", tritan: "Tritanopie" } };
-  if (locale === "es") return { group: "Elige un tipo de visión", types: { protan: "Protanopía", deutan: "Deuteranopía", tritan: "Tritanopía" } };
-  if (locale === "fr") return { group: "Choisir un type de vision", types: { protan: "Protanopie", deutan: "Deutéranopie", tritan: "Tritanopie" } };
-  if (locale === "pt") return { group: "Escolha um tipo de visão", types: { protan: "Protanopia", deutan: "Deuteranopia", tritan: "Tritanopia" } };
-  if (locale === "ru") return { group: "Выберите тип зрения", types: { protan: "Протанопия", deutan: "Дейтеранопия", tritan: "Тританопия" } };
-  return { group: "Choose a color-vision type", types: { protan: "Protanopia", deutan: "Deuteranopia", tritan: "Tritanopia" } };
-};
 
 async function simulatedHero(type: HeroVisionType) {
   const image = new Image();
@@ -48,7 +37,7 @@ export function HeroCompare({ before, after, hint, locale }: { before: string; a
   const [visionType, setVisionType] = useState<HeroVisionType>("deutan");
   const [rightImage, setRightImage] = useState(HERO_IMAGE);
   const cache = useRef<Partial<Record<HeroVisionType, string>>>({});
-  const labels = labelsFor(locale);
+  const labels = getVisionLabels(locale);
   const updateDivider = (clientX: number, element: HTMLElement) => {
     const rect = element.getBoundingClientRect();
     setDivider(Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100)));
@@ -72,7 +61,10 @@ export function HeroCompare({ before, after, hint, locale }: { before: string; a
       <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 z-10 w-px bg-white shadow-[0_0_0_1px_rgba(36,52,71,0.13)]" style={{ left: `${divider}%` }}><span className="absolute left-1/2 top-1/2 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white bg-[var(--color-primary)] text-[14px] text-white shadow-[var(--shadow-m)]">↔</span></div>
     </div>
     <figcaption className="flex justify-between border-b border-[var(--color-border)] py-3 text-[13px] text-[var(--color-text-sub)]"><span>{before}</span><span>{after}</span></figcaption>
-    <div role="group" aria-label={labels.group} className="mt-3 flex flex-wrap gap-2">{(Object.keys(labels.types) as HeroVisionType[]).map((type) => <button key={type} type="button" onClick={() => setVisionType(type)} aria-pressed={visionType === type} className={`min-h-10 rounded-[var(--radius-s)] border px-3 text-[13px] font-medium transition-colors ${visionType === type ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white" : "border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-bg)]"}`}>{labels.types[type]}</button>)}</div>
+    <div className="mt-3 space-y-3" aria-label={labels.chooser}>
+      <div><p className="text-[12px] font-medium text-[var(--color-text-sub)]">{labels.redGreen}</p><div role="group" aria-label={labels.redGreen} className="mt-2 flex flex-wrap gap-2">{(["protan", "deutan"] as HeroVisionType[]).map((type) => <button key={type} type="button" onClick={() => setVisionType(type)} aria-pressed={visionType === type} className={`min-h-10 rounded-[var(--radius-s)] border px-3 text-[13px] font-medium transition-colors ${visionType === type ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white" : "border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-bg)]"}`}>{labels.types[type]}</button>)}</div></div>
+      <div><p className="text-[12px] font-medium text-[var(--color-text-sub)]">{labels.blueYellow}</p><button type="button" onClick={() => setVisionType("tritan")} aria-pressed={visionType === "tritan"} className={`mt-2 min-h-10 rounded-[var(--radius-s)] border px-3 text-[13px] font-medium transition-colors ${visionType === "tritan" ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white" : "border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-bg)]"}`}>{labels.types.tritan}</button></div>
+    </div>
     <p className="pt-3 text-[13px] leading-5 text-[var(--color-text-sub)]">{hint}</p>
   </figure>;
 }

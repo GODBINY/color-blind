@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { getVisionLabels } from "@/lib/vision-labels";
 
 type Axis = "protanopia" | "deuteranopia" | "tritanopia";
 type Answer = "match" | "miss" | "unsure";
@@ -59,13 +60,14 @@ function ColorStudy({ colors, label }: { colors: Question["colors"]; label: stri
 
 export function FindMyViewQuiz({ locale }: { locale: string }) {
   const isKo = locale === "ko";
+  const visionLabels = getVisionLabels(locale);
   const questions = useMemo(() => getQuestions(), []);
   const [started, setStarted] = useState(false);
   const [position, setPosition] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [finished, setFinished] = useState(false);
   const question = questions[position];
-  const labels: Record<Axis, string> = { protanopia: "Protan", deuteranopia: "Deutan", tritanopia: "Tritan" };
+  const labels: Record<Axis, string> = { protanopia: visionLabels.types.protan, deuteranopia: visionLabels.types.deutan, tritanopia: visionLabels.types.tritan };
 
   const result = useMemo(() => {
     const misses = { protanopia: 0, deuteranopia: 0, tritanopia: 0 };

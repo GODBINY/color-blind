@@ -49,7 +49,7 @@ const toSRGB = (c: number) =>
 | Brettel et al. 1997 | dichromacy(완전 2색형)의 표준. LMS 공간에서 confusion line을 두 반평면에 투영. Tritan 정확도가 Machado보다 좋음 | ✅ **Tritan 전용** (Machado의 tritan 행렬은 부정확하다고 알려져 있음) |
 | Viénot et al. 1999 | Brettel의 protan/deutan 단순화(행렬 1개) | 참고용 |
 
-> 구현 검증 레퍼런스: DaltonLens 문서와 `libDaltonLens`(public domain), Machado 행렬 표 (https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html)
+> 구현 검증 레퍼런스: Machado, Oliveira & Fernandes (2009)의 행렬 표와 Brettel, Viénot & Mollon (1997)의 투영 모델을 사용한다. DaltonLens-Python은 결과 대조용 참고 구현이며, 현재 앱은 해당 패키지의 코드나 런타임 의존성을 포함하지 않는다. DaltonLens-Python의 라이선스는 MIT이며 public domain이 아니다. 자세한 출처와 사용 범위는 [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md)를 참고한다.
 
 ### Machado 행렬 (severity 1.0 예시)
 
@@ -103,6 +103,12 @@ M_shift = [ 0    0    0
 - **쌍 분리 회귀 검사**: 꽃/잎처럼 의미 있는 두 색 영역에 대해 `gain = separation(sim(translated pair)) - separation(sim(original pair))`를 계산한다. gain이 양수여야 하며, 이는 모델 안에서의 자동 품질 지표일 뿐 임상 검증이나 개인의 체감 보장은 아니다.
 - 검증 도구: 번역 후 시뮬레이션(= 그 사람이 볼 모습)을 결과 화면으로 제공한다. 번역 전/후 시뮬레이션 드래그 비교는 검증용 보조 화면으로만 열 수 있으며, 결과 감상 화면의 기본 UI가 아니다.
 - 알고리즘 튜닝은 실제 색약 당사자(남자친구) 피드백으로 검증하는 것이 최우선. 문헌 지표보다 "꽃이 보이는가"가 기준
+
+### 검증 범위와 한계
+
+- **시뮬레이션 모델**: Machado et al. 모델은 색각 이상·일반 색각 참가자 집단을 대상으로 한 실험 평가가 보고된 공개 연구 모델이다. Iris는 Protan/Deutan에 이 모델을 사용하며, 단위 테스트로 공개 행렬값·severity 보간·색공간 경계를 회귀 검사한다.
+- **번역(달토나이제이션) 결과**: 오차 재분배와 명도 보상은 사진 속 색 차이를 다른 단서로 옮기는 Iris의 독자 구현이다. 자동 테스트는 선택된 시뮬레이션 모델 안에서 대표적인 적록 쌍의 분리도가 높아지는지 확인할 뿐, 실제 개인에게 항상 더 잘 보인다는 임상적·개인별 검증은 아니다. 특히 Tritan의 사진 번역 효과는 별도 당사자 평가가 필요하다.
+- **출시 전 기준**: 대표 장면(꽃/잎, 노을, 익힘 정도, 지도·그래프)을 유형별 당사자와 비교 평가하고, 원본과 번역본 중 어느 쪽이 더 구분되는지 기록한다. 결과가 나빠지는 장면은 강도를 낮추거나 원본 보기를 함께 제공한다.
 
 ## 5. 렌더링 & 성능 전략
 

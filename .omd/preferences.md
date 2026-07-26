@@ -155,6 +155,51 @@ source_context: "messages/ko.json, docs/03_UI_UX.md"
 
 Name the simulation menu “색약·색맹 시뮬레이션” so its scope is immediately clear.
 
+## 2026-07-26T01:31:32.000Z — lead-translation-copy-with-shared-beauty
+
+```omd-meta
+id: pref_ms14gzal_b1aff2c0
+timestamp: 2026-07-26T01:31:32.000Z
+scope: voice
+signal: user-statement
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/components/editor/ImageEditor.tsx"
+```
+
+Translation copy should lead with shared moments such as flowers and sunsets that may have been less distinct, framing the feature as sharing beauty rather than technical colour differences. Keep claims honest: translate distinctions, never promise to restore colour vision.
+
+## 2026-07-26T01:40:00.000Z — use-familiar-korean-red-green-term
+
+```omd-meta
+id: pref_ms14t7c0_815e5e5d
+timestamp: 2026-07-26T01:40:00.000Z
+scope: voice
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "messages/ko.json, src/components/editor/ImageEditor.tsx"
+```
+
+For Korean product copy, use the familiar term “적녹색약” for the red–green colour-vision family; retain Protan and Deutan as optional explanatory subtypes rather than leading labels.
+
+## 2026-07-26T02:00:00.000Z — localize-color-vision-taxonomy-by-locale
+
+```omd-meta
+id: pref_ms15j4w0_d0e9c1f4
+timestamp: 2026-07-26T02:00:00.000Z
+scope: voice
+signal: user-statement
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/lib/vision-labels.ts"
+```
+
+Adapt color-vision labels to each supported locale’s familiar medical terminology. Keep one canonical internal model, present the local umbrella category first, and keep Protan/Deutan/Tritan as optional comparison detail rather than literal one-to-one translations.
+
 ## 2026-07-26T00:00:00.000Z — group-home-tools-by-user-goal
 
 ```omd-meta

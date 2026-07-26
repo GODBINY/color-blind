@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { takePendingImage } from "@/lib/pending-image";
+import { getVisionLabels, redGreenTypes } from "@/lib/vision-labels";
 import {
   clamp01,
   daltonize,
@@ -21,8 +22,8 @@ const MAX_DIMENSION = 4096;
 
 const copy = {
   ko: {
-    translateTitle: "그 사람의 색으로 번역하기",
-    translateIntro: "그 사람이 더 많은 색의 차이를 만날 수 있도록, 사진을 그 사람의 색으로 옮겨요.",
+    translateTitle: "꽃과 노을을, 그 사람의 색으로",
+    translateIntro: "꽃이 묻혀 보였나요? 노을이 덜 빛났나요? 그 사람이 더 많은 색의 차이를 만날 수 있도록, 사진을 그 사람의 색으로 옮겨요.",
     simulateTitle: "그 사람의 시야로 보기",
     simulateIntro: "같은 장면이 어떻게 다르게 보이는지 살펴봐요.",
     drop: "여기에 사진을 놓아주세요",
@@ -37,9 +38,9 @@ const copy = {
     theirs: "그 사람의 눈으로 보기",
     viewing: (type: string) => `지금 ${type}의 시야로 보고 있어요`,
     theirResultTitle: "그 사람에게 전해질 장면",
-    theirResultIntro: (type: string) => `${type}의 시야에서 본, 번역 뒤의 사진이에요.`,
-    theirResultNote: "색을 되돌리는 대신, 구분하기 어려운 색의 차이를 다른 단서로 옮겨요.",
-    showBefore: "번역 전에는 어떻게 보였을까?",
+    theirResultIntro: (type: string) => `${type}의 시야에서도 장면 속 색의 차이가 더 잘 전해지도록 옮긴 사진이에요.`,
+    theirResultNote: "색을 되돌리는 건 아니에요. 대신 가까웠던 색의 차이를 다른 단서로 옮겨, 장면의 인상이 더 잘 전해지도록 해요.",
+    showBefore: "번역 전에는 이 장면이 어떻게 보였을까?",
     hideBefore: "완성된 사진만 보기",
     original: "원본",
     translated: "번역한 뒤",
@@ -48,13 +49,13 @@ const copy = {
     simulated: "그 사람의 시야",
     download: "저장하기",
     replace: "다른 사진 고르기",
-    processingTranslate: "그 사람이 볼 수 있는 색으로 번역하는 중...",
+    processingTranslate: "사진 속 색의 차이를 옮기는 중...",
     processingSimulate: "그 사람의 시선으로 바꾸는 중...",
     invalid: "앗, 이 파일은 읽을 수 없었어요. JPG, PNG, WebP로 다시 시도해 볼까요?",
     tooLarge: "사진은 20MB 이하로 올려 주세요.",
     resized: "큰 사진은 이 기기에서 편하게 다룰 수 있도록 크기를 조절했어요.",
     compareHint: "가운데 선을 드래그하거나 키보드의 좌우 화살표로 비교해 보세요.",
-    translateCta: "이 사진, 잘 보이게 번역해 볼까요?",
+    translateCta: "이 장면을 그 사람의 색으로 옮겨 볼까요?",
     unknownType: "유형을 모르겠다면 Find My View에서 함께 알아볼 수 있어요.",
   },
   en: {
@@ -96,17 +97,11 @@ const copy = {
   },
 } as const;
 
-const typeLabels: Record<VisionType, string> = {
-  protan: "Protan",
-  deutan: "Deutan",
-  tritan: "Tritan",
-  monochromacy: "Mono",
-};
-
 const toDataUrl = (canvas: HTMLCanvasElement) => canvas.toDataURL("image/png");
 
 export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string }) {
   const text = locale === "ko" ? copy.ko : copy.en;
+  const visionLabels = getVisionLabels(locale);
   const fileInput = useRef<HTMLInputElement>(null);
   const cameraInput = useRef<HTMLInputElement>(null);
   const [source, setSource] = useState<ImageBitmap | null>(null);
@@ -289,10 +284,6 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
     link.click();
   };
 
-  const availableTypes: VisionType[] = mode === "translate"
-    ? ["protan", "deutan", "tritan"]
-    : ["protan", "deutan", "tritan", "monochromacy"];
-
   return (
     <main className="mx-auto w-full max-w-[1184px] px-5 pb-12 pt-7 md:px-8 md:pt-10">
       <div className="mb-10 max-w-[620px] border-b border-[var(--color-border)] pb-7">
@@ -338,9 +329,9 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
             )}
             {isTheirResult && !showTheirComparison && (
               <div className="mb-4">
-                <p className="text-[13px] font-medium text-[var(--color-text-sub)]">{text.viewing(typeLabels[visionType])}</p>
+                <p className="text-[13px] font-medium text-[var(--color-text-sub)]">{text.viewing(visionLabels.types[visionType])}</p>
                 <h2 className="mt-2 text-[20px] font-semibold tracking-[-0.025em]">{text.theirResultTitle}</h2>
-                <p className="mt-2 text-[14px] leading-6 text-[var(--color-text-sub)]">{text.theirResultIntro(typeLabels[visionType])}</p>
+                <p className="mt-2 text-[14px] leading-6 text-[var(--color-text-sub)]">{text.theirResultIntro(visionLabels.types[visionType])}</p>
               </div>
             )}
             {isTheirResult && !showTheirComparison ? (
@@ -353,7 +344,7 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
               </>
             ) : (
               <>
-            {isTheirResult && <p className="mb-4 text-[13px] font-medium text-[var(--color-text-sub)]">{text.viewing(typeLabels[visionType])}</p>}
+            {isTheirResult && <p className="mb-4 text-[13px] font-medium text-[var(--color-text-sub)]">{text.viewing(visionLabels.types[visionType])}</p>}
             <div className="mb-3 flex items-center justify-between text-[13px] font-medium text-[var(--color-text-sub)]"><span>{leftLabel}</span><span>{rightLabel}</span></div>
             <div
               role="slider"
@@ -390,8 +381,10 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
           <aside className="border-t border-[var(--color-border)] pt-6 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
             <fieldset>
               <legend className="text-[16px] font-semibold">{text.typeQuestion}</legend>
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                {availableTypes.map((type) => <button key={type} type="button" onClick={() => setVisionType(type)} aria-pressed={visionType === type} className={`min-h-11 rounded-[var(--radius-s)] border px-3 text-left text-[14px] font-medium transition-colors ${visionType === type ? "border-[var(--color-primary)] bg-[var(--color-bg)]" : "border-[var(--color-border)] hover:bg-[var(--color-bg)]"}`}>{typeLabels[type]}</button>)}
+              <div className="mt-4 space-y-4">
+                <div><p className="text-[13px] font-medium text-[var(--color-text-sub)]">{visionLabels.redGreen}</p><div className="mt-2 grid grid-cols-2 gap-2">{redGreenTypes.map((type) => <button key={type} type="button" onClick={() => setVisionType(type)} aria-pressed={visionType === type} className={`min-h-11 rounded-[var(--radius-s)] border px-3 text-left text-[14px] font-medium transition-colors ${visionType === type ? "border-[var(--color-primary)] bg-[var(--color-bg)]" : "border-[var(--color-border)] hover:bg-[var(--color-bg)]"}`}>{visionLabels.types[type]}</button>)}</div></div>
+                <div><p className="text-[13px] font-medium text-[var(--color-text-sub)]">{visionLabels.blueYellow}</p><button type="button" onClick={() => setVisionType("tritan")} aria-pressed={visionType === "tritan"} className={`mt-2 min-h-11 w-full rounded-[var(--radius-s)] border px-3 text-left text-[14px] font-medium transition-colors ${visionType === "tritan" ? "border-[var(--color-primary)] bg-[var(--color-bg)]" : "border-[var(--color-border)] hover:bg-[var(--color-bg)]"}`}>{visionLabels.types.tritan}</button></div>
+                {mode === "simulate" && <div><p className="text-[13px] font-medium text-[var(--color-text-sub)]">{visionLabels.fullColor}</p><button type="button" onClick={() => setVisionType("monochromacy")} aria-pressed={visionType === "monochromacy"} className={`mt-2 min-h-11 w-full rounded-[var(--radius-s)] border px-3 text-left text-[14px] font-medium transition-colors ${visionType === "monochromacy" ? "border-[var(--color-primary)] bg-[var(--color-bg)]" : "border-[var(--color-border)] hover:bg-[var(--color-bg)]"}`}>{visionLabels.types.monochromacy}</button></div>}
               </div>
             </fieldset>
             <div className="mt-7 border-t border-[var(--color-border)] pt-6">

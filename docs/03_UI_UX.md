@@ -96,8 +96,8 @@ Shadow (은은하게, 병원 느낌의 flat 회색 금지):
 | `Button` | primary / secondary / ghost, sm / md / lg, loading, disabled | primary: bg-primary + white text, radius-m, h 48px(md). 문구는 [08_Brand.md](08_Brand.md) 버튼 카피 규칙 준수 |
 | `UploadZone` | idle / dragover / loading / error | 점선 border → dragover 시 accent 배경 + scale(1.01). "여기에 사진을 놓아주세요". 파일 선택·카메라 촬영 버튼 내장 |
 | `CompareSlider` | dragging / idle | 세로 핸들 + 좌우 라벨(모드별: "Original/Translated", "Before/After — their view"). 터치 44px 히트 영역. 키보드 ←→ 지원 |
-| `Hero vision tabs` | Protan / Deutan / Tritan | 홈 CompareSlider 아래의 탭으로 기준 시야를 선택한다. 선택하면 오른쪽 "번역한 뒤" 이미지가 해당 색약 시뮬레이션으로 바뀐다. |
-| `VisionTypeTabs` | selected / unselected | Protan / Deutan / Tritan (+ Mono, Simulate 전용). 텍스트 라벨 항상 노출, 선택은 배경+밑줄로 표시 (색만 사용 금지) |
+| `Hero vision tabs` | 적녹색약: Protan / Deutan · 청황색약: Tritan | 홈 CompareSlider 아래에서 먼저 익숙한 상위 범주를 보여주고, 그 안에서 기준 시야를 선택한다. 선택하면 오른쪽 "번역한 뒤" 이미지가 해당 시뮬레이션으로 바뀐다. |
+| `VisionTypeTabs` | selected / unselected | 적녹색약 안의 Protan / Deutan, 청황색약 Tritan (+ 전색맹 Monochromacy, Simulate 전용). 텍스트 라벨 항상 노출, 선택은 배경+밑줄로 표시 (색만 사용 금지). `전색약`은 별도 모델이 생기기 전까지 Monochromacy의 이름으로 사용하지 않는다. |
 | `PreviewToggle` | my-eyes / their-eyes | Translate 전용. `내 눈으로 보기`는 원본↔번역본 드래그 비교다. `그 사람의 눈으로 보기`는 번역 후 완성 이미지를 단독으로 보여주는 결과 화면이며, 번역 전/후 드래그 비교는 "번역 전에는 어떻게 보였을까?"를 눌렀을 때만 연다. |
 | `StrengthSlider` | - | 번역 강도/시뮬레이션 severity 공용. 0–100%, 현재 값 수치 병기, 스텝 5% |
 | `ColorChip` | - | Live Camera용. 사용자가 프레임을 탭한 위치를 십자선으로 표시하고 해당 지점의 색 미리보기 + HEX + RGB를 보여준다. 중앙 고정 샘플링 금지. |
@@ -211,6 +211,6 @@ Translate와 동일 레이아웃, 우측 패널만 차이:
 ## 6. 상태별 UX 카피 원칙
 
 - 에러도 브랜드 톤으로: "앗, 이 파일은 읽을 수 없었어요. JPG나 PNG로 다시 시도해 볼까요?"
-- 로딩(Translate): "그 사람이 볼 수 있는 색으로 번역하는 중..." / 로딩(Simulate): "그 사람의 시선으로 바꾸는 중..."
+- 로딩(Translate): "사진 속 색의 차이를 옮기는 중..." / 로딩(Simulate): "그 사람의 시선으로 바꾸는 중..."
 - 빈 상태(업로드 전): 기능 설명이 아니라 감정 제안 — "보여주고 싶었던 사진으로 시작해 보세요."
-- 번역 완료 순간: 결과 위에 1회성 안내 "이제 꽃이 보이나요?" 스타일의 감성 카피는 남용 금지 — 첫 사용 시 1회만.
+- 번역 완료 순간: 꽃·노을처럼 함께 보고 싶은 장면을 떠올리게 하되, "이제 볼 수 있어요"처럼 색각이 되돌아온다는 약속은 하지 않는다. "장면의 인상이 더 잘 전해지도록" 같은 정직한 표현을 쓴다.

@@ -68,4 +68,24 @@ describe("computeSeparationGain", () => {
       computeSeparationGain(ROSE_RED, LEAF_GREEN, ROSE_RED, LEAF_GREEN, "deutan", 1),
     ).toBeCloseTo(0, 8);
   });
+
+  it("improves the modeled separation for a red-green flower/leaf pair", () => {
+    const fixtures: Array<{
+      type: "protan" | "deutan" | "tritan";
+      left: RGB;
+      right: RGB;
+    }> = [
+      // flowers against leaves: the common red-green case
+      { type: "protan", left: [0.76, 0.14, 0.18], right: [0.24, 0.43, 0.14] },
+      { type: "deutan", left: [0.76, 0.14, 0.18], right: [0.24, 0.43, 0.14] },
+    ];
+
+    for (const { type, left, right } of fixtures) {
+      const translatedLeft = daltonize(left, type, 1, 0.8);
+      const translatedRight = daltonize(right, type, 1, 0.8);
+      expect(
+        computeSeparationGain(left, right, translatedLeft, translatedRight, type, 1),
+      ).toBeGreaterThan(0);
+    }
+  });
 });
