@@ -7,15 +7,15 @@ bootstrapped_at: 2026-07-19
 tokens:
   source: project-docs (docs/03_UI_UX.md, docs/08_Brand.md)
   colors:
-    bg: "#F8F6F2"
+    bg: "#F7F7FC"
     surface: "#FFFFFF"
-    primary: "#243447"
-    accent: "#E6B17E"
-    text: "#243447"
-    text-sub: "#6B7280"
-    border: "#E5E1DA"
-    error: "#B4534B"
-    success: "#4E7A5A"
+    primary: "#2D2330"
+    accent: "#9B4A76"
+    text: "#2D2330"
+    text-sub: "#6E6474"
+    border: "#DED7E2"
+    error: "#B84E58"
+    success: "#476F5A"
   typography:
     family: { ko: "Pretendard Variable", en: "Inter" }
     display: { size: "40/48 (mobile 32/40)", weight: 600, use: "Hero copy" }
@@ -27,9 +27,9 @@ tokens:
   spacing: { 1: 4, 2: 8, 3: 12, 4: 16, 5: 24, 6: 32, 7: 48, 8: 64, 9: 96 }
   rounded: { s: 8, m: 12, l: 20, full: 9999 }
   shadow:
-    s: "0 1px 2px rgba(36,52,71,0.06)"
-    m: "0 4px 12px rgba(36,52,71,0.08)"
-    l: "0 12px 32px rgba(36,52,71,0.12)"
+    s: "0 1px 2px rgba(0,0,0,0.18)"
+    m: "0 4px 12px rgba(0,0,0,0.24)"
+    l: "0 12px 32px rgba(0,0,0,0.32)"
   motion:
     fast: "150ms"
     base: "250ms"
@@ -44,15 +44,15 @@ tokens:
 
 ## 1. Visual Theme & Atmosphere
 
-Iris is a warm, comparison-first surface built around one recurring gesture: a photograph transforms in front of you, and something that was invisible becomes visible. The canvas is a warm off-white (`#F8F6F2`) — never pure white, never a cool clinical tone — carrying deep navy (`#243447`) text and warm sand (`#E6B17E`) as a single restrained accent. Nothing about the palette should read as a hospital, a lab, or a test result screen; the mood is closer to a sunlit study or a handwritten letter.
+Iris is a comparison-first surface built around one recurring gesture: a photograph transforms in front of you, and something that was invisible becomes visible. The default canvas is lavender-white (`#F7F7FC`) with plum ink (`#2D2330`) and berry (`#9B4A76`) as a restrained accent. Dark mode is an optional aubergine-black counterpart, not the default. The mood is a flower field in clear morning light, not a lab, a test result screen, or a calm SaaS dashboard.
 
 From **Airbnb** this system borrows the conviction that *photography is the hero and chrome should recede* — the same discipline Airbnb applies to listing cards applies here to the Compare Slider and the before/after crossfade: the image does the emotional work, the UI gets out of the way. From **29CM** this system borrows *whitespace as the brand asset* and the editorial instinct to subordinate secondary information (strength percentages, HEX values, technical labels) the way 29CM subordinates price to photograph — present, legible, never louder than the image.
 
 The signature moment is the **crossfade**: in Translate, the "their eyes" preview transitions from before → after and a flower that was buried in the background quietly rises into visibility. This is Iris's equivalent of Airbnb's heart-icon save — the one place the interface is allowed a small emotional beat — and of 29CM's tile-reveal-on-scroll — unhurried, never bouncy, never celebratory with confetti or sound.
 
 **Key Characteristics:**
-- Warm off-white canvas (`#F8F6F2`), never pure white — avoids the clinical/lab association explicitly rejected in [08_Brand.md](docs/08_Brand.md)
-- Deep navy (`#243447`) as the only text/primary-button color; warm sand (`#E6B17E`) as the singular accent, background/hover/highlight only — never used as text (contrast)
+- Lavender-white canvas (`#F7F7FC`) by default, with no beige or orange; an explicit header control reveals dark mode
+- Plum ink (`#2D2330`) as the text/primary-button color; berry (`#9B4A76`) as the singular accent, background/hover/highlight only — never used as text (contrast)
 - Photography/comparison is the hero content — Compare Slider, before/after crossfade — chrome recedes (Airbnb)
 - Generous whitespace, restrained chrome, no urgency styling — comparison earns its own room (29CM)
 - Soft, warm shadows (never flat institutional grey, never zero-shadow flatness) — depth reads as natural light
@@ -63,18 +63,20 @@ The signature moment is the **crossfade**: in Translate, the "their eyes" previe
 
 | Token | Hex | Role |
 |---|---|---|
-| `--color-bg` | `#F8F6F2` | Page canvas — warm off-white |
+| `--color-bg` | `#F7F7FC` | Default page canvas — lavender-white |
 | `--color-surface` | `#FFFFFF` | Cards, panels |
-| `--color-primary` | `#243447` | Text, primary buttons, deep navy |
-| `--color-accent` | `#E6B17E` | Warm sand — CTA hover, highlight, decoration only |
-| `--color-text-sub` | `#6B7280` | Secondary text |
-| `--color-border` | `#E5E1DA` | Dividers, input borders |
-| `--color-error` | `#B4534B` | Desaturated red-brown — always icon + text, never color alone |
-| `--color-success` | `#4E7A5A` | Desaturated green — always icon + text, never color alone |
+| `--color-primary` | `#2D2330` | Text, primary buttons, plum ink |
+| `--color-accent` | `#9B4A76` | Berry — CTA hover, highlight, decoration only |
+| `--color-text-sub` | `#6E6474` | Secondary text |
+| `--color-border` | `#DED7E2` | Dividers, input borders |
+| `--color-error` | `#B84E58` | Desaturated berry red — always icon + text, never color alone |
+| `--color-success` | `#476F5A` | Soft leaf green — always icon + text, never color alone |
 
 **Explicit refusals**: no Rausch-style saturated brand red (would clash with the "not a medical correction" thesis and reads alarm-adjacent for a color-vision product), no 29CM-style pure-monochrome black/white (too cold/clinical for a gift-framed product), no blue-on-white "accessibility tool" combination ([08_Brand.md](docs/08_Brand.md) explicitly bans this — it reads as hospital software).
 
-**Accent discipline (29CM-derived)**: `#E6B17E` is spent like 29CM spends sale-red — sparingly, on one or two moments per screen (hover state, a single highlight), never as a structural color.
+**Theme behavior**: the header control switches to dark mode (`#171316` canvas / `#F3EAE5` text) and remembers the choice locally. Both modes use the same semantic tokens and retain the no-beige, no-orange rule.
+
+**Accent discipline (29CM-derived)**: `#9B4A76` is spent like 29CM spends sale-red — sparingly, on one or two moments per screen (hover state, a single highlight), never as a structural color.
 
 ## 3. Typography Rules
 
@@ -103,7 +105,7 @@ The signature moment is the **crossfade**: in Translate, the "their eyes" previe
 Full behavioral spec lives in [docs/03_UI_UX.md §4](docs/03_UI_UX.md). Token mapping:
 
 **Button (primary)**
-- Background: `--color-primary` (`#243447`) · Text: white · Radius: `--radius-m` (12px) · Height: 48px (md)
+- Background: `--color-primary` (`#2D2330` in light mode) · Text: surface color · Radius: `--radius-m` (12px) · Height: 48px (md)
 - Hover: background shifts toward `--color-accent` tint, never a full accent fill (accent stays a whisper, per §2)
 
 **Button (secondary/ghost)**
@@ -150,16 +152,16 @@ Full behavioral spec lives in [docs/03_UI_UX.md §4](docs/03_UI_UX.md). Token ma
 | Level | Treatment | Use |
 |---|---|---|
 | Flat | No shadow | Page background, text blocks |
-| `--shadow-s` | `0 1px 2px rgba(36,52,71,0.06)` | Inputs, small cards |
-| `--shadow-m` | `0 4px 12px rgba(36,52,71,0.08)` | Cards, panels |
-| `--shadow-l` | `0 12px 32px rgba(36,52,71,0.12)` | Modals, upload hover |
+| `--shadow-s` | `0 1px 2px rgba(0,0,0,0.18)` | Inputs, small cards |
+| `--shadow-m` | `0 4px 12px rgba(0,0,0,0.24)` | Cards, panels |
+| `--shadow-l` | `0 12px 32px rgba(0,0,0,0.32)` | Modals, upload hover |
 
 **Shadow philosophy**: soft and warm-tinted (navy-based rgba, not pure black) — reads as natural light, the Airbnb approach — but never absent entirely the way 29CM's flat marketing surface is. Iris compares two states side by side; a small amount of lift helps separate "before" from "after" without competing with the image. Flat-grey institutional shadows are explicitly rejected ([03_UI_UX.md §2.3](docs/03_UI_UX.md)).
 
 ## 7. Do's and Don'ts
 
 ### Do
-- Keep the accent (`#E6B17E`) to one or two moments per screen
+- Keep the accent (`#B24B6A`) to one or two moments per screen
 - Pair every state (error/success/selection) with icon + text, never color alone
 - Let the Compare Slider / crossfade be the visual focus — everything else recedes
 - Use warm, wide margins between comparison blocks
@@ -185,20 +187,20 @@ Mobile-first — most traffic arrives via shared links. Live Camera is always fu
 ## 9. Agent Prompt Guide
 
 ### Quick Token Reference
-- Background: `#F8F6F2` · Surface: `#FFFFFF` · Text/Primary: `#243447` · Accent: `#E6B17E` (sparse)
-- Radius: 8 / 12 / 20 / full · Shadow: soft warm navy-tinted, three tiers
+- Light default: `#F7F7FC` canvas · `#FFFFFF` surface · `#2D2330` text/primary · `#9B4A76` accent (sparse)
+- Dark is user-selected, not automatic · Radius: 8 / 12 / 20 / full · Shadow: soft plum, three tiers
 - Type: Pretendard Variable (KO) / Inter (EN), headings ≥600 weight
 
 ### Example Component Prompts
 - "Compare Slider: two images side by side with a vertical drag handle, 44px touch target. Labels outside the image (never overlaid). `--shadow-m` on the container, `--radius-l` (20px) corners. No color competes with the photograph."
-- "Primary button: `#243447` background, white text, `--radius-m` (12px), 48px height, Pretendard/Inter 16px medium. Hover: subtle warm-sand tint, never a full accent fill."
-- "UploadZone: dashed `#E5E1DA` border on `#F8F6F2` canvas. Dragover: warm-sand tinted background + 1.01 scale over 150ms. Copy is an invitation, not an instruction."
-- "Error toast: icon + text together, `#B4534B` (desaturated, not alarm-red), bottom-center, 4s auto-dismiss, warm tone throughout."
+- "Primary button: `#F3EAE5` background, aubergine-black text, `--radius-m` (12px), 48px height, Pretendard/Inter 16px medium. Hover: subtle berry tint, never a full accent fill."
+- "UploadZone: dashed `#4B3A42` border on `#171316` canvas. Dragover: berry tinted background + 1.01 scale over 150ms. Copy is an invitation, not an instruction."
+- "Error toast: icon + text together, `#D86A62` (desaturated, not alarm-red), bottom-center, 4s auto-dismiss, warm tone throughout."
 
 ### Iteration Guide
-1. Start from the warm off-white canvas — never pure white, never cool grey
+1. Start from the lavender-white light canvas — never beige, orange, or cool hospital blue; dark mode is user-selected
 2. The comparison image is the hero; every other element should visually recede
-3. Spend the accent (`#E6B17E`) once or twice per screen, never as a fill
+3. Spend the accent (`#B24B6A`) once or twice per screen, never as a fill
 4. Icon + text for every state — this is a color-vision product, color-only signaling is a functional bug, not a style choice
 5. Headings stay ≥600 weight — thin weights read cold and undercut the "gift" framing
 

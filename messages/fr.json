@@ -1,0 +1,34 @@
+{
+  "Nav": {
+    "brand": "Iris",
+    "languageNav": "Choisir la langue",
+    "privacy": "Vos photos restent sur cet appareil."
+  },
+  "Home": {
+    "eyebrow": "Un peu plus proches, grâce à la couleur",
+    "tagline": "Partagez la beauté que vous voyez —\ndans des couleurs qu'ils peuvent distinguer.",
+    "intro": "Commencez avec une photo. Transmettez les différences qu'ils pourraient manquer dans des couleurs plus faciles à distinguer.",
+    "cta": "Importer une photo",
+    "uploadError": "Choisissez une image JPG, PNG ou WebP de moins de 20 Mo.",
+    "secondaryCta": "Voir à travers leurs yeux",
+    "privacy": "Vos photos ne sont pas envoyées sur un serveur. Tout se fait sur cet appareil.",
+    "before": "Leur vision",
+    "after": "Après traduction",
+    "visualCaption": "Faites glisser pour voir ce qui change",
+    "exploreEyebrow": "Explorer",
+    "exploreTitle": "Quelques façons de partager un regard",
+    "exploreBody": "Partez d'une photo, puis rapprochez-vous d'une autre façon de voir.",
+    "tileSimulate": "Leur vision",
+    "tileSimulateBody": "Voir la même scène autrement",
+    "tileLive": "Live Camera",
+    "tileLiveBody": "Identifier les couleurs autour de vous",
+    "tileFindMyView": "Find My View",
+    "tileFindMyViewBody": "Découvrir doucement votre vision des couleurs",
+    "tileLearn": "Learn",
+    "tileLearnBody": "Lire les différentes façons de voir"
+  },
+  "RouteStub": {
+    "back": "Retour à l’accueil",
+    "preparing": "Cet écran est encore en préparation"
+  }
+}

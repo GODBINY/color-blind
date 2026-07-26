@@ -1,0 +1,31 @@
+{
+  "Nav": {
+    "brand": "Iris",
+    "languageNav": "選擇語言",
+    "privacy": "相片不會離開這台裝置。"
+  },
+  "Home": {
+    "eyebrow": "透過色彩，靠近一點",
+    "tagline": "把我看見的美，\n換成你也看得見的色彩。",
+    "intro": "從一張相片開始。把不容易看見的差異，轉成對方更容易分辨的感受。",
+    "cta": "上傳相片",
+    "uploadError": "請選擇 20MB 以下的 JPG、PNG 或 WebP 圖片。",
+    "secondaryCta": "看看對方的視角",
+    "privacy": "相片不會上傳到伺服器，所有轉換都在這台裝置完成。",
+    "before": "對方的視角",
+    "after": "轉換之後",
+    "visualCaption": "拖曳看看兩張圖有什麼不同",
+    "exploreEyebrow": "繼續探索",
+    "exploreTitle": "用不同方式傳遞色彩",
+    "exploreBody": "從一張相片開始，更靠近另一種看見世界的方式。",
+    "tileSimulate": "對方的眼睛",
+    "tileSimulateBody": "從另一個視角看同一個場景",
+    "tileLive": "Live Camera",
+    "tileLiveBody": "立即確認眼前的顏色",
+    "tileFindMyView": "Find My View",
+    "tileFindMyViewBody": "慢慢認識自己的色彩視角",
+    "tileLearn": "Learn",
+    "tileLearnBody": "閱讀關於不同色彩視覺的故事"
+  },
+  "RouteStub": { "back": "回到首頁", "preparing": "這個畫面還在準備中" }
+}

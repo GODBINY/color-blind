@@ -79,3 +79,35 @@ export const computeDelta = (
     3
   );
 };
+
+/**
+ * Distance between two colours after they have passed through the same vision
+ * model. This is a model-based proxy for "can these adjacent areas be told
+ * apart?" — it is deliberately not presented as a clinical measurement.
+ */
+export const simulatedSeparation = (
+  left: RGB,
+  right: RGB,
+  visionType: VisionType,
+  severity: number,
+): number => {
+  const a = simulate(left, visionType, severity);
+  const b = simulate(right, visionType, severity);
+  return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+};
+
+/**
+ * Automated regression metric for a meaningful colour pair (for example a
+ * rose against nearby leaves). Positive values mean the pair is farther apart
+ * in the selected simulated view after translation.
+ */
+export const computeSeparationGain = (
+  originalLeft: RGB,
+  originalRight: RGB,
+  translatedLeft: RGB,
+  translatedRight: RGB,
+  visionType: VisionType,
+  severity: number,
+): number =>
+  simulatedSeparation(translatedLeft, translatedRight, visionType, severity) -
+  simulatedSeparation(originalLeft, originalRight, visionType, severity);

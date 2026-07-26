@@ -11,7 +11,7 @@ export function HeroCompare({ before, after, hint }: { before: string; after: st
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-[560px] rounded-[var(--radius-l)] border border-white/80 bg-white p-3 shadow-[var(--shadow-l)]">
+    <figure className="relative mx-auto w-full max-w-[560px]">
       <div
         role="slider"
         tabIndex={0}
@@ -19,7 +19,7 @@ export function HeroCompare({ before, after, hint }: { before: string; after: st
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(divider)}
-        className="relative aspect-[1.08/1] cursor-ew-resize touch-none select-none overflow-hidden rounded-[15px] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3"
+        className="relative aspect-[1.08/1] cursor-ew-resize touch-none select-none overflow-hidden rounded-[var(--radius-l)] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3"
         onPointerDown={(event) => { event.preventDefault(); setDragging(true); event.currentTarget.setPointerCapture(event.pointerId); updateDivider(event.clientX, event.currentTarget); }}
         onPointerMove={(event) => { if (dragging) { event.preventDefault(); updateDivider(event.clientX, event.currentTarget); } }}
         onPointerUp={(event) => { setDragging(false); event.currentTarget.releasePointerCapture(event.pointerId); }}
@@ -36,10 +36,9 @@ export function HeroCompare({ before, after, hint }: { before: string; after: st
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 z-10 w-px bg-white shadow-[0_0_0_1px_rgba(36,52,71,0.13)]" style={{ left: `${divider}%` }}>
           <span className="absolute left-1/2 top-1/2 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white bg-[var(--color-primary)] text-[14px] text-white shadow-[var(--shadow-m)]">↔</span>
         </div>
-        <div className="pointer-events-none absolute bottom-4 left-4 z-20 rounded-full bg-white/90 px-3 py-1.5 text-[12px] font-medium text-[var(--color-primary)] backdrop-blur">{before}</div>
-        <div className="pointer-events-none absolute bottom-4 right-4 z-20 rounded-full bg-[var(--color-primary)] px-3 py-1.5 text-[12px] font-medium text-white">{after}</div>
       </div>
-      <div className="flex items-center justify-between px-2 pb-1 pt-4 text-[13px] text-[var(--color-text-sub)]"><span>{hint}</span><span aria-hidden="true">↔</span></div>
-    </div>
+      <figcaption className="flex justify-between border-b border-[var(--color-border)] py-3 text-[13px] text-[var(--color-text-sub)]"><span>{before}</span><span>{after}</span></figcaption>
+      <p className="pt-3 text-[13px] leading-5 text-[var(--color-text-sub)]">{hint}</p>
+    </figure>
   );
 }

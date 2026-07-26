@@ -17,20 +17,21 @@
 ### 2.1 Color
 
 ```
---color-bg          #F8F6F2   /* Warm off-white 배경 */
+--color-bg          #F7F7FC   /* 기본: 밝은 라일락 화이트 배경 */
 --color-surface     #FFFFFF   /* 카드, 패널 */
---color-primary     #243447   /* Deep navy — 텍스트, 주요 버튼 */
---color-accent      #E6B17E   /* Warm sand — 포인트, CTA hover, 하이라이트 */
---color-text        #243447
---color-text-sub    #6B7280   /* Soft gray */
---color-border      #E5E1DA
---color-error       #B4534B   /* 채도 낮춘 적갈색 — 색약 대비 고려해 아이콘+텍스트 병행 */
---color-success     #4E7A5A
+--color-primary     #2D2330   /* Plum ink — 텍스트, 주요 버튼 */
+--color-accent      #9B4A76   /* Berry — 포인트, CTA hover, 하이라이트 */
+--color-text        #2D2330
+--color-text-sub    #6E6474   /* Soft plum gray */
+--color-border      #DED7E2
+--color-error       #B84E58   /* 채도 낮춘 베리 레드 — 색약 대비 고려해 아이콘+텍스트 병행 */
+--color-success     #476F5A
 ```
 
 - **규칙**: 상태(에러/성공)를 색만으로 전달하지 않는다. 항상 아이콘+문구 병기.
-- 본문 텍스트 대비 4.5:1 이상 유지. `#243447 on #F8F6F2` = 약 12:1 ✓
-- Accent(#E6B17E)는 텍스트 색으로 사용 금지 (대비 부족) — 배경/장식/hover 전용.
+- 기본은 라이트 모드이며, 헤더 전환으로 다크 모드를 선택할 수 있다. 선택값은 이 기기에 저장한다.
+- 본문 텍스트 대비 4.5:1 이상 유지. `#2D2330 on #F7F7FC` = 약 14:1 ✓
+- Accent(#9B4A76)는 텍스트 색으로 사용 금지 (대비 부족) — 배경/장식/hover 전용.
 
 ### 2.2 Typography
 
@@ -58,9 +59,9 @@ Radius:
   --radius-full 9999px /* 토글, pill */
 
 Shadow (은은하게, 병원 느낌의 flat 회색 금지):
-  --shadow-s   0 1px 2px rgba(36,52,71,0.06)
-  --shadow-m   0 4px 12px rgba(36,52,71,0.08)
-  --shadow-l   0 12px 32px rgba(36,52,71,0.12)   /* 모달, 업로드 hover */
+  --shadow-s   0 1px 2px rgba(0,0,0,0.18)
+  --shadow-m   0 4px 12px rgba(0,0,0,0.24)
+  --shadow-l   0 12px 32px rgba(0,0,0,0.32)   /* 모달, 업로드 hover */
 ```
 
 ### 2.4 Motion
@@ -96,10 +97,11 @@ Shadow (은은하게, 병원 느낌의 flat 회색 금지):
 | `UploadZone` | idle / dragover / loading / error | 점선 border → dragover 시 accent 배경 + scale(1.01). "여기에 사진을 놓아주세요". 파일 선택·카메라 촬영 버튼 내장 |
 | `CompareSlider` | dragging / idle | 세로 핸들 + 좌우 라벨(모드별: "Original/Translated", "Before/After — their view"). 터치 44px 히트 영역. 키보드 ←→ 지원 |
 | `VisionTypeTabs` | selected / unselected | Protan / Deutan / Tritan (+ Mono, Simulate 전용). 텍스트 라벨 항상 노출, 선택은 배경+밑줄로 표시 (색만 사용 금지) |
-| `PreviewToggle` | my-eyes / their-eyes | Translate 전용. "내 눈으로 보기 ↔ 그 사람의 눈으로 보기" 전환. 그 사람의 눈 모드에서는 상단에 "지금 {type}의 시야로 보고 있어요" 배지 |
+| `PreviewToggle` | my-eyes / their-eyes | Translate 전용. `내 눈으로 보기`는 원본↔번역본 드래그 비교다. `그 사람의 눈으로 보기`는 번역 후 완성 이미지를 단독으로 보여주는 결과 화면이며, 번역 전/후 드래그 비교는 "번역 전에는 어떻게 보였을까?"를 눌렀을 때만 연다. |
 | `StrengthSlider` | - | 번역 강도/시뮬레이션 severity 공용. 0–100%, 현재 값 수치 병기, 스텝 5% |
-| `ColorChip` | - | Live Camera용. 색 미리보기 + HEX + RGB + 이름, 복사 버튼. 어두운 색 위 대비 자동 반전 |
-| `QuizCard` | idle / selected / answered | Find My View 문항. 선택 표시는 테두리 3px + 체크 아이콘 |
+| `ColorChip` | - | Live Camera용. 사용자가 프레임을 탭한 위치를 십자선으로 표시하고 해당 지점의 색 미리보기 + HEX + RGB를 보여준다. 중앙 고정 샘플링 금지. |
+| `ImageColorPicker` | empty / picking / saved | 업로드 이미지의 탭 위치에 번호 마커를 남기고, 데스크톱은 우측·모바일은 하단의 스크롤 목록에 HEX/RGB를 쌓는다. 저장 시 원본·번호 마커·목록을 하나의 PNG로 합성한다. |
+| `QuizCard` | idle / selected / answered | Find My View 문항. 고정 색값의 자체 제작 3카드 비교를 사용하며, 공식 Ishihara 플레이트나 진단 이미지를 복제하지 않는다. 선택 표시는 테두리 + 화살표 아이콘 |
 | `Toast` | info / error | 하단 중앙, 4s 자동 소멸, 아이콘+문구 |
 | `LangSwitch` | - | EN/KO 토글, 헤더 우측 |
 | `Footer` | - | 면책 한 줄 + 프라이버시 문구("사진은 서버로 전송되지 않아요") + 링크 |

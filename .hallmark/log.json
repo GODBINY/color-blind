@@ -1,0 +1,27 @@
+[
+  {
+    "date": "2026-07-26",
+    "macrostructure": "Workbench",
+    "theme": "custom",
+    "theme_axes": "aubergine-black / pressed-paper / berry",
+    "vibe": "nocturnal flower field",
+    "enrichment": "E4 photographic comparison",
+    "brief": "Remove all beige and orange from the Iris palette"
+  },
+  {
+    "date": "2026-07-26",
+    "macrostructure": "Workbench",
+    "theme": "custom",
+    "theme_axes": "clay paper / ink-plum utility / muted-mulberry",
+    "vibe": "botanical ink and pressed flowers",
+    "enrichment": "E4 photographic comparison",
+    "brief": "Replace generic AI-SaaS cream, navy, and sand palette"
+  },
+  {
+    "date": "2026-07-26",
+    "macrostructure": "Workbench",
+    "theme": "Iris locked system",
+    "enrichment": "E4 photographic comparison",
+    "brief": "Reduce AI-template cues while preserving Iris's photo-first product experience"
+  }
+]

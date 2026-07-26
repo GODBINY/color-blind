@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { daltonize, computeDelta } from "../daltonize";
+import { computeDelta, computeSeparationGain, daltonize } from "../daltonize";
 import type { RGB } from "../srgb";
 
 const ROSE_RED: RGB = [0.75, 0.15, 0.2];
@@ -45,5 +45,27 @@ describe("computeDelta", () => {
     const translated = daltonize(ROSE_RED, "deutan", 1, 0.8);
     const deltaAfter = computeDelta(translated, LEAF_GREEN, "deutan", 1);
     expect(deltaAfter).toBeGreaterThan(deltaBefore);
+  });
+});
+
+describe("computeSeparationGain", () => {
+  it("reports a positive modelled gain for a rose translated against a leaf", () => {
+    const translatedRose = daltonize(ROSE_RED, "deutan", 1, 0.8);
+    expect(
+      computeSeparationGain(
+        ROSE_RED,
+        LEAF_GREEN,
+        translatedRose,
+        LEAF_GREEN,
+        "deutan",
+        1,
+      ),
+    ).toBeGreaterThan(0);
+  });
+
+  it("is zero when neither side changes", () => {
+    expect(
+      computeSeparationGain(ROSE_RED, LEAF_GREEN, ROSE_RED, LEAF_GREEN, "deutan", 1),
+    ).toBeCloseTo(0, 8);
   });
 });

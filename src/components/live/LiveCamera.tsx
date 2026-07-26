@@ -12,7 +12,8 @@ type CameraCopy = {
   flip: string;
   front: string;
   back: string;
-  colorAtCenter: string;
+  colorAtPoint: string;
+  pickHint: string;
   unsupportedTitle: string;
   unsupportedBody: string;
   deniedTitle: string;
@@ -29,11 +30,14 @@ const toHex = (value: number) => value.toString(16).padStart(2, "0").toUpperCase
 export function LiveCamera({ copy }: { copy: CameraCopy }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const cameraFrameRef = useRef<HTMLDivElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const frameRef = useRef<number | null>(null);
+  const pointRef = useRef({ x: 0.5, y: 0.5 });
   const [state, setState] = useState<CameraState>("idle");
   const [facingMode, setFacingMode] = useState<"user" | "environment">("environment");
   const [rgb, setRgb] = useState<[number, number, number]>([36, 52, 71]);
+  const [point, setPoint] = useState({ x: 0.5, y: 0.5 });
 
   const stopCamera = useCallback(() => {
     if (frameRef.current !== null) {
@@ -52,8 +56,15 @@ export function LiveCamera({ copy }: { copy: CameraCopy }) {
       if (video && canvas && video.videoWidth && video.videoHeight) {
         const context = canvas.getContext("2d", { willReadFrequently: true });
         if (context) {
-          const x = Math.max(0, Math.floor(video.videoWidth / 2));
-          const y = Math.max(0, Math.floor(video.videoHeight / 2));
+          const frame = cameraFrameRef.current;
+          const rect = frame?.getBoundingClientRect();
+          const frameWidth = rect?.width ?? video.clientWidth;
+          const frameHeight = rect?.height ?? video.clientHeight;
+          const scale = Math.max(frameWidth / video.videoWidth, frameHeight / video.videoHeight);
+          const renderedWidth = video.videoWidth * scale;
+          const renderedHeight = video.videoHeight * scale;
+          const x = Math.max(0, Math.min(video.videoWidth - 1, Math.floor((pointRef.current.x * frameWidth - (frameWidth - renderedWidth) / 2) / scale)));
+          const y = Math.max(0, Math.min(video.videoHeight - 1, Math.floor((pointRef.current.y * frameHeight - (frameHeight - renderedHeight) / 2) / scale)));
           context.drawImage(video, x, y, 1, 1, 0, 0, 1, 1);
           const pixel = context.getImageData(0, 0, 1, 1).data;
           const [red = 0, green = 0, blue = 0] = pixel;
@@ -106,6 +117,17 @@ export function LiveCamera({ copy }: { copy: CameraCopy }) {
     await startCamera(nextFacingMode);
   };
 
+  const pickColor = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (state !== "active") return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const next = {
+      x: Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width)),
+      y: Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height)),
+    };
+    pointRef.current = next;
+    setPoint(next);
+  };
+
   const hex = `#${toHex(rgb[0])}${toHex(rgb[1])}${toHex(rgb[2])}`;
   const isFallback = state === "unsupported" || state === "denied" || state === "error";
   const fallbackTitle = state === "denied" ? copy.deniedTitle : copy.unsupportedTitle;
@@ -115,7 +137,7 @@ export function LiveCamera({ copy }: { copy: CameraCopy }) {
     <main className="mx-auto flex min-h-[calc(100vh-76px)] max-w-[1184px] items-center px-5 pb-10 pt-4 md:px-8 md:pb-16">
       <section className="w-full overflow-hidden rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-m)]">
         <div className="grid min-h-[min(720px,calc(100vh-140px))] lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="relative min-h-[520px] overflow-hidden bg-[var(--color-primary)] sm:min-h-[600px]">
+          <div ref={cameraFrameRef} onPointerDown={pickColor} className="relative min-h-[520px] overflow-hidden bg-[var(--color-primary)] touch-manipulation sm:min-h-[600px]">
             <video
               ref={videoRef}
               aria-label={copy.title}
@@ -129,7 +151,7 @@ export function LiveCamera({ copy }: { copy: CameraCopy }) {
             {state === "active" && (
               <>
                 <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(36,52,71,0.42),transparent_25%,transparent_70%,rgba(36,52,71,0.58))]" />
-                <div className="pointer-events-none absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_1px_6px_rgba(36,52,71,0.45)]">
+                <div className="pointer-events-none absolute size-12 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_1px_6px_rgba(36,52,71,0.45)] transition-[left,top] duration-150" style={{ left: `${point.x * 100}%`, top: `${point.y * 100}%` }}>
                   <span className="absolute left-1/2 top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
                 </div>
                 <div className="absolute inset-x-4 top-4 flex items-start justify-between gap-3 sm:inset-x-6 sm:top-6">
@@ -144,7 +166,7 @@ export function LiveCamera({ copy }: { copy: CameraCopy }) {
                   </button>
                 </div>
                 <div className="absolute bottom-5 left-1/2 w-[calc(100%-40px)] max-w-[360px] -translate-x-1/2 rounded-[var(--radius-m)] bg-white/95 p-4 shadow-[var(--shadow-l)] backdrop-blur-sm sm:bottom-7">
-                  <p className="text-[13px] leading-5 text-[var(--color-text-sub)]">{copy.colorAtCenter}</p>
+                  <p className="text-[13px] leading-5 text-[var(--color-text-sub)]">{copy.colorAtPoint}</p>
                   <div className="mt-3 flex items-center gap-3">
                     <span className="size-10 shrink-0 rounded-[var(--radius-s)] border border-black/10" style={{ backgroundColor: hex }} aria-label={hex} />
                     <div className="min-w-0 font-mono text-[14px] font-medium tabular-nums text-[var(--color-primary)]">
@@ -188,10 +210,11 @@ export function LiveCamera({ copy }: { copy: CameraCopy }) {
               <h2 className="mt-3 text-[22px] font-semibold leading-[30px] tracking-[-0.025em]">{copy.title}</h2>
               <p className="mt-3 text-[16px] leading-[26px] text-[var(--color-text-sub)]">{copy.body}</p>
               <div className="mt-7 rounded-[var(--radius-m)] bg-[var(--color-bg)] p-4">
-                <p className="text-[13px] leading-5 text-[var(--color-text-sub)]">{copy.colorAtCenter}</p>
+                <p className="text-[13px] leading-5 text-[var(--color-text-sub)]">{copy.colorAtPoint}</p>
                 <p className="mt-2 font-mono text-[16px] font-medium tabular-nums">{hex}</p>
                 <p className="mt-1 font-mono text-[13px] tabular-nums text-[var(--color-text-sub)]">RGB {rgb.join(", ")}</p>
               </div>
+              <p className="mt-3 text-[13px] leading-5 text-[var(--color-text-sub)]">{copy.pickHint}</p>
             </div>
             <p className="mt-8 text-[13px] leading-5 text-[var(--color-text-sub)]">{copy.privacy}</p>
           </aside>

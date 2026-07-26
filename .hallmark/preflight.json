@@ -1,0 +1,8 @@
+{
+  "date": "2026-07-26",
+  "font_stack": "Pretendard Variable / Inter tokens with system fallbacks",
+  "palette": "Iris warm off-white, deep navy, warm sand",
+  "motion": "CSS motion only",
+  "spacing": "4px scale",
+  "framework": "Next.js App Router + Tailwind CSS v4"
+}

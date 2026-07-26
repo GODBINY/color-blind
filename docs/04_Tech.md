@@ -99,8 +99,9 @@ M_shift = [ 0    0    0
 ### 품질 규칙
 
 - `strength` 기본 80%. 100%는 하늘·피부톤까지 변해 부자연스러울 수 있음 → 슬라이더 제공 ([02_PRD.md](02_PRD.md) T-4)
-- **번역 효과 측정**: `Δ = mean|simulate(result) - simulate(original)|` — Δ가 임계값 미만이면 "이 사진은 이미 잘 보여요" 안내
-- 검증 도구: 번역 후 시뮬레이션(= 그 사람이 볼 모습)을 반드시 미리보기로 제공 — 이것이 T-5의 근거
+- **번역 효과 측정**: `Δ = mean|simulate(result) - simulate(original)|`로 번역이 선택한 시야에서 실제 변화를 만드는지 확인한다.
+- **쌍 분리 회귀 검사**: 꽃/잎처럼 의미 있는 두 색 영역에 대해 `gain = separation(sim(translated pair)) - separation(sim(original pair))`를 계산한다. gain이 양수여야 하며, 이는 모델 안에서의 자동 품질 지표일 뿐 임상 검증이나 개인의 체감 보장은 아니다.
+- 검증 도구: 번역 후 시뮬레이션(= 그 사람이 볼 모습)을 결과 화면으로 제공한다. 번역 전/후 시뮬레이션 드래그 비교는 검증용 보조 화면으로만 열 수 있으며, 결과 감상 화면의 기본 UI가 아니다.
 - 알고리즘 튜닝은 실제 색약 당사자(남자친구) 피드백으로 검증하는 것이 최우선. 문헌 지표보다 "꽃이 보이는가"가 기준
 
 ## 5. 렌더링 & 성능 전략
@@ -109,7 +110,7 @@ M_shift = [ 0    0    0
 |---|---|---|
 | 정지 이미지 (Translate/Simulate) | Canvas 2D `ImageData` + 픽셀 루프, 4096px 초과 시 리사이즈 | 1회성 연산, 구현 단순. 12MP에서도 수백 ms 수준 |
 | 처리 중 블로킹 방지 | Web Worker (`OffscreenCanvas` 지원 시) | 메인 스레드 UI 유지 |
-| Live Camera | **WebGL fragment shader** (행렬을 uniform으로) | 30fps 실시간은 CPU 루프 불가 |
+| Live Camera | **WebGL fragment shader** (행렬을 uniform으로) | 30fps 실시간은 CPU 루프 불가. 색상 피커는 `object-fit: cover`의 크롭 오프셋을 반영해 탭 좌표를 원본 video 좌표로 변환한다. |
 | Compare Slider | 변환본을 캔버스/이미지 2장으로 두고 `clip-path`로 분할 | 드래그마다 재연산 금지 |
 | 색 이름 매칭 | 색 사전(≈140색)의 Lab 값 사전 계산, 최근접 탐색 | 실시간 픽커 대응 |
 
@@ -194,5 +195,5 @@ public/og/                               # OG 이미지 (07_SEO)
 1. Live Camera의 실시간 Translate/Simulate WebGL 필터와 색 이름 사전
 2. 이미지 변환 Web Worker 및 저사양 기기 메모리 폴백
 3. HEIC 입력 변환, Web Share API, 붙여넣기/모바일 실기기 E2E 검증
-4. Find My View의 런타임 도트 패턴 생성 및 실제 사용자 검증을 통한 문항 보정
+4. Find My View의 자체 제작 색 비교 카드 문항을 실제 사용자 검증으로 보정 (공식 Ishihara 플레이트 복제 금지)
 | 대형 이미지 메모리 (구형 모바일) | 4096 → 2048px 단계적 폴백 |

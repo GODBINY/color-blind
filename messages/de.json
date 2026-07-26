@@ -1,0 +1,34 @@
+{
+  "Nav": {
+    "brand": "Iris",
+    "languageNav": "Sprache auswählen",
+    "privacy": "Deine Fotos bleiben auf diesem Gerät."
+  },
+  "Home": {
+    "eyebrow": "Durch Farbe ein wenig näher",
+    "tagline": "Teile die Schönheit, die du siehst —\nin Farben, die sie erkennen können.",
+    "intro": "Beginne mit einem Foto. Übertrage Unterschiede, die sonst verloren gehen könnten, in besser unterscheidbare Eindrücke.",
+    "cta": "Foto hochladen",
+    "uploadError": "Wähle ein JPG-, PNG- oder WebP-Bild bis 20 MB.",
+    "secondaryCta": "Durch ihre Augen sehen",
+    "privacy": "Fotos werden nicht an einen Server gesendet. Alles geschieht auf diesem Gerät.",
+    "before": "Ihre Sicht",
+    "after": "Übersetzt",
+    "visualCaption": "Ziehe, um Veränderungen zu entdecken",
+    "exploreEyebrow": "Entdecken",
+    "exploreTitle": "Ein paar Wege, eine Sicht zu teilen",
+    "exploreBody": "Beginne mit einem Foto und nähere dich einer anderen Art zu sehen.",
+    "tileSimulate": "Ihre Sicht",
+    "tileSimulateBody": "Dieselbe Szene aus einer anderen Sicht sehen",
+    "tileLive": "Live Camera",
+    "tileLiveBody": "Farben um dich herum direkt prüfen",
+    "tileFindMyView": "Find My View",
+    "tileFindMyViewBody": "Die eigene Farbwahrnehmung behutsam erkunden",
+    "tileLearn": "Learn",
+    "tileLearnBody": "Über unterschiedliche Farbwahrnehmungen lesen"
+  },
+  "RouteStub": {
+    "back": "Zur Startseite",
+    "preparing": "Dieser Bereich wird noch vorbereitet"
+  }
+}

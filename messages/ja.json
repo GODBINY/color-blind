@@ -1,0 +1,31 @@
+{
+  "Nav": {
+    "brand": "Iris",
+    "languageNav": "言語を選ぶ",
+    "privacy": "写真はこの端末から送信されません。"
+  },
+  "Home": {
+    "eyebrow": "色を通して、もう少し近くに",
+    "tagline": "あなたが見た美しさを、\nその人にも見える色で。",
+    "intro": "一枚の写真から始めましょう。見えにくかった違いを、その人が感じ取りやすい印象へと届けます。",
+    "cta": "写真を選ぶ",
+    "uploadError": "20MB 以下の JPG、PNG、WebP を選んでください。",
+    "secondaryCta": "その人の見え方を見る",
+    "privacy": "写真はサーバーに送信されません。すべての変換はこの端末で行われます。",
+    "before": "その人の見え方",
+    "after": "変換後",
+    "visualCaption": "ドラッグして違いを見てみましょう",
+    "exploreEyebrow": "もっと知る",
+    "exploreTitle": "色を届ける、いくつかの方法",
+    "exploreBody": "一枚の写真から、別の見え方を少しずつ理解していきましょう。",
+    "tileSimulate": "その人の見え方",
+    "tileSimulateBody": "同じ場面を別の視点で見てみる",
+    "tileLive": "Live Camera",
+    "tileLiveBody": "目の前の色をすぐに確かめる",
+    "tileFindMyView": "Find My View",
+    "tileFindMyViewBody": "自分の見え方の特徴を穏やかに知る",
+    "tileLearn": "Learn",
+    "tileLearnBody": "色の見え方について読む"
+  },
+  "RouteStub": { "back": "ホームへ", "preparing": "この画面は準備中です" }
+}

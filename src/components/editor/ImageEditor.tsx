@@ -22,7 +22,7 @@ const MAX_DIMENSION = 4096;
 const copy = {
   ko: {
     translateTitle: "그 사람의 색으로 번역하기",
-    translateIntro: "보여주고 싶었던 사진으로 시작해 보세요.",
+    translateIntro: "그 사람이 더 많은 색의 차이를 만날 수 있도록, 사진을 그 사람의 색으로 옮겨요.",
     simulateTitle: "그 사람의 시야로 보기",
     simulateIntro: "같은 장면이 어떻게 다르게 보이는지 살펴봐요.",
     drop: "여기에 사진을 놓아주세요",
@@ -36,6 +36,11 @@ const copy = {
     mine: "내 눈으로 보기",
     theirs: "그 사람의 눈으로 보기",
     viewing: (type: string) => `지금 ${type}의 시야로 보고 있어요`,
+    theirResultTitle: "그 사람에게 전해질 장면",
+    theirResultIntro: (type: string) => `${type}의 시야에서 본, 번역 뒤의 사진이에요.`,
+    theirResultNote: "색을 되돌리는 대신, 구분하기 어려운 색의 차이를 다른 단서로 옮겨요.",
+    showBefore: "번역 전에는 어떻게 보였을까?",
+    hideBefore: "완성된 사진만 보기",
     original: "원본",
     translated: "번역한 뒤",
     before: "번역 전 시야",
@@ -54,7 +59,7 @@ const copy = {
   },
   en: {
     translateTitle: "Translate for them",
-    translateIntro: "Begin with a photo you wanted to share.",
+    translateIntro: "Move a photo into colours where they can notice more of its differences.",
     simulateTitle: "See through their eyes",
     simulateIntro: "Notice how the same scene can look different.",
     drop: "Drop a photo here",
@@ -68,6 +73,11 @@ const copy = {
     mine: "My eyes",
     theirs: "Their eyes",
     viewing: (type: string) => `You are viewing through ${type} eyes`,
+    theirResultTitle: "What reaches them",
+    theirResultIntro: (type: string) => `The translated photo, as it appears in a ${type} view.`,
+    theirResultNote: "It does not restore colour vision. It moves hard-to-separate colour differences into other cues.",
+    showBefore: "How did it look before translation?",
+    hideBefore: "Show the finished photo only",
     original: "Original",
     translated: "Translated",
     before: "Before translation",
@@ -105,6 +115,7 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
   const [visionType, setVisionType] = useState<VisionType>("deutan");
   const [amount, setAmount] = useState(mode === "translate" ? 0.8 : 1);
   const [view, setView] = useState<ViewMode>("mine");
+  const [showTheirComparison, setShowTheirComparison] = useState(false);
   const [divider, setDivider] = useState(50);
   const [dragging, setDragging] = useState(false);
   const [isDraggingFile, setIsDraggingFile] = useState(false);
@@ -218,13 +229,9 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
     setDivider(Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100)));
   };
 
-  const activeResult = mode === "translate" && view === "theirs" ? resultUrl : resultUrl;
-  const leftImage = mode === "translate" && view === "theirs" ? originalUrl : originalUrl;
-  const rightImage = mode === "translate" && view === "theirs" ? resultUrl : activeResult;
-  const leftLabel = mode === "translate" && view === "theirs" ? text.before : text.original;
-  const rightLabel = mode === "translate" && view === "theirs" ? text.after : mode === "translate" ? text.translated : text.simulated;
-  // In their-eyes mode both sides must be simulated; the processing pass above creates the translated image.
-  // A small second pass is rendered below whenever this view is selected.
+  // The "their eyes" result is the finished translated photo, simulated for the
+  // selected view. Its before/after slider is deliberately optional: it is an
+  // explanation tool, not the main result someone is meant to receive.
   const [theirBeforeUrl, setTheirBeforeUrl] = useState<string | null>(null);
   const [theirAfterUrl, setTheirAfterUrl] = useState<string | null>(null);
 
@@ -267,8 +274,11 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
     return () => { cancelled = true; window.clearTimeout(timer); };
   }, [amount, mode, source, view, visionType]);
 
-  const compareLeft = mode === "translate" && view === "theirs" ? theirBeforeUrl : leftImage;
-  const compareRight = mode === "translate" && view === "theirs" ? theirAfterUrl : rightImage;
+  const isTheirResult = mode === "translate" && view === "theirs";
+  const compareLeft = isTheirResult ? theirBeforeUrl : originalUrl;
+  const compareRight = isTheirResult ? theirAfterUrl : resultUrl;
+  const leftLabel = isTheirResult ? text.before : text.original;
+  const rightLabel = isTheirResult ? text.after : mode === "translate" ? text.translated : text.simulated;
 
   const download = () => {
     if (!resultUrl) return;
@@ -285,9 +295,8 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
 
   return (
     <main className="mx-auto w-full max-w-[1184px] px-5 pb-12 pt-7 md:px-8 md:pt-10">
-      <div className="mb-7 max-w-[620px]">
-        <p className="mb-2 text-[13px] font-medium tracking-[0.08em] text-[var(--color-text-sub)]">IRIS / {mode.toUpperCase()}</p>
-        <h1 className="text-[28px] font-semibold leading-9 tracking-[-0.035em] md:text-[32px] md:leading-10">
+      <div className="mb-10 max-w-[620px] border-b border-[var(--color-border)] pb-7">
+        <h1 className="min-w-0 text-[28px] font-semibold leading-9 tracking-[-0.035em] [overflow-wrap:anywhere] md:text-[32px] md:leading-10">
           {mode === "translate" ? text.translateTitle : text.simulateTitle}
         </h1>
         <p className="mt-3 text-[16px] leading-[26px] text-[var(--color-text-sub)]">
@@ -301,17 +310,16 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
           onDragOver={(event) => event.preventDefault()}
           onDragLeave={() => setIsDraggingFile(false)}
           onDrop={(event) => { event.preventDefault(); setIsDraggingFile(false); const file = event.dataTransfer.files[0]; if (file) void loadFile(file); }}
-          className={`grid min-h-[390px] place-items-center rounded-[var(--radius-l)] border border-dashed p-6 text-center transition-all duration-[var(--duration-fast)] ${isDraggingFile ? "scale-[1.01] border-[var(--color-accent)] bg-[#f5e7d8]" : "border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-m)]"}`}
+          className={`flex min-h-[430px] items-end rounded-[var(--radius-l)] border border-dashed p-6 transition-[background-color,transform,border-color] duration-[var(--duration-fast)] ${isDraggingFile ? "scale-[1.01] border-[var(--color-accent)] bg-[var(--color-bg)]" : "border-[var(--color-border)] bg-[var(--color-surface)]"}`}
         >
           <div className="max-w-sm">
-            <span aria-hidden="true" className="mx-auto grid size-12 place-items-center rounded-full bg-[var(--color-bg)] text-xl">⌁</span>
-            <h2 className="mt-5 text-[22px] font-semibold leading-[30px]">{text.drop}</h2>
+            <h2 className="text-[22px] font-semibold leading-[30px]">{text.drop}</h2>
             <p className="mt-2 text-[13px] leading-5 text-[var(--color-text-sub)]">{text.paste}</p>
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <button type="button" onClick={() => fileInput.current?.click()} className="h-12 rounded-[var(--radius-m)] bg-[var(--color-primary)] px-5 text-[16px] font-medium text-white transition-colors hover:bg-[#3a4b5e] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3">{text.select}</button>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button type="button" onClick={() => fileInput.current?.click()} className="h-12 whitespace-nowrap rounded-[var(--radius-m)] bg-[var(--color-primary)] px-5 text-[16px] font-medium text-white transition-colors hover:bg-[color-mix(in_srgb,var(--color-primary)_85%,var(--color-accent))] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3">{text.select}</button>
               <button type="button" onClick={() => cameraInput.current?.click()} className="h-12 rounded-[var(--radius-m)] border border-[var(--color-border)] bg-white px-5 text-[16px] font-medium transition-colors hover:bg-[var(--color-bg)] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3">{text.camera}</button>
             </div>
-            <p className="mt-7 text-[13px] leading-5 text-[var(--color-text-sub)]">⌁ {text.privacy}</p>
+            <p className="mt-7 text-[13px] leading-5 text-[var(--color-text-sub)]">{text.privacy}</p>
           </div>
           <input ref={fileInput} type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={(event) => { const file = event.target.files?.[0]; if (file) void loadFile(file); event.currentTarget.value = ""; }} />
           <input ref={cameraInput} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" className="sr-only" onChange={(event) => { const file = event.target.files?.[0]; if (file) void loadFile(file); event.currentTarget.value = ""; }} />
@@ -320,15 +328,32 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
           <section>
             {mode === "translate" && (
-              <div className="mb-5 flex w-full rounded-full border border-[var(--color-border)] bg-white p-1 shadow-[var(--shadow-s)] sm:w-fit" role="group" aria-label={text.translateTitle}>
+              <div className="mb-5 flex w-full border-b border-[var(--color-border)] sm:w-fit" role="group" aria-label={text.translateTitle}>
                 {(["mine", "theirs"] as const).map((item) => (
-                  <button key={item} type="button" onClick={() => setView(item)} aria-pressed={view === item} className={`min-h-10 rounded-full px-4 text-[14px] font-medium transition-colors ${view === item ? "bg-[var(--color-primary)] text-white" : "text-[var(--color-text-sub)] hover:bg-[var(--color-bg)]"}`}>
+                  <button key={item} type="button" onClick={() => { setView(item); if (item === "theirs") setShowTheirComparison(false); }} aria-pressed={view === item} className={`min-h-10 whitespace-nowrap border-b-2 px-4 text-[14px] font-medium transition-colors ${view === item ? "border-[var(--color-primary)] text-[var(--color-primary)]" : "border-transparent text-[var(--color-text-sub)] hover:text-[var(--color-primary)]"}`}>
                     {item === "mine" ? text.mine : text.theirs}
                   </button>
                 ))}
               </div>
             )}
-            {mode === "translate" && view === "theirs" && <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#f5e7d8] px-3 py-2 text-[13px] font-medium"><span aria-hidden="true">◉</span>{text.viewing(typeLabels[visionType])}</p>}
+            {isTheirResult && !showTheirComparison && (
+              <div className="mb-4">
+                <p className="text-[13px] font-medium text-[var(--color-text-sub)]">{text.viewing(typeLabels[visionType])}</p>
+                <h2 className="mt-2 text-[20px] font-semibold tracking-[-0.025em]">{text.theirResultTitle}</h2>
+                <p className="mt-2 text-[14px] leading-6 text-[var(--color-text-sub)]">{text.theirResultIntro(typeLabels[visionType])}</p>
+              </div>
+            )}
+            {isTheirResult && !showTheirComparison ? (
+              <>
+                <div className="relative overflow-hidden rounded-[var(--radius-l)] bg-[var(--color-primary)] shadow-[var(--shadow-m)]" style={{ aspectRatio: `${dimensions.width} / ${dimensions.height}` }}>
+                  {theirAfterUrl && <img src={theirAfterUrl} alt={text.theirResultTitle} draggable={false} className="size-full object-contain" />}
+                </div>
+                <p className="mt-4 text-[13px] leading-5 text-[var(--color-text-sub)]">{text.theirResultNote}</p>
+                <button type="button" onClick={() => setShowTheirComparison(true)} className="mt-5 text-[14px] font-medium underline underline-offset-4">{text.showBefore} <span aria-hidden="true">→</span></button>
+              </>
+            ) : (
+              <>
+            {isTheirResult && <p className="mb-4 text-[13px] font-medium text-[var(--color-text-sub)]">{text.viewing(typeLabels[visionType])}</p>}
             <div className="mb-3 flex items-center justify-between text-[13px] font-medium text-[var(--color-text-sub)]"><span>{leftLabel}</span><span>{rightLabel}</span></div>
             <div
               role="slider"
@@ -356,14 +381,17 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
               </div>
             </div>
             <p className="mt-3 text-[13px] leading-5 text-[var(--color-text-sub)]">{text.compareHint}</p>
+            {isTheirResult && <button type="button" onClick={() => setShowTheirComparison(false)} className="mt-4 text-[14px] font-medium underline underline-offset-4">{text.hideBefore}</button>}
+              </>
+            )}
             <p className="mt-6 flex items-center gap-2 text-[13px] leading-5 text-[var(--color-text-sub)]"><span aria-hidden="true">⌁</span>{text.privacy}</p>
           </section>
 
-          <aside className="rounded-[var(--radius-l)] border border-[var(--color-border)] bg-white p-5 shadow-[var(--shadow-m)]">
+          <aside className="border-t border-[var(--color-border)] pt-6 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
             <fieldset>
               <legend className="text-[16px] font-semibold">{text.typeQuestion}</legend>
               <div className="mt-4 grid grid-cols-2 gap-2">
-                {availableTypes.map((type) => <button key={type} type="button" onClick={() => setVisionType(type)} aria-pressed={visionType === type} className={`min-h-11 rounded-[var(--radius-s)] border px-3 text-left text-[14px] font-medium transition-colors ${visionType === type ? "border-[var(--color-primary)] bg-[var(--color-bg)] shadow-[inset_0_-2px_0_var(--color-accent)]" : "border-[var(--color-border)] hover:bg-[var(--color-bg)]"}`}>{visionType === type ? "✓ " : ""}{typeLabels[type]}</button>)}
+                {availableTypes.map((type) => <button key={type} type="button" onClick={() => setVisionType(type)} aria-pressed={visionType === type} className={`min-h-11 rounded-[var(--radius-s)] border px-3 text-left text-[14px] font-medium transition-colors ${visionType === type ? "border-[var(--color-primary)] bg-[var(--color-bg)]" : "border-[var(--color-border)] hover:bg-[var(--color-bg)]"}`}>{typeLabels[type]}</button>)}
               </div>
             </fieldset>
             <div className="mt-7 border-t border-[var(--color-border)] pt-6">
@@ -372,7 +400,7 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
             </div>
             {mode === "translate" && <p className="mt-5 text-[13px] leading-5 text-[var(--color-text-sub)]">{text.unknownType}</p>}
             <div className="mt-7 grid gap-3">
-              <button type="button" onClick={download} disabled={!resultUrl || isProcessing} className="h-12 rounded-[var(--radius-m)] bg-[var(--color-primary)] px-4 text-[16px] font-medium text-white transition-colors hover:bg-[#3a4b5e] disabled:cursor-not-allowed disabled:opacity-50">{isProcessing ? (mode === "translate" ? text.processingTranslate : text.processingSimulate) : text.download}</button>
+              <button type="button" onClick={download} disabled={!resultUrl || isProcessing} className="h-12 whitespace-nowrap rounded-[var(--radius-m)] bg-[var(--color-primary)] px-4 text-[16px] font-medium text-white transition-colors hover:bg-[color-mix(in_srgb,var(--color-primary)_85%,var(--color-accent))] disabled:cursor-not-allowed disabled:opacity-50">{isProcessing ? (mode === "translate" ? text.processingTranslate : text.processingSimulate) : text.download}</button>
               <button type="button" onClick={() => fileInput.current?.click()} className="h-12 rounded-[var(--radius-m)] border border-[var(--color-border)] bg-white px-4 text-[16px] font-medium hover:bg-[var(--color-bg)]">{text.replace}</button>
               {mode === "simulate" && <Link href="/translate" className="rounded-[var(--radius-m)] px-1 py-2 text-center text-[14px] font-medium underline underline-offset-4">{text.translateCta} →</Link>}
             </div>
