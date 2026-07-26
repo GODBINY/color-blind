@@ -334,3 +334,63 @@ source_context: "src/components/ui/ThemeToggle.tsx"
 ```
 
 Keep the header light/dark toggle at a very compact visual size; reduce it again when it still reads as oversized.
+
+## 2026-07-26T11:10:00.000Z — make-reference-results-verifiable
+
+```omd-meta
+id: pref_ms1qfkju_c3dd0bdd
+timestamp: 2026-07-26T11:10:00.000Z
+scope: voice
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/components/find-my-view/FindMyViewQuiz.tsx"
+```
+
+For reference-test results, label correct and different counts precisely and let people review every entered answer against its reference value.
+
+## 2026-07-26T11:20:00.000Z — keep-translation-previews-identical
+
+```omd-meta
+id: pref_ms1qyhrc_e27d5b7b
+timestamp: 2026-07-26T11:20:00.000Z
+scope: layout
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/components/editor/ImageEditor.tsx"
+```
+
+The “what reaches them” translation preview must show the exact same finished file as the translated side of the comparison, never a separately simulated image.
+
+## 2026-07-26T11:30:00.000Z — translation-is-a-single-comparison
+
+```omd-meta
+id: pref_ms1r3gwo_a8184d28
+timestamp: 2026-07-26T11:30:00.000Z
+scope: layout
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/components/editor/ImageEditor.tsx"
+```
+
+Present translation as one fixed before/after comparison, not two tabs: original as “the scene I share” and translated as “how it reaches them.”
+
+## 2026-07-26T11:40:00.000Z — eliminate-page-level-horizontal-scroll
+
+```omd-meta
+id: pref_ms1rgzca_fe837fc7
+timestamp: 2026-07-26T11:40:00.000Z
+scope: layout
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/globals.css"
+```
+
+On desktop as well as mobile, the document itself must never horizontally scroll or bounce; keep any intentional image pan/zoom inside its own component.

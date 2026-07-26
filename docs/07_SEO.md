@@ -65,6 +65,8 @@
 - [x] Canonical: locale별 self-canonical
 - [x] 9개 언어별 Home / 사진 변환 / 시야 시뮬레이션 / 이미지 색상 추출 / Live Camera / 시야 설정 / Learn / FAQ의 title·description
 - [x] Structured Data: `WebApplication` (Home) — 무료, 브라우저 기반 도구임을 명시
+- [x] 브랜드 파비콘 / Apple 아이콘 / 웹 앱 manifest / 정적 Open Graph 이미지
+- [x] Structured Data에 `WebSite`, `Organization`을 함께 제공
 - [ ] `FAQPage` (`/learn/faq`) — 화면에 보이는 다국어 FAQ 본문을 먼저 정비한 뒤 마크업을 확장
 - [ ] `Article` (Learn 각 페이지, 블로그)
 - [ ] Core Web Vitals: LCP < 2.5s — Hero 이미지 `priority` + AVIF/WebP, 폰트 self-host `font-display: swap`

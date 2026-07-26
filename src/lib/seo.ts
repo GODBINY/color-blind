@@ -145,19 +145,26 @@ export function seoMetadata(locale: AppLocale, page: SeoPage): Metadata {
 
 export function appSchema(locale: AppLocale) {
   const copy = seoCopy[locale].home;
+  const baseUrl = siteUrl().toString();
   return {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "NUNBIT",
-    url: localizedUrl(locale),
-    description: copy.description,
-    applicationCategory: "UtilitiesApplication",
-    operatingSystem: "Web",
-    isAccessibleForFree: true,
-    inLanguage: locale,
-    featureList: locale === "ko"
-      ? ["색약·색맹 사진 변환", "색약·색맹 시야 시뮬레이션", "이미지 RGB·HEX 색상 추출"]
-      : ["Colorblind photo conversion", "Color vision simulation", "Image HEX and RGB color extraction"],
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        name: "NUNBIT",
+        url: localizedUrl(locale),
+        description: copy.description,
+        applicationCategory: "UtilitiesApplication",
+        operatingSystem: "Web",
+        isAccessibleForFree: true,
+        inLanguage: locale,
+        featureList: locale === "ko"
+          ? ["색약·색맹 사진 변환", "색약·색맹 시야 시뮬레이션", "이미지 RGB·HEX 색상 추출"]
+          : ["Colorblind photo conversion", "Color vision simulation", "Image HEX and RGB color extraction"],
+      },
+      { "@type": "WebSite", name: "NUNBIT", url: baseUrl, inLanguage: locale },
+      { "@type": "Organization", name: "NUNBIT", url: baseUrl, logo: new URL("/icon.svg", siteUrl()).toString() },
+    ],
   };
 }
 

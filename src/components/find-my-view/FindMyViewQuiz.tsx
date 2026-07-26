@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { getVisionLabels } from "@/lib/vision-labels";
 import { saveVisionProfile } from "@/lib/vision-profile";
+import { scoreVisionResponses } from "@/lib/vision-score";
 
 type SelectableVision = "protan" | "deutan" | "tritan";
 
@@ -31,8 +32,8 @@ export function FindMyViewQuiz({ locale }: { locale: string }) {
   const [selectedVision, setSelectedVision] = useState<SelectableVision | null>(null);
   const plate = plates[position];
   const finished = responses.length === plates.length;
-  const matched = responses.filter((response, index) => response === plates[index]!.answer).length;
-  const mayHaveRedGreenDifference = matched <= 4;
+  const score = scoreVisionResponses(plates, responses);
+  const mayHaveRedGreenDifference = score.incorrect.length >= 4;
 
   function submit() {
     if (!value.trim()) return;
@@ -93,8 +94,14 @@ export function FindMyViewQuiz({ locale }: { locale: string }) {
     <p className="text-[13px] font-medium text-[var(--color-text-sub)]">Find My View · {plates.length} / {plates.length}</p>
     <div className="mt-5 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-m)] md:p-10">
       <p className="text-[13px] font-medium text-[var(--color-text-sub)]">{isKo ? "사진 비교를 위한 시야 설정" : "Set a view for photo comparisons"}</p>
-      <h1 className="mt-3 text-[30px] font-semibold tracking-[-0.04em]">{mayHaveRedGreenDifference ? (isKo ? `${plates.length}장 중 ${matched}장이 기준 숫자와 달랐어요` : `${matched} of ${plates.length} plates matched the reference number`) : (isKo ? `${plates.length}장 중 ${matched}장이 기준 숫자와 같았어요` : `${matched} of ${plates.length} plates matched the reference number`)}</h1>
+      <h1 className="mt-3 text-[30px] font-semibold tracking-[-0.04em]">{score.incorrect.length > 0 ? (isKo ? `${plates.length}장 중 ${score.incorrect.length}장이 기준 숫자와 달랐어요` : `${score.incorrect.length} of ${plates.length} answers differed from the reference`) : (isKo ? `${plates.length}장 모두 기준 숫자와 같았어요` : `All ${plates.length} answers matched the reference`)}</h1>
       <p className="mt-3 text-[15px] leading-6 text-[var(--color-text-sub)]">{mayHaveRedGreenDifference ? (isKo ? <><strong className="font-semibold text-[var(--color-primary)]">적록 계열</strong>의 색 차이가 비슷하게 느껴질 수 있어요. 이 결과는 화면과 판에 따라 달라질 수 있으므로, 알고 있는 유형이나 사진에서 더 가까운 시야를 직접 골라 주세요.</> : <><strong className="font-semibold text-[var(--color-primary)]">Red–green differences</strong> may feel closer together. Displays and online plates can vary, so choose the type you already know or the view that feels closest in a photo.</>) : (isKo ? "온라인 판에서 큰 차이가 드러나지 않았어요. 이 결과만으로 색각 유형을 확정할 수는 없으니, 사진 비교에 필요한 시야를 직접 골라 주세요." : "No large difference appeared on these online plates. This does not confirm a color-vision type, so choose the view you need for photo comparisons.")}</p>
+      {score.incorrect.length > 0 && <details className="mt-5 rounded-[var(--radius-s)] bg-[var(--color-bg)] px-4 py-3 text-[13px] leading-5 text-[var(--color-text-sub)]">
+        <summary className="cursor-pointer font-medium text-[var(--color-primary)]">{isKo ? "입력한 답과 기준 숫자 확인" : "Review your answers against the reference"}</summary>
+        <ul className="mt-3 space-y-1.5">
+          {score.incorrect.map((entry) => <li key={entry.id}>{isKo ? `${entry.id}번 판 · 입력 ${entry.response || "—"} / 기준 ${entry.answer}` : `Plate ${entry.id} · you entered ${entry.response || "—"} / reference ${entry.answer}`}</li>)}
+        </ul>
+      </details>}
       <fieldset className="mt-8">
         <legend className="text-[16px] font-semibold">{isKo ? "사진 비교에 쓸 시야" : "View to use for photo comparisons"}</legend>
         <div className="mt-4 grid gap-2 sm:grid-cols-3">{(["protan", "deutan", "tritan"] as const).map((type) => <button key={type} type="button" onClick={() => setSelectedVision(type)} aria-pressed={selectedVision === type} className={`min-h-12 rounded-[var(--radius-s)] border px-3 text-left text-[14px] font-medium transition-colors ${selectedVision === type ? "border-[var(--color-primary)] bg-[var(--color-bg)]" : "border-[var(--color-border)] hover:bg-[var(--color-bg)]"}`}>{labels.types[type]}</button>)}</div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -24,6 +25,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     metadataBase: siteUrl(),
     ...seoMetadata(locale as AppLocale, "home"),
     applicationName: "NUNBIT",
+    icons: {
+      icon: "/icon.svg",
+      apple: "/icon.svg",
+    },
     robots: {
       index: true,
       follow: true,
@@ -54,8 +59,9 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider>
           <header className="mx-auto flex max-w-[1184px] items-center justify-between border-b border-[var(--color-border)] px-5 py-5 md:px-8">
-            <Link href="/" className="text-[21px] font-semibold tracking-[-0.05em]">
-              {t("brand")}
+            <Link href="/" className="flex items-center gap-2 text-[21px] font-semibold tracking-[-0.05em]">
+              <Image src="/icon.svg" alt="" width={28} height={28} className="size-7" priority />
+              <span>{t("brand")}</span>
             </Link>
             <nav aria-label={t("languageNav")} className="flex items-center gap-3 text-[12px] font-medium text-[var(--color-text-sub)]">
               <details className="relative">

@@ -79,17 +79,19 @@ html[data-theme="dark"] {
   --shadow-l: 0 12px 32px rgba(0, 0, 0, 0.32);
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-primary);
   font-family: var(--font-sans-ko);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: clip;
-}
-
-html {
-  overflow-x: clip;
 }
 
 ::selection {

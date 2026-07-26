@@ -16,10 +16,10 @@ import {
 } from "@/lib/color";
 
 type EditorMode = "translate" | "simulate";
-type ViewMode = "mine" | "theirs";
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
 const MAX_DIMENSION = 4096;
+const PROCESSING_FRAME_BUDGET_MS = 12;
 
 const copy = {
   ko: {
@@ -37,11 +37,11 @@ const copy = {
     severity: "시야 강도",
     mine: "내가 전할 장면",
     theirs: "그 사람에게 전해질 모습",
-    viewing: (type: string) => `지금 ${type}의 시야로 보고 있어요`,
+    viewing: (type: string) => `${type}에 맞춰 만든 사진이에요`,
     theirResultTitle: "그 사람에게 전해질 장면",
-    theirResultIntro: (type: string) => `${type}의 시야에서도 장면 속 색의 차이가 더 잘 전해지도록 옮긴 사진이에요.`,
-    theirResultNote: "색을 되돌리는 건 아니에요. 대신 가까웠던 색의 차이를 다른 단서로 옮겨, 장면의 인상이 더 잘 전해지도록 해요.",
-    showBefore: "번역 전에는 이 장면이 어떻게 보였을까?",
+    theirResultIntro: (type: string) => `${type}에서 색의 차이를 더 구분하기 쉽게 만든 완성 사진이에요.`,
+    theirResultNote: "오른쪽 ‘번역한 뒤’와 같은 파일이에요. 이 사진을 그대로 저장해 전할 수 있어요.",
+    showBefore: "원본과 나란히 비교하기",
     hideBefore: "완성된 사진만 보기",
     original: "원본",
     translated: "번역한 뒤",
@@ -52,6 +52,7 @@ const copy = {
     replace: "다른 사진 고르기",
     processingTranslate: "사진 속 색의 차이를 옮기는 중...",
     processingSimulate: "그 사람의 시선으로 바꾸는 중...",
+    processingDetail: "사진 크기에 따라 잠시 걸릴 수 있어요.",
     invalid: "앗, 이 파일은 읽을 수 없었어요. JPG, PNG, WebP로 다시 시도해 볼까요?",
     tooLarge: "사진은 20MB 이하로 올려 주세요.",
     resized: "큰 사진은 이 기기에서 편하게 다룰 수 있도록 크기를 조절했어요.",
@@ -74,11 +75,11 @@ const copy = {
     severity: "View strength",
     mine: "The scene I share",
     theirs: "How it reaches them",
-    viewing: (type: string) => `You are viewing through ${type} eyes`,
+    viewing: (type: string) => `Made for a ${type} view`,
     theirResultTitle: "What reaches them",
-    theirResultIntro: (type: string) => `The translated photo, as it appears in a ${type} view.`,
-    theirResultNote: "It does not restore colour vision. It moves hard-to-separate colour differences into other cues.",
-    showBefore: "How did it look before translation?",
+    theirResultIntro: (type: string) => `The finished photo, made to make colour differences easier to distinguish in a ${type} view.`,
+    theirResultNote: "This is the same file as “Translated” on the right. Save this photo to share it.",
+    showBefore: "Compare it with the original",
     hideBefore: "Show the finished photo only",
     original: "Original",
     translated: "Translated",
@@ -89,6 +90,7 @@ const copy = {
     replace: "Choose another photo",
     processingTranslate: "Translating into colors they can see...",
     processingSimulate: "Changing to their view...",
+    processingDetail: "This can take a moment for larger photos.",
     invalid: "We couldn’t read that file. Try a JPG, PNG, or WebP image.",
     tooLarge: "Please choose a photo under 20MB.",
     resized: "We resized this large photo so it stays comfortable to use here.",
@@ -100,6 +102,16 @@ const copy = {
 
 const toDataUrl = (canvas: HTMLCanvasElement) => canvas.toDataURL("image/png");
 
+function ProcessingOverlay({ label, detail, progress }: { label: string; detail: string; progress: number }) {
+  return <div role="status" aria-live="polite" className="absolute inset-0 z-20 grid place-items-center bg-[color-mix(in_srgb,var(--color-primary)_72%,transparent)] p-6 text-center text-white backdrop-blur-[2px]">
+    <div className="w-full max-w-60">
+      <p className="text-[16px] font-semibold">{label} <span className="tabular-nums">{progress}%</span></p>
+      <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/30"><div className="h-full rounded-full bg-white transition-[width] duration-150" style={{ width: `${progress}%` }} /></div>
+      <p className="mt-3 text-[13px] leading-5 text-white/80">{detail}</p>
+    </div>
+  </div>;
+}
+
 export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string }) {
   const text = locale === "ko" ? copy.ko : copy.en;
   const visionLabels = getVisionLabels(locale);
@@ -110,13 +122,12 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [visionType, setVisionType] = useState<VisionType>(() => readVisionProfile()?.visionType ?? "deutan");
   const [amount, setAmount] = useState(() => mode === "simulate" ? readVisionProfile()?.severity ?? 1 : 0.8);
-  const [view, setView] = useState<ViewMode>("mine");
-  const [showTheirComparison, setShowTheirComparison] = useState(false);
   const [divider, setDivider] = useState(50);
   const [dragging, setDragging] = useState(false);
   const [isDraggingFile, setIsDraggingFile] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processingProgress, setProcessingProgress] = useState(0);
   const [dimensions, setDimensions] = useState({ width: 4, height: 3 });
 
   const loadFile = useCallback(async (file: File) => {
@@ -135,6 +146,8 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
       setDimensions({ width: bitmap.width, height: bitmap.height });
       if (Math.max(bitmap.width, bitmap.height) > MAX_DIMENSION) setNotice(text.resized);
       setSource(bitmap);
+      setOriginalUrl(null);
+      setResultUrl(null);
       setDivider(50);
     } catch {
       setNotice(text.invalid);
@@ -163,7 +176,7 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
   useEffect(() => {
     if (!source) return;
     let cancelled = false;
-
+    let frameId: number | null = null;
     const process = () => {
       const scale = Math.min(1, MAX_DIMENSION / Math.max(source.width, source.height));
       const width = Math.max(1, Math.round(source.width * scale));
@@ -178,45 +191,62 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
       originalContext.drawImage(source, 0, 0, width, height);
       const input = originalContext.getImageData(0, 0, width, height);
       const result = new ImageData(width, height);
+      let index = 0;
 
-      for (let index = 0; index < input.data.length; index += 4) {
-        const linear = rgbToLinear([
-          input.data[index]! / 255,
-          input.data[index + 1]! / 255,
-          input.data[index + 2]! / 255,
-        ]);
-        const transformed = mode === "translate"
-          ? daltonize(linear, visionType as DaltonizeVisionType, 1, amount)
-          : simulate(linear, visionType, amount);
-        const [red, green, blue] = linearToRGB(transformed);
-        result.data[index] = Math.round(clamp01(red) * 255);
-        result.data[index + 1] = Math.round(clamp01(green) * 255);
-        result.data[index + 2] = Math.round(clamp01(blue) * 255);
-        result.data[index + 3] = input.data[index + 3]!;
-      }
-      outputContext.putImageData(result, 0, 0);
-      if (!cancelled) {
+      const processChunk = () => {
+        const startedAt = performance.now();
+        while (index < input.data.length && performance.now() - startedAt < PROCESSING_FRAME_BUDGET_MS) {
+          const linear = rgbToLinear([
+            input.data[index]! / 255,
+            input.data[index + 1]! / 255,
+            input.data[index + 2]! / 255,
+          ]);
+          const transformed = mode === "translate"
+            ? daltonize(linear, visionType as DaltonizeVisionType, 1, amount)
+            : simulate(linear, visionType, amount);
+          const [red, green, blue] = linearToRGB(transformed);
+          result.data[index] = Math.round(clamp01(red) * 255);
+          result.data[index + 1] = Math.round(clamp01(green) * 255);
+          result.data[index + 2] = Math.round(clamp01(blue) * 255);
+          result.data[index + 3] = input.data[index + 3]!;
+          index += 4;
+        }
+
+        if (cancelled) return;
+        setProcessingProgress(Math.round((index / input.data.length) * 100));
+        if (index < input.data.length) {
+          frameId = window.requestAnimationFrame(processChunk);
+          return;
+        }
+
+        outputContext.putImageData(result, 0, 0);
         setOriginalUrl(toDataUrl(original));
         setResultUrl(toDataUrl(output));
         setDimensions({ width, height });
         setIsProcessing(false);
-      }
+      };
+
+      frameId = window.requestAnimationFrame(processChunk);
     };
 
-    const timer = window.setTimeout(() => {
+    frameId = window.requestAnimationFrame(() => {
+      if (cancelled) return;
       setIsProcessing(true);
-      try {
-        process();
-      } catch {
-        if (!cancelled) {
-          setNotice(text.invalid);
-          setIsProcessing(false);
+      setProcessingProgress(0);
+      frameId = window.requestAnimationFrame(() => {
+        try {
+          process();
+        } catch {
+          if (!cancelled) {
+            setNotice(text.invalid);
+            setIsProcessing(false);
+          }
         }
-      }
-    }, 0);
+      });
+    });
     return () => {
       cancelled = true;
-      window.clearTimeout(timer);
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
     };
   }, [amount, mode, source, text.invalid, visionType]);
 
@@ -225,56 +255,10 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
     setDivider(Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100)));
   };
 
-  // The "their eyes" result is the finished translated photo, simulated for the
-  // selected view. Its before/after slider is deliberately optional: it is an
-  // explanation tool, not the main result someone is meant to receive.
-  const [theirBeforeUrl, setTheirBeforeUrl] = useState<string | null>(null);
-  const [theirAfterUrl, setTheirAfterUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!source || mode !== "translate" || view !== "theirs") return;
-    let cancelled = false;
-    const timer = window.setTimeout(() => {
-      const canvas = document.createElement("canvas");
-      const scale = Math.min(1, MAX_DIMENSION / Math.max(source.width, source.height));
-      canvas.width = Math.max(1, Math.round(source.width * scale));
-      canvas.height = Math.max(1, Math.round(source.height * scale));
-      const context = canvas.getContext("2d", { willReadFrequently: true });
-      if (!context) return;
-      context.drawImage(source, 0, 0, canvas.width, canvas.height);
-      const input = context.getImageData(0, 0, canvas.width, canvas.height);
-      const before = new ImageData(canvas.width, canvas.height);
-      const after = new ImageData(canvas.width, canvas.height);
-      for (let index = 0; index < input.data.length; index += 4) {
-        const linear = rgbToLinear([input.data[index]! / 255, input.data[index + 1]! / 255, input.data[index + 2]! / 255]);
-        const translated = daltonize(linear, visionType as DaltonizeVisionType, 1, amount);
-        const originalSimulated = linearToRGB(simulate(linear, visionType, 1));
-        const translatedSimulated = linearToRGB(simulate(translated, visionType, 1));
-        for (const [target, color] of [[before, originalSimulated], [after, translatedSimulated]] as const) {
-          target.data[index] = Math.round(clamp01(color[0]) * 255);
-          target.data[index + 1] = Math.round(clamp01(color[1]) * 255);
-          target.data[index + 2] = Math.round(clamp01(color[2]) * 255);
-          target.data[index + 3] = input.data[index + 3]!;
-        }
-      }
-      const afterCanvas = document.createElement("canvas");
-      afterCanvas.width = canvas.width;
-      afterCanvas.height = canvas.height;
-      context.putImageData(before, 0, 0);
-      afterCanvas.getContext("2d")?.putImageData(after, 0, 0);
-      if (!cancelled) {
-        setTheirBeforeUrl(toDataUrl(canvas));
-        setTheirAfterUrl(toDataUrl(afterCanvas));
-      }
-    }, 0);
-    return () => { cancelled = true; window.clearTimeout(timer); };
-  }, [amount, mode, source, view, visionType]);
-
-  const isTheirResult = mode === "translate" && view === "theirs";
-  const compareLeft = isTheirResult ? theirBeforeUrl : originalUrl;
-  const compareRight = isTheirResult ? theirAfterUrl : resultUrl;
-  const leftLabel = isTheirResult ? text.before : text.original;
-  const rightLabel = isTheirResult ? text.after : mode === "translate" ? text.translated : text.simulated;
+  const compareLeft = originalUrl;
+  const compareRight = resultUrl;
+  const leftLabel = mode === "translate" ? `${text.original} · ${text.mine}` : text.original;
+  const rightLabel = mode === "translate" ? `${text.translated} · ${text.theirs}` : text.simulated;
 
   const download = () => {
     if (!resultUrl) return;
@@ -319,34 +303,10 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
       ) : (
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
           <section>
-            {mode === "translate" && (
-              <div className="mb-5 flex w-full border-b border-[var(--color-border)] sm:w-fit" role="group" aria-label={text.translateTitle}>
-                {(["mine", "theirs"] as const).map((item) => (
-                  <button key={item} type="button" onClick={() => { setView(item); if (item === "theirs") setShowTheirComparison(false); }} aria-pressed={view === item} className={`min-h-10 whitespace-nowrap border-b-2 px-4 text-[14px] font-medium transition-colors ${view === item ? "border-[var(--color-primary)] text-[var(--color-primary)]" : "border-transparent text-[var(--color-text-sub)] hover:text-[var(--color-primary)]"}`}>
-                    {item === "mine" ? text.mine : text.theirs}
-                  </button>
-                ))}
-              </div>
-            )}
-            {isTheirResult && !showTheirComparison && (
-              <div className="mb-4">
-                <p className="text-[13px] font-medium text-[var(--color-text-sub)]">{text.viewing(visionLabels.types[visionType])}</p>
-                <h2 className="mt-2 text-[20px] font-semibold tracking-[-0.025em]">{text.theirResultTitle}</h2>
-                <p className="mt-2 text-[14px] leading-6 text-[var(--color-text-sub)]">{text.theirResultIntro(visionLabels.types[visionType])}</p>
-              </div>
-            )}
-            {isTheirResult && !showTheirComparison ? (
-              <>
-                <div className="relative overflow-hidden rounded-[var(--radius-l)] bg-[var(--color-primary)] shadow-[var(--shadow-m)]" style={{ aspectRatio: `${dimensions.width} / ${dimensions.height}` }}>
-                  {theirAfterUrl && <img src={theirAfterUrl} alt={text.theirResultTitle} draggable={false} className="size-full object-contain" />}
-                </div>
-                <p className="mt-4 text-[13px] leading-5 text-[var(--color-text-sub)]">{text.theirResultNote}</p>
-                <button type="button" onClick={() => setShowTheirComparison(true)} className="mt-5 text-[14px] font-medium underline underline-offset-4">{text.showBefore} <span aria-hidden="true">→</span></button>
-              </>
-            ) : (
-              <>
-            {isTheirResult && <p className="mb-4 text-[13px] font-medium text-[var(--color-text-sub)]">{text.viewing(visionLabels.types[visionType])}</p>}
-            <div className="mb-3 flex items-center justify-between text-[13px] font-medium text-[var(--color-text-sub)]"><span>{leftLabel}</span><span>{rightLabel}</span></div>
+            <div className="mb-3 flex items-start justify-between gap-5 text-[13px] font-medium text-[var(--color-text-sub)]">
+              <span className="min-w-0"><strong className="block text-[var(--color-primary)]">{mode === "translate" ? text.original : leftLabel}</strong>{mode === "translate" && <span>{text.mine}</span>}</span>
+              <span className="min-w-0 text-right"><strong className="block text-[var(--color-primary)]">{mode === "translate" ? text.translated : rightLabel}</strong>{mode === "translate" && <span>{text.theirs}</span>}</span>
+            </div>
             <div
               role="slider"
               tabIndex={0}
@@ -368,14 +328,12 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
             >
               {compareLeft && <img src={compareLeft} alt={leftLabel} draggable={false} className="pointer-events-none absolute inset-0 size-full object-contain" />}
               {compareRight && <img src={compareRight} alt={rightLabel} draggable={false} className="pointer-events-none absolute inset-0 size-full object-contain" style={{ clipPath: `inset(0 0 0 ${divider}%)` }} />}
+              {isProcessing && <ProcessingOverlay label={mode === "translate" ? text.processingTranslate : text.processingSimulate} detail={text.processingDetail} progress={processingProgress} />}
               <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 z-10 w-px bg-white shadow-[0_0_0_1px_rgba(36,52,71,0.2)]" style={{ left: `${divider}%` }}>
                 <span className="absolute left-1/2 top-1/2 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-[var(--color-border)] bg-white text-[var(--color-primary)] shadow-[var(--shadow-m)]">↔</span>
               </div>
             </div>
             <p className="mt-3 text-[13px] leading-5 text-[var(--color-text-sub)]">{text.compareHint}</p>
-            {isTheirResult && <button type="button" onClick={() => setShowTheirComparison(false)} className="mt-4 text-[14px] font-medium underline underline-offset-4">{text.hideBefore}</button>}
-              </>
-            )}
             <p className="mt-6 flex items-center gap-2 text-[13px] leading-5 text-[var(--color-text-sub)]"><span aria-hidden="true">⌁</span>{text.privacy}</p>
           </section>
 
