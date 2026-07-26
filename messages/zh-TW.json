@@ -1,16 +1,18 @@
 {
   "Nav": {
-    "brand": "Iris",
+    "brand": "NUNBIT",
     "languageNav": "選擇語言",
     "privacy": "相片不會離開這台裝置。"
   },
   "Home": {
     "eyebrow": "透過色彩，靠近一點",
-    "tagline": "把我看見的美，\n換成你也看得見的色彩。",
+    "tagline": "每一雙眼睛，\n看見不同的光。",
     "intro": "從一張相片開始。把不容易看見的差異，轉成對方更容易分辨的感受。",
-    "cta": "上傳相片",
+    "cta": "上傳並轉換相片",
+    "ctaBody": "上傳相片，讓對方更容易分辨色彩之間的差異。",
     "uploadError": "請選擇 20MB 以下的 JPG、PNG 或 WebP 圖片。",
-    "secondaryCta": "看看對方的視角",
+    "secondaryCta": "色覺模擬",
+    "secondaryCtaBody": "比較原始相片在另一種視角中可能呈現的樣子。",
     "privacy": "相片不會上傳到伺服器，所有轉換都在這台裝置完成。",
     "before": "對方的視角",
     "after": "轉換之後",

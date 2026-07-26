@@ -229,3 +229,108 @@ source_context: "src/app/[locale]/learn/page.tsx, src/lib/learn/content.ts"
 ```
 
 Learn cards use model-based color-vision simulations instead of decorative gradients, and non-English locales lead with localized type names plus the academic term in parentheses.
+
+## 2026-07-26T16:19:00.000Z — brand-nunbit-noonbit
+
+```omd-meta
+id: pref_ms1gw4zv_7a56b7aa
+timestamp: 2026-07-26T16:19:00.000Z
+scope: visualTheme
+signal: user-statement
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "DESIGN.md, messages/*.json, docs/08_Brand.md"
+```
+
+Use NUNBIT / 눈빛 as the product name. Lead with “서로 다른 눈빛, 같은 아름다움.” in Korean and “Every eye sees a different light.” in English; retain “See the world through another’s eyes.” as supporting English copy.
+
+## 2026-07-26T16:22:00.000Z — pair-color-codes-with-plain-language-names
+
+```omd-meta
+id: pref_ms1gzd4i_37c6f6be
+timestamp: 2026-07-26T16:22:00.000Z
+scope: voice
+signal: user-statement
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/components/color-pick/ImageColorPicker.tsx"
+```
+
+In image color picking, pair HEX/RGB values with an intuitive plain-language colour description such as “연한 빨간색” or “진한 빨간색”.
+
+## 2026-07-26T08:34:19.848Z — make-feature-explanations-direct
+
+```omd-meta
+id: pref_ms1jkoxh_6f691dbb
+timestamp: 2026-07-26T08:34:19.848Z
+scope: voice
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "messages/ko.json, src/components/editor/ImageEditor.tsx"
+```
+
+Keep warm emotional framing in headings, but make CTA and tool descriptions direct: explicitly say color-blind people, state whether a new translated image is created, and state when the original stays unchanged.
+
+## 2026-07-26T08:38:54.208Z — keep-cta-labels-short-and-task-first
+
+```omd-meta
+id: pref_ms1jqkmn_66d76fe0
+timestamp: 2026-07-26T08:38:54.208Z
+scope: voice
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "messages/ko.json, src/components/editor/ImageEditor.tsx"
+```
+
+Keep primary feature labels short and task-first; reserve warm, emotional wording for supporting copy rather than CTA titles.
+
+## 2026-07-26T08:40:25.872Z — make-header-wordmark-more-prominent
+
+```omd-meta
+id: pref_ms1jsjcu_3026d735
+timestamp: 2026-07-26T08:40:25.872Z
+scope: typography
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/layout.tsx"
+```
+
+Make the NUNBIT header wordmark slightly larger so the brand is immediately legible without increasing header density.
+
+## 2026-07-26T10:15:22.120Z — keep-theme-toggle-compact
+
+```omd-meta
+id: pref_ms1n6mmg_95239e7c
+timestamp: 2026-07-26T10:15:22.120Z
+scope: components.button
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/components/ui/ThemeToggle.tsx"
+```
+
+Keep the light/dark theme toggle visually compact; avoid oversized circular controls in the header.
+
+## 2026-07-26T10:20:00.000Z — make-theme-toggle-smaller
+
+```omd-meta
+id: pref_ms1najd7_92a762c5
+timestamp: 2026-07-26T10:20:00.000Z
+scope: components.button
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/components/ui/ThemeToggle.tsx"
+```
+
+Keep the header light/dark toggle at a very compact visual size; reduce it again when it still reads as oversized.

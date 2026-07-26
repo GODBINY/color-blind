@@ -1,6 +1,6 @@
 ---
 omd: 0.1
-brand: Iris
+brand: NUNBIT
 bootstrapped_from: airbnb
 bootstrapped_from_secondary: 29cm
 bootstrapped_at: 2026-07-19
@@ -38,17 +38,17 @@ tokens:
     ease-in-out: "cubic-bezier(0.65, 0, 0.35, 1)"
 ---
 
-# Design System — Iris
+# Design System — NUNBIT / 눈빛
 
-> Hybrid bootstrap: structure and photography-first warmth from **Airbnb**, editorial restraint and whitespace-as-brand from **29CM**. All token values (color/type/spacing/radius/shadow/motion) are Iris's own, defined in [docs/03_UI_UX.md](docs/03_UI_UX.md) and [docs/08_Brand.md](docs/08_Brand.md) — the two references shaped *structure and philosophy*, not color or type values.
+> Hybrid bootstrap: structure and photography-first warmth from **Airbnb**, editorial restraint and whitespace-as-brand from **29CM**. All token values (color/type/spacing/radius/shadow/motion) are NUNBIT's own, defined in [docs/03_UI_UX.md](docs/03_UI_UX.md) and [docs/08_Brand.md](docs/08_Brand.md) — the two references shaped *structure and philosophy*, not color or type values.
 
 ## 1. Visual Theme & Atmosphere
 
-Iris is a comparison-first surface built around one recurring gesture: a photograph transforms in front of you, and something that was invisible becomes visible. The default canvas is lavender-white (`#F7F7FC`) with plum ink (`#2D2330`) and berry (`#9B4A76`) as a restrained accent. Dark mode is an optional aubergine-black counterpart, not the default. The mood is a flower field in clear morning light, not a lab, a test result screen, or a calm SaaS dashboard.
+NUNBIT is a comparison-first surface built around one recurring gesture: a photograph transforms in front of you, and something that was invisible becomes visible. The default canvas is lavender-white (`#F7F7FC`) with plum ink (`#2D2330`) and berry (`#9B4A76`) as a restrained accent. Dark mode is an optional aubergine-black counterpart, not the default. The mood is a flower field in clear morning light, not a lab, a test result screen, or a calm SaaS dashboard.
 
 From **Airbnb** this system borrows the conviction that *photography is the hero and chrome should recede* — the same discipline Airbnb applies to listing cards applies here to the Compare Slider and the before/after crossfade: the image does the emotional work, the UI gets out of the way. From **29CM** this system borrows *whitespace as the brand asset* and the editorial instinct to subordinate secondary information (strength percentages, HEX values, technical labels) the way 29CM subordinates price to photograph — present, legible, never louder than the image.
 
-The signature moment is the **crossfade**: in Translate, the "their eyes" preview transitions from before → after and a flower that was buried in the background quietly rises into visibility. This is Iris's equivalent of Airbnb's heart-icon save — the one place the interface is allowed a small emotional beat — and of 29CM's tile-reveal-on-scroll — unhurried, never bouncy, never celebratory with confetti or sound.
+The signature moment is the **crossfade**: in Translate, the "their eyes" preview transitions from before → after and a flower that was buried in the background quietly rises into visibility. This is NUNBIT's equivalent of Airbnb's heart-icon save — the one place the interface is allowed a small emotional beat — and of 29CM's tile-reveal-on-scroll — unhurried, never bouncy, never celebratory with confetti or sound.
 
 **Key Characteristics:**
 - Lavender-white canvas (`#F7F7FC`) by default, with no beige or orange; an explicit header control reveals dark mode
@@ -118,7 +118,7 @@ Full behavioral spec lives in [docs/03_UI_UX.md §4](docs/03_UI_UX.md). Token ma
 
 **CompareSlider**
 - Vertical handle, 44px touch target, keyboard ←→ support
-- This is Iris's photography-first hero component (Airbnb parallel: listing card image) — no chrome competes with it; labels sit outside the image, never overlaid
+- This is NUNBIT's photography-first hero component (Airbnb parallel: listing card image) — no chrome competes with it; labels sit outside the image, never overlaid
 
 **PreviewToggle**
 - "my-eyes ↔ their-eyes" — badge appears only in their-eyes mode ("지금 {type}의 시야로 보고 있어요")
@@ -156,7 +156,7 @@ Full behavioral spec lives in [docs/03_UI_UX.md §4](docs/03_UI_UX.md). Token ma
 | `--shadow-m` | `0 4px 12px rgba(0,0,0,0.24)` | Cards, panels |
 | `--shadow-l` | `0 12px 32px rgba(0,0,0,0.32)` | Modals, upload hover |
 
-**Shadow philosophy**: soft and warm-tinted (navy-based rgba, not pure black) — reads as natural light, the Airbnb approach — but never absent entirely the way 29CM's flat marketing surface is. Iris compares two states side by side; a small amount of lift helps separate "before" from "after" without competing with the image. Flat-grey institutional shadows are explicitly rejected ([03_UI_UX.md §2.3](docs/03_UI_UX.md)).
+**Shadow philosophy**: soft and warm-tinted (navy-based rgba, not pure black) — reads as natural light, the Airbnb approach — but never absent entirely the way 29CM's flat marketing surface is. NUNBIT compares two states side by side; a small amount of lift helps separate "before" from "after" without competing with the image. Flat-grey institutional shadows are explicitly rejected ([03_UI_UX.md §2.3](docs/03_UI_UX.md)).
 
 ## 7. Do's and Don'ts
 
@@ -208,7 +208,7 @@ Mobile-first — most traffic arrives via shared links. Live Camera is always fu
 
 ## 10. Voice & Tone
 
-Iris's voice is **warm, calm, honest, minimal** ([08_Brand.md §3](docs/08_Brand.md)) — closer to a handwritten note than either a travel-magazine invitation (Airbnb) or a curated-editor's caption (29CM), though it borrows discipline from both: Airbnb's refusal of transactional/urgency language, and 29CM's `~해요` friendly-formal register over corporate `~합니다`.
+NUNBIT's voice is **warm, calm, honest, minimal** ([08_Brand.md §3](docs/08_Brand.md)) — closer to a handwritten note than either a travel-magazine invitation (Airbnb) or a curated-editor's caption (29CM), though it borrows discipline from both: Airbnb's refusal of transactional/urgency language, and 29CM's `~해요` friendly-formal register over corporate `~합니다`.
 
 | Context | Tone | Not this |
 |---|---|---|
@@ -222,15 +222,15 @@ Iris's voice is **warm, calm, honest, minimal** ([08_Brand.md §3](docs/08_Brand
 
 ## 11. Brand Narrative
 
-Iris (가칭, `iris.withint.com`) began from a single moment: a red rose in full bloom, and the wish to show it to a color-blind boyfriend who would see it lost in the background instead ([01_Project.md §1](docs/01_Project.md)). The founding thesis is deliberately narrow: *"We don't fix color vision. We translate beauty."* The product does not restore lost color perception — it cannot — it translates the **distinction and impression** of color across two people's vision.
+NUNBIT / 눈빛 began from a single moment: a red rose in full bloom, and the wish to show it to a color-blind boyfriend who would see it lost in the background instead ([01_Project.md §1](docs/01_Project.md)). The founding thesis is deliberately narrow: *"We don't fix color vision. We translate beauty."* The product does not restore lost color perception — it cannot — it translates the **distinction and impression** of color across two people's vision.
 
-The name draws on three overlapping meanings: **iris the flower** (the founding story starts with a flower), **iris the eye** (the anatomical seat of color vision), and **Iris the Greek messenger goddess of the rainbow** — a deity whose entire role was carrying messages between gods and mortals across the rainbow, which maps with unusual precision onto a service whose job is carrying color across two different kinds of vision.
+The name draws on the Korean word **눈빛**: the light in an eye, a person's gaze, and the feeling carried between people. **NUNBIT** keeps that sound as a distinctive global name; its pronunciation, `noon-bit`, is introduced once in the brand story rather than forced into every interface.
 
 Tagline, fixed:
-- KO: **내가 본 아름다움을, 그 사람이 볼 수 있는 색으로.**
-- EN: **Share the beauty you see — in colors they can see.**
+- KO: **서로 다른 눈빛, 같은 아름다움.**
+- EN: **Every eye sees a different light.**
 
-What Iris refuses: the medical-diagnostic aesthetic (white background + blue accent, Ishihara-plate imagery, "결과/진단/판정" vocabulary), the pity frame (동정, "불쌍하다", "~밖에 못 보는"), the engineering-tool exposure that competitors default to ("필터 강도 파라미터 조절" instead of "그 사람의 색으로 번역하기"). What Iris embraces: photography as the emotional center (inherited structurally from Airbnb's photography-first listing cards), restraint and whitespace as a sign of care rather than emptiness (inherited from 29CM's editorial discipline), and treating every translated photo as a **gift**, not a filter output — the download button says "저장하기", the share button says "보내기", never "Export" or "Apply Filter".
+What NUNBIT refuses: the medical-diagnostic aesthetic (white background + blue accent, Ishihara-plate imagery, "결과/진단/판정" vocabulary), the pity frame (동정, "불쌍하다", "~밖에 못 보는"), the engineering-tool exposure that competitors default to ("필터 강도 파라미터 조절" instead of "그 사람의 색으로 번역하기"). What NUNBIT embraces: photography as the emotional center (inherited structurally from Airbnb's photography-first listing cards), restraint and whitespace as a sign of care rather than emptiness (inherited from 29CM's editorial discipline), and treating every translated photo as a **gift**, not a filter output — the download button says "저장하기", the share button says "보내기", never "Export" or "Apply Filter".
 
 Core values, fixed ([01_Project.md §5](docs/01_Project.md)): **Empathy** (understanding comes before features), **Gift** (the output is a gift, not a diagnostic result), **Connection** (a translated photo is only complete once it's shared), **Honesty** (we never claim to correct color vision), **Simplicity & Beauty** (one photo is enough to start — this is an experience, not a tool).
 
@@ -288,7 +288,7 @@ Core values, fixed ([01_Project.md §5](docs/01_Project.md)): **Empathy** (under
 | `--ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | Entrances, crossfade settle |
 | `--ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | Two-way transitions |
 
-**Signature motion.** The **before/after crossfade** ([03_UI_UX.md §2.4](docs/03_UI_UX.md)) is Iris's one allowed emotional beat — a flower buried in a color-blind person's view of the background quietly rises into visibility over `--duration-slow` with `--ease-out`. This is the direct equivalent of Airbnb's heart-icon "joy" motion and 29CM's tile-reveal-on-scroll: used exactly once as the hero moment, never scattered across the interface as decoration.
+**Signature motion.** The **before/after crossfade** ([03_UI_UX.md §2.4](docs/03_UI_UX.md)) is NUNBIT's one allowed emotional beat — a flower buried in a color-blind person's view of the background quietly rises into visibility over `--duration-slow` with `--ease-out`. This is the direct equivalent of Airbnb's heart-icon "joy" motion and 29CM's tile-reveal-on-scroll: used exactly once as the hero moment, never scattered across the interface as decoration.
 
 **Reduce motion.** Under `prefers-reduced-motion: reduce`, the crossfade becomes an instant cut. The emotional beat is preserved through copy and the Compare Slider's static before/after, not through motion — same principle both reference systems apply.
 

@@ -155,7 +155,7 @@ export function LiveCamera({ copy }: { copy: CameraCopy }) {
                   <span className="absolute left-1/2 top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
                 </div>
                 <div className="absolute inset-x-4 top-4 flex items-start justify-between gap-3 sm:inset-x-6 sm:top-6">
-                  <p className="rounded-full bg-[rgba(36,52,71,0.78)] px-3 py-2 text-[13px] font-medium text-white backdrop-blur-sm">Iris / Live Camera</p>
+                  <p className="rounded-full bg-[rgba(36,52,71,0.78)] px-3 py-2 text-[13px] font-medium text-white backdrop-blur-sm">NUNBIT / Live Camera</p>
                   <button
                     type="button"
                     onClick={switchCamera}

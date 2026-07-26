@@ -32,14 +32,14 @@ export function ThemeToggle({ locale }: { locale: string }) {
       onClick={toggleTheme}
       aria-label={nextLabel}
       aria-pressed={theme === "dark"}
-      className="grid size-8 place-items-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-primary)] transition-colors hover:bg-[var(--color-bg)] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3"
+      className="grid size-6 place-items-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-primary)] transition-colors hover:bg-[var(--color-bg)] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3"
     >
       {theme === "light" ? (
-        <svg aria-hidden="true" viewBox="0 0 24 24" className="size-[15px] fill-none stroke-current stroke-[1.8]">
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="size-3 fill-none stroke-current stroke-[1.8]">
           <path d="M20.4 15.2A8.5 8.5 0 0 1 8.8 3.6 8.5 8.5 0 1 0 20.4 15.2Z" />
         </svg>
       ) : (
-        <svg aria-hidden="true" viewBox="0 0 24 24" className="size-[15px] fill-none stroke-current stroke-[1.8]">
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="size-3 fill-none stroke-current stroke-[1.8]">
           <circle cx="12" cy="12" r="3.4" />
           <path d="M12 2.5v2M12 19.5v2M21.5 12h-2M4.5 12h-2M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4M18.7 18.7l-1.4-1.4M6.7 6.7 5.3 5.3" />
         </svg>

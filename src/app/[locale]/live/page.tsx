@@ -1,5 +1,12 @@
 import { setRequestLocale } from "next-intl/server";
 import { LiveCamera } from "@/components/live/LiveCamera";
+import { seoMetadata, type AppLocale } from "@/lib/seo";
+import type { Metadata } from "next";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return seoMetadata(locale as AppLocale, "live");
+}
 
 export default async function LivePage({
   params,

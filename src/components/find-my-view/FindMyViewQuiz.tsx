@@ -1,111 +1,107 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import Image from "next/image";
+import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { getVisionLabels } from "@/lib/vision-labels";
+import { saveVisionProfile } from "@/lib/vision-profile";
 
-type Axis = "protanopia" | "deuteranopia" | "tritanopia";
-type Answer = "match" | "miss" | "unsure";
+type SelectableVision = "protan" | "deutan" | "tritan";
 
-type Question = {
-  axis: Axis;
-  colors: readonly [string, string, string];
-  correct: number;
-};
+const ishiharaSource = "https://commons.wikimedia.org/wiki/File:NDL1679314_The_series_of_plates_designed_as_tests_for_colour-blindness,_by_Dr._Shinobu_Ishihara.pdf";
 
-const axes: Axis[] = ["protanopia", "deuteranopia", "tritanopia"];
-
-// These are Iris-made comparison cards, not copied pseudoisochromatic plates
-// and not a medical instrument. Each set intentionally asks about one simple
-// local colour distinction only.
-const studies: Record<Axis, readonly (readonly [string, string, string])[]> = {
-  protanopia: [
-    ["#a95661", "#6f7d49", "#a95661"],
-    ["#b96855", "#748b52", "#b96855"],
-    ["#97505e", "#667946", "#97505e"],
-    ["#bd7554", "#72844f", "#bd7554"],
-  ],
-  deuteranopia: [
-    ["#aa604c", "#597a54", "#aa604c"],
-    ["#b66c50", "#63824f", "#b66c50"],
-    ["#9e5849", "#52734d", "#9e5849"],
-    ["#bd754f", "#6b8754", "#bd754f"],
-  ],
-  tritanopia: [
-    ["#557da1", "#786ca2", "#557da1"],
-    ["#6289ab", "#8575a7", "#6289ab"],
-    ["#4d7598", "#71649b", "#4d7598"],
-    ["#6d91ad", "#8c7aae", "#6d91ad"],
-  ],
-};
-
-function getQuestions(): Question[] {
-  return Array.from({ length: 12 }, (_, index) => {
-    const axis = axes[index % axes.length]!;
-    return { axis, colors: studies[axis][Math.floor(index / axes.length)]!, correct: 1 };
-  });
-}
-
-function ColorStudy({ colors, label }: { colors: Question["colors"]; label: string }) {
-  return (
-    <figure aria-label={label} className="mx-auto grid max-w-[480px] grid-cols-3 gap-3 sm:gap-5">
-      {colors.map((color, index) => (
-        <div key={`${color}-${index}`} className="aspect-[4/5] overflow-hidden rounded-[var(--radius-m)] border border-black/5 shadow-[var(--shadow-s)]" style={{ backgroundColor: color }}>
-          <div className="h-full w-full opacity-25" style={{ backgroundImage: "linear-gradient(135deg, rgba(255,255,255,.35), transparent 55%)" }} />
-        </div>
-      ))}
-    </figure>
-  );
-}
+const plates = [
+  { id: "1", src: "/images/ishihara-plate-01.jpg", answer: "12" },
+  { id: "2", src: "/images/ishihara-plate-02.jpg", answer: "8" },
+  { id: "3", src: "/images/ishihara-plate-03.jpg", answer: "6" },
+  { id: "4", src: "/images/ishihara-plate-04.jpg", answer: "5" },
+  { id: "5", src: "/images/ishihara-plate-05.jpg", answer: "74" },
+  { id: "6", src: "/images/ishihara-plate-06.jpg", answer: "2" },
+  { id: "7", src: "/images/ishihara-plate-07.jpg", answer: "6" },
+  { id: "8", src: "/images/ishihara-plate-08.jpg", answer: "5" },
+] as const;
 
 export function FindMyViewQuiz({ locale }: { locale: string }) {
   const isKo = locale === "ko";
-  const visionLabels = getVisionLabels(locale);
-  const questions = useMemo(() => getQuestions(), []);
+  const labels = getVisionLabels(locale);
   const [started, setStarted] = useState(false);
   const [position, setPosition] = useState(0);
-  const [answers, setAnswers] = useState<Answer[]>([]);
-  const [finished, setFinished] = useState(false);
-  const question = questions[position];
-  const labels: Record<Axis, string> = { protanopia: visionLabels.types.protan, deuteranopia: visionLabels.types.deutan, tritanopia: visionLabels.types.tritan };
+  const [responses, setResponses] = useState<string[]>([]);
+  const [value, setValue] = useState("");
+  const [selectedVision, setSelectedVision] = useState<SelectableVision | null>(null);
+  const plate = plates[position];
+  const finished = responses.length === plates.length;
+  const matched = responses.filter((response, index) => response === plates[index]!.answer).length;
+  const mayHaveRedGreenDifference = matched <= 4;
 
-  const result = useMemo(() => {
-    const misses = { protanopia: 0, deuteranopia: 0, tritanopia: 0 };
-    const totals = { protanopia: 0, deuteranopia: 0, tritanopia: 0 };
-    answers.forEach((answer, index) => {
-      const axis = questions[index]!.axis;
-      totals[axis]++;
-      if (answer !== "match") misses[axis]++;
-    });
-    const ranked = axes
-      .map((axis) => ({ axis, rate: totals[axis] ? misses[axis] / totals[axis] : 0 }))
-      .sort((a, b) => b.rate - a.rate);
-    const top = ranked[0]!;
-    if (top.rate < 0.5 || Math.abs(top.rate - ranked[1]!.rate) < 0.25) return null;
-    return { type: top.axis, severity: top.rate >= 0.75 ? 1 : 0.6 };
-  }, [answers, questions]);
-
-  function choose(choiceIndex: number) {
-    const answer: Answer = choiceIndex === 3 ? "unsure" : choiceIndex === question!.correct ? "match" : "miss";
-    const next = [...answers, answer];
-    setAnswers(next);
-    if (position + 1 === questions.length) setFinished(true);
-    else setPosition(position + 1);
+  function submit() {
+    if (!value.trim()) return;
+    const next = [...responses, value.trim()];
+    setResponses(next);
+    setValue("");
+    if (next.length < plates.length) setPosition((current) => current + 1);
   }
 
   function saveSetting() {
-    if (!result) return;
-    localStorage.setItem("iris.vision-profile", JSON.stringify({ visionType: result.type.replace("opia", ""), severity: result.severity, source: "find-my-view" }));
+    if (!selectedVision) return;
+    saveVisionProfile({ visionType: selectedVision, severity: 1, source: "find-my-view" });
+  }
+
+  function reset() {
+    setStarted(false);
+    setPosition(0);
+    setResponses([]);
+    setValue("");
+    setSelectedVision(null);
   }
 
   if (!started) {
-    return <section className="mx-auto max-w-[720px] px-5 pb-20 pt-8 md:pt-16"><p className="text-[13px] font-medium text-[var(--color-text-sub)]">Find My View</p><h1 className="mt-3 whitespace-pre-line text-[32px] font-semibold leading-[40px] tracking-[-0.04em] md:text-[40px] md:leading-[48px]">{isKo ? "색의 차이를\n천천히 살펴봐요" : "Take a quiet look\nat colour differences"}</h1><p className="mt-5 max-w-[580px] text-[16px] leading-[26px] text-[var(--color-text-sub)]">{isKo ? "색 이름을 맞히는 검사가 아니라, 비슷하게 느껴지는 색의 차이를 살펴보는 짧은 비교예요." : "This is a short comparison of colour differences, not a test of colour names."}</p><div className="mt-10 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-m)]"><p className="text-[15px] font-semibold">{isKo ? "시작하기 전에" : "Before you begin"}</p><ul className="mt-4 space-y-3 text-[14px] leading-6 text-[var(--color-text-sub)]"><li>✓ {isKo ? "화면 밝기를 편안한 정도로 맞춰 주세요." : "Set your screen to a comfortable brightness."}</li><li>✓ {isKo ? "잘 모르겠으면 ‘잘 모르겠어요’를 골라도 괜찮아요." : "It is fine to choose “I’m not sure.”"}</li><li>✓ {isKo ? "의학적 검사나 진단을 대신하지 않아요." : "It does not replace a clinical colour-vision assessment."}</li></ul><button onClick={() => setStarted(true)} className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-[var(--radius-m)] bg-[var(--color-primary)] px-6 text-[16px] font-medium text-white shadow-[var(--shadow-s)] transition-transform hover:-translate-y-0.5 sm:w-auto">{isKo ? "비교 시작하기" : "Start comparing"}<span className="ml-2" aria-hidden="true">→</span></button></div></section>;
+    return <section className="mx-auto max-w-[720px] px-5 pb-20 pt-8 md:pt-16">
+      <p className="text-[13px] font-medium text-[var(--color-text-sub)]">Find My View</p>
+      <h1 className="mt-3 whitespace-pre-line text-[32px] font-semibold leading-[40px] tracking-[-0.04em] md:text-[40px] md:leading-[48px]">{isKo ? "색약·색맹 시야를\n사진으로 확인해요" : "Set a color-vision view\nfor photo comparisons"}</h1>
+      <p className="mt-5 max-w-[580px] text-[16px] leading-[26px] text-[var(--color-text-sub)]">{isKo ? "1920년 공개 도메인 이시하라 원본 8장으로 적록 계열의 색 차이를 가볍게 확인한 뒤, 사진 비교에 쓸 시야를 직접 골라요." : "Use eight public-domain Ishihara plates from the 1920 original as a quick red–green screen, then choose the view you want to use for photo comparisons."}</p>
+      <div className="mt-10 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-m)]">
+        <p className="text-[15px] font-semibold">{isKo ? "시작하기 전에" : "Before you begin"}</p>
+        <ul className="mt-4 space-y-3 text-[14px] leading-6 text-[var(--color-text-sub)]">
+          <li>✓ {isKo ? "화면 밝기를 편안한 정도로 맞추고 야간 모드·색상 필터를 꺼 주세요." : "Set a comfortable brightness and turn off night mode or color filters."}</li>
+          <li>✓ {isKo ? "각 판은 보이는 숫자만 입력해 주세요. 답을 모르면 ‘?’를 입력해도 돼요." : "Enter only the number you see on each plate. If you are unsure, you can enter “?”."}</li>
+          <li>✓ {isKo ? "온라인 판은 참고용이며 Protan·Deutan·Tritan을 확정하지 않아요." : "Online plates are a reference only; they do not identify Protan, Deutan, or Tritan."}</li>
+        </ul>
+        <button onClick={() => setStarted(true)} className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-[var(--radius-m)] bg-[var(--color-primary)] px-6 text-[16px] font-medium text-white shadow-[var(--shadow-s)] transition-transform hover:-translate-y-0.5 sm:w-auto">{isKo ? "8장 확인하기" : "Check eight plates"}<span className="ml-2" aria-hidden="true">→</span></button>
+      </div>
+    </section>;
   }
 
-  if (finished) {
-    return <section className="mx-auto max-w-[720px] px-5 pb-20 pt-8 md:pt-16"><p className="text-[13px] font-medium text-[var(--color-text-sub)]">Find My View · 12 / 12</p><div className="mt-5 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-m)] md:p-10"><p className="text-[13px] font-medium text-[var(--color-text-sub)]">{isKo ? "가까운 비교 프로필" : "Closest comparison profile"}</p>{result ? <><h1 className="mt-3 text-[40px] font-semibold tracking-[-0.04em]">{labels[result.type]}</h1><p className="mt-2 text-[15px] text-[var(--color-text-sub)]">{result.type === "tritanopia" ? (isKo ? "청황 계열의 차이가 비슷하게 느껴질 수 있어요." : "Blue–yellow differences may feel closer together.") : (isKo ? "적록 계열의 차이가 비슷하게 느껴질 수 있어요." : "Red–green differences may feel closer together.")}</p><p className="mt-6 rounded-[var(--radius-m)] bg-[var(--color-bg)] p-4 text-[13px] leading-5 text-[var(--color-text-sub)]">{isKo ? "이 결과는 사진을 어떤 시야로 미리 볼지 정하는 출발점이에요. 실제 체감은 사람과 화면 환경에 따라 달라질 수 있어요." : "This is a starting point for choosing a preview. What feels distinct can vary by person and display."}</p><div className="mt-7 flex flex-col gap-3 sm:flex-row"><Link onClick={saveSetting} href="/translate" className="inline-flex min-h-12 items-center justify-center rounded-[var(--radius-m)] bg-[var(--color-primary)] px-5 text-[15px] font-medium text-white">{isKo ? "이 시야로 사진 보기" : "Preview photos this way"}<span className="ml-2" aria-hidden="true">→</span></Link><Link href={`/learn/${result.type}`} className="inline-flex min-h-12 items-center justify-center rounded-[var(--radius-m)] border border-[var(--color-border)] px-5 text-[15px] font-medium">{isKo ? `${labels[result.type]} 알아보기` : `Learn about ${labels[result.type]}`}</Link></div></> : <><h1 className="mt-3 text-[30px] font-semibold tracking-[-0.04em]">{isKo ? "한 가지로 정하지 않아도 괜찮아요" : "It does not need one label"}</h1><p className="mt-3 text-[15px] leading-6 text-[var(--color-text-sub)]">{isKo ? "여러 색의 차이가 비슷하게 느껴졌어요. Translate에서 Protan과 Deutan을 직접 바꿔 보며 더 편한 쪽을 골라 보세요." : "A few differences felt similarly close. In Translate, compare Protan and Deutan directly and choose the more comfortable view."}</p><Link href="/translate" className="mt-7 inline-flex min-h-12 items-center justify-center rounded-[var(--radius-m)] border border-[var(--color-border)] px-5 text-[15px] font-medium">{isKo ? "사진으로 직접 비교하기" : "Compare with a photo"}</Link></>}</div><button onClick={() => { setStarted(false); setPosition(0); setAnswers([]); setFinished(false); }} className="mt-5 text-[14px] underline underline-offset-4">{isKo ? "처음부터 다시 보기" : "Start again"}</button></section>;
+  if (!finished && plate) {
+    return <section className="mx-auto max-w-[720px] px-5 pb-20 pt-8 md:pt-16">
+      <div className="flex items-center justify-between text-[13px] font-medium text-[var(--color-text-sub)]"><span>Find My View</span><span>{position + 1} / {plates.length}</span></div>
+      <div className="mt-3 h-1 overflow-hidden rounded-full bg-[var(--color-border)]"><div className="h-full rounded-full bg-[var(--color-primary)] transition-all duration-300" style={{ width: `${((position + 1) / plates.length) * 100}%` }} /></div>
+      <div className="mt-8 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-m)] md:p-10">
+        <p className="text-[13px] font-medium text-[var(--color-text-sub)]">{isKo ? "적록 계열 참고 판" : "Red–green reference plate"}</p>
+        <figure className="mx-auto mt-6 max-w-[440px]">
+          <Image src={plate.src} alt={isKo ? `공개 도메인 이시하라 색각 판 ${plate.id}` : `Public-domain Ishihara color plate ${plate.id}`} width={1400} height={1400} className="h-auto w-full rounded-[var(--radius-l)] shadow-[var(--shadow-s)]" priority={position === 0} />
+          <figcaption className="mt-3 text-[12px] leading-5 text-[var(--color-text-sub)]">{isKo ? <>1920년 공개 도메인 이시하라 {plate.id}번 판 · <a className="underline underline-offset-4" href={ishiharaSource} target="_blank" rel="noreferrer">Wikimedia Commons 원본</a></> : <>1920 public-domain Ishihara plate {plate.id} · <a className="underline underline-offset-4" href={ishiharaSource} target="_blank" rel="noreferrer">Wikimedia Commons original</a></>}</figcaption>
+        </figure>
+        <label className="mt-8 block text-[24px] font-semibold tracking-[-0.03em]" htmlFor="plate-answer">{isKo ? "어떤 숫자가 보이나요?" : "Which number do you see?"}</label>
+        <div className="mt-5 flex gap-2"><input id="plate-answer" value={value} onChange={(event) => setValue(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") submit(); }} inputMode="text" autoComplete="off" maxLength={2} placeholder={isKo ? "숫자 또는 ?" : "Number or ?"} className="min-h-12 min-w-0 flex-1 rounded-[var(--radius-s)] border border-[var(--color-border)] bg-white px-4 text-[16px] font-medium outline-none placeholder:text-[var(--color-text-sub)] focus-visible:border-[var(--color-primary)]" /><button type="button" onClick={submit} disabled={!value.trim()} className="min-h-12 rounded-[var(--radius-m)] bg-[var(--color-primary)] px-5 text-[15px] font-medium text-white disabled:cursor-not-allowed disabled:opacity-45">{isKo ? "다음" : "Next"}</button></div>
+      </div>
+      <button type="button" onClick={reset} className="mt-5 text-[14px] underline underline-offset-4">{isKo ? "처음으로" : "Back"}</button>
+    </section>;
   }
 
-  const choices = isKo ? ["첫 번째", "가운데", "세 번째", "잘 모르겠어요"] : ["First", "Middle", "Third", "I’m not sure"];
-  return <section className="mx-auto max-w-[720px] px-5 pb-20 pt-8 md:pt-16"><div className="flex items-center justify-between text-[13px] font-medium text-[var(--color-text-sub)]"><span>Find My View</span><span>{position + 1} / {questions.length}</span></div><div className="mt-3 h-1 overflow-hidden rounded-full bg-[var(--color-border)]"><div className="h-full rounded-full bg-[var(--color-primary)] transition-all duration-300" style={{ width: `${((position + 1) / questions.length) * 100}%` }} /></div><div className="mt-8 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-m)] md:p-10"><p className="text-[13px] font-medium text-[var(--color-text-sub)]">{isKo ? "색의 차이" : "Colour difference"}</p><ColorStudy colors={question!.colors} label={isKo ? "서로 비슷한 세 개의 색 카드" : "Three nearby colour cards"} /><h1 className="mt-8 text-[24px] font-semibold tracking-[-0.03em]">{isKo ? "조금 다르게 느껴지는 카드를 골라 보세요" : "Choose the card that feels a little different"}</h1><div className="mt-6 grid gap-3 sm:grid-cols-2">{choices.map((choice, index) => <button key={choice} onClick={() => choose(index)} className="group flex min-h-14 items-center justify-between rounded-[var(--radius-m)] border border-[var(--color-border)] px-5 text-left text-[15px] font-medium transition-all hover:border-[var(--color-primary)] hover:shadow-[var(--shadow-s)]"><span>{choice}</span><span className="grid size-5 place-items-center rounded-full border border-[var(--color-border)] text-[11px] opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true">→</span></button>)}</div></div><p className="mt-5 text-center text-[13px] leading-5 text-[var(--color-text-sub)]">{isKo ? "정답을 맞히는 화면이 아니에요. 편하게 느껴지는 대로 골라 주세요." : "There is no need to get this right. Choose what feels closest."}</p></section>;
+  return <section className="mx-auto max-w-[720px] px-5 pb-20 pt-8 md:pt-16">
+    <p className="text-[13px] font-medium text-[var(--color-text-sub)]">Find My View · {plates.length} / {plates.length}</p>
+    <div className="mt-5 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-m)] md:p-10">
+      <p className="text-[13px] font-medium text-[var(--color-text-sub)]">{isKo ? "사진 비교를 위한 시야 설정" : "Set a view for photo comparisons"}</p>
+      <h1 className="mt-3 text-[30px] font-semibold tracking-[-0.04em]">{mayHaveRedGreenDifference ? (isKo ? `${plates.length}장 중 ${matched}장이 기준 숫자와 달랐어요` : `${matched} of ${plates.length} plates matched the reference number`) : (isKo ? `${plates.length}장 중 ${matched}장이 기준 숫자와 같았어요` : `${matched} of ${plates.length} plates matched the reference number`)}</h1>
+      <p className="mt-3 text-[15px] leading-6 text-[var(--color-text-sub)]">{mayHaveRedGreenDifference ? (isKo ? <><strong className="font-semibold text-[var(--color-primary)]">적록 계열</strong>의 색 차이가 비슷하게 느껴질 수 있어요. 이 결과는 화면과 판에 따라 달라질 수 있으므로, 알고 있는 유형이나 사진에서 더 가까운 시야를 직접 골라 주세요.</> : <><strong className="font-semibold text-[var(--color-primary)]">Red–green differences</strong> may feel closer together. Displays and online plates can vary, so choose the type you already know or the view that feels closest in a photo.</>) : (isKo ? "온라인 판에서 큰 차이가 드러나지 않았어요. 이 결과만으로 색각 유형을 확정할 수는 없으니, 사진 비교에 필요한 시야를 직접 골라 주세요." : "No large difference appeared on these online plates. This does not confirm a color-vision type, so choose the view you need for photo comparisons.")}</p>
+      <fieldset className="mt-8">
+        <legend className="text-[16px] font-semibold">{isKo ? "사진 비교에 쓸 시야" : "View to use for photo comparisons"}</legend>
+        <div className="mt-4 grid gap-2 sm:grid-cols-3">{(["protan", "deutan", "tritan"] as const).map((type) => <button key={type} type="button" onClick={() => setSelectedVision(type)} aria-pressed={selectedVision === type} className={`min-h-12 rounded-[var(--radius-s)] border px-3 text-left text-[14px] font-medium transition-colors ${selectedVision === type ? "border-[var(--color-primary)] bg-[var(--color-bg)]" : "border-[var(--color-border)] hover:bg-[var(--color-bg)]"}`}>{labels.types[type]}</button>)}</div>
+      </fieldset>
+      <p className="mt-4 text-[13px] leading-5 text-[var(--color-text-sub)]">{isKo ? "적록색약이라면 Protan과 Deutan을 사진으로 각각 비교해 보고 더 가까운 쪽을 골라 보세요." : "For red–green color vision differences, compare Protan and Deutan with a photo and choose the closer view."}</p>
+      <Link href="/translate" onClick={(event) => { if (!selectedVision) event.preventDefault(); else saveSetting(); }} aria-disabled={!selectedVision} className={`mt-7 inline-flex min-h-12 items-center justify-center rounded-[var(--radius-m)] px-5 text-[15px] font-medium text-white ${selectedVision ? "bg-[var(--color-primary)]" : "cursor-not-allowed bg-[var(--color-text-sub)] opacity-55"}`}>{isKo ? "이 시야로 사진 보기" : "Preview photos this way"}<span className="ml-2" aria-hidden="true">→</span></Link>
+    </div>
+    <button type="button" onClick={reset} className="mt-5 text-[14px] underline underline-offset-4">{isKo ? "처음부터 다시 보기" : "Start again"}</button>
+  </section>;
 }

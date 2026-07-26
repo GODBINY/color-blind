@@ -1,16 +1,18 @@
 {
   "Nav": {
-    "brand": "Iris",
+    "brand": "NUNBIT",
     "languageNav": "Choisir la langue",
     "privacy": "Vos photos restent sur cet appareil."
   },
   "Home": {
     "eyebrow": "Un peu plus proches, grâce à la couleur",
-    "tagline": "Partagez la beauté que vous voyez —\ndans des couleurs qu'ils peuvent distinguer.",
+    "tagline": "Chaque regard voit\nune lumière différente.",
     "intro": "Commencez avec une photo. Transmettez les différences qu'ils pourraient manquer dans des couleurs plus faciles à distinguer.",
-    "cta": "Importer une photo",
+    "cta": "Importer et traduire une photo",
+    "ctaBody": "Importez une photo pour rendre les différences de couleur plus faciles à distinguer.",
     "uploadError": "Choisissez une image JPG, PNG ou WebP de moins de 20 Mo.",
-    "secondaryCta": "Voir à travers leurs yeux",
+    "secondaryCta": "Simuler le daltonisme",
+    "secondaryCtaBody": "Comparez l'apparence de la photo d'origine dans une autre vision.",
     "privacy": "Vos photos ne sont pas envoyées sur un serveur. Tout se fait sur cet appareil.",
     "before": "Leur vision",
     "after": "Après traduction",

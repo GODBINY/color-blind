@@ -13,7 +13,7 @@ Home (/)
 ├── Translate      (/translate)      ← 핵심: 그 사람의 색으로 번역
 ├── Simulate       (/simulate)       ← 보조: 그 사람의 시야로 보기
 ├── Live Camera    (/live)
-├── Find My View   (/find-my-view)
+├── Find My View   (/find-my-view)  ← 1920년 공개 도메인 이시하라 8판 참고 + 사진 비교 시야 직접 선택
 └── Learn          (/learn)
     ├── /learn/protanopia
     ├── /learn/deuteranopia
@@ -22,7 +22,7 @@ Home (/)
 ```
 
 - 모든 기능은 Route 기반 (SEO를 위해 각 기능이 고유 URL을 가짐)
-- 도메인: `iris.withint.com` (가칭 — [08_Brand.md](08_Brand.md))
+- 도메인: 출시 전 NUNBIT 도메인 확정 필요 ([08_Brand.md](08_Brand.md))
 - i18n: `/en/...`, `/ko/...` prefix ([05_Architecture.md](05_Architecture.md))
 - Translate와 Simulate는 내부적으로 같은 에디터 컴포넌트를 모드만 바꿔 공유
 

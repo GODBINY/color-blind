@@ -23,5 +23,12 @@
     "theme": "Iris locked system",
     "enrichment": "E4 photographic comparison",
     "brief": "Reduce AI-template cues while preserving Iris's photo-first product experience"
+  },
+  {
+    "date": "2026-07-26",
+    "macrostructure": "Index-First",
+    "theme": "NUNBIT locked system",
+    "enrichment": "none — task-directory section",
+    "brief": "Clarify the homepage task hierarchy around user goals"
   }
 ]

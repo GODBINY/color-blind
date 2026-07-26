@@ -3,8 +3,15 @@ import { Link } from "@/i18n/navigation";
 import { getLearnIndex } from "@/lib/learn/content";
 import { getLocalizedLearnName } from "@/lib/learn/content";
 import { VisionSimulationPreview } from "@/components/learn/VisionSimulationPreview";
+import { seoMetadata, type AppLocale } from "@/lib/seo";
+import type { Metadata } from "next";
 
 const simulationType = { protanopia: "protan", deuteranopia: "deutan", tritanopia: "tritan" } as const;
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return seoMetadata(locale as AppLocale, "learn");
+}
 
 export default async function LearnPage({
   params,

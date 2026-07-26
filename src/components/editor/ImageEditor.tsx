@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { takePendingImage } from "@/lib/pending-image";
 import { getVisionLabels, redGreenTypes } from "@/lib/vision-labels";
+import { readVisionProfile } from "@/lib/vision-profile";
 import {
   clamp01,
   daltonize,
@@ -22,10 +23,10 @@ const MAX_DIMENSION = 4096;
 
 const copy = {
   ko: {
-    translateTitle: "꽃과 노을을, 그 사람의 색으로",
-    translateIntro: "꽃이 묻혀 보였나요? 노을이 덜 빛났나요? 그 사람이 더 많은 색의 차이를 만날 수 있도록, 사진을 그 사람의 색으로 옮겨요.",
-    simulateTitle: "그 사람의 시야로 보기",
-    simulateIntro: "같은 장면이 어떻게 다르게 보이는지 살펴봐요.",
+    translateTitle: "사진 번역하기",
+    translateIntro: "색약·색맹인이 사진 속 색의 차이를 더 구분하기 쉽게, 새 사진을 만들어요.",
+    simulateTitle: "시야 확인하기",
+    simulateIntro: "색약·색맹이 없는 사람이 색약·색맹인의 시야를 시뮬레이션으로 확인해요. 원본은 바꾸지 않아요.",
     drop: "여기에 사진을 놓아주세요",
     select: "사진 선택",
     camera: "카메라로 찍기",
@@ -34,8 +35,8 @@ const copy = {
     typeQuestion: "누구의 시야로 볼까요?",
     strength: "번역 강도",
     severity: "시야 강도",
-    mine: "내 눈으로 보기",
-    theirs: "그 사람의 눈으로 보기",
+    mine: "내가 전할 장면",
+    theirs: "그 사람에게 전해질 모습",
     viewing: (type: string) => `지금 ${type}의 시야로 보고 있어요`,
     theirResultTitle: "그 사람에게 전해질 장면",
     theirResultIntro: (type: string) => `${type}의 시야에서도 장면 속 색의 차이가 더 잘 전해지도록 옮긴 사진이에요.`,
@@ -59,10 +60,10 @@ const copy = {
     unknownType: "유형을 모르겠다면 Find My View에서 함께 알아볼 수 있어요.",
   },
   en: {
-    translateTitle: "Translate for them",
-    translateIntro: "Move a photo into colours where they can notice more of its differences.",
-    simulateTitle: "See through their eyes",
-    simulateIntro: "Notice how the same scene can look different.",
+    translateTitle: "Translate a photo",
+    translateIntro: "Create a new photo that makes color differences easier for color-blind people to distinguish.",
+    simulateTitle: "Check their view",
+    simulateIntro: "Check how a color-blind person sees the original photo now. The photo itself stays unchanged.",
     drop: "Drop a photo here",
     select: "Choose a photo",
     camera: "Take a photo",
@@ -71,8 +72,8 @@ const copy = {
     typeQuestion: "Whose view are you exploring?",
     strength: "Translation strength",
     severity: "View strength",
-    mine: "My eyes",
-    theirs: "Their eyes",
+    mine: "The scene I share",
+    theirs: "How it reaches them",
     viewing: (type: string) => `You are viewing through ${type} eyes`,
     theirResultTitle: "What reaches them",
     theirResultIntro: (type: string) => `The translated photo, as it appears in a ${type} view.`,
@@ -107,8 +108,8 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
   const [source, setSource] = useState<ImageBitmap | null>(null);
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
-  const [visionType, setVisionType] = useState<VisionType>("deutan");
-  const [amount, setAmount] = useState(mode === "translate" ? 0.8 : 1);
+  const [visionType, setVisionType] = useState<VisionType>(() => readVisionProfile()?.visionType ?? "deutan");
+  const [amount, setAmount] = useState(() => mode === "simulate" ? readVisionProfile()?.severity ?? 1 : 0.8);
   const [view, setView] = useState<ViewMode>("mine");
   const [showTheirComparison, setShowTheirComparison] = useState(false);
   const [divider, setDivider] = useState(50);

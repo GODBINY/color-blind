@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { seoMetadata, siteUrl, type AppLocale } from "@/lib/seo";
 import "../globals.css";
 
 const languages = [
@@ -17,9 +18,19 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export const metadata: Metadata = {
-  title: "Iris",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    metadataBase: siteUrl(),
+    ...seoMetadata(locale as AppLocale, "home"),
+    applicationName: "NUNBIT",
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
+    },
+  };
+}
 
 export default async function LocaleLayout({
   children,
@@ -43,8 +54,8 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider>
           <header className="mx-auto flex max-w-[1184px] items-center justify-between border-b border-[var(--color-border)] px-5 py-5 md:px-8">
-            <Link href="/" className="text-[19px] font-semibold tracking-[-0.05em]">
-              {t("brand").toLowerCase()}
+            <Link href="/" className="text-[21px] font-semibold tracking-[-0.05em]">
+              {t("brand")}
             </Link>
             <nav aria-label={t("languageNav")} className="flex items-center gap-3 text-[12px] font-medium text-[var(--color-text-sub)]">
               <details className="relative">
@@ -59,7 +70,7 @@ export default async function LocaleLayout({
           {children}
           <footer className="mx-auto flex max-w-[1184px] flex-col gap-3 border-t border-[var(--color-border)] px-5 py-8 text-[13px] leading-5 text-[var(--color-text-sub)] md:flex-row md:items-center md:justify-between md:px-8">
             <p>{t("privacy")}</p>
-            <p>© {new Date().getFullYear()} Iris</p>
+            <p>© {new Date().getFullYear()} NUNBIT</p>
           </footer>
         </NextIntlClientProvider>
       </body>
