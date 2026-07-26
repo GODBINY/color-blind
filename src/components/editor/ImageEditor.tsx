@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "@/i18n/navigation";
 import { takePendingImage } from "@/lib/pending-image";
 import { getVisionLabels, redGreenTypes } from "@/lib/vision-labels";
 import { readVisionProfile } from "@/lib/vision-profile";
@@ -10,12 +9,9 @@ import {
   daltonize,
   linearToRGB,
   rgbToLinear,
-  simulate,
   type DaltonizeVisionType,
   type VisionType,
 } from "@/lib/color";
-
-type EditorMode = "translate" | "simulate";
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
 const MAX_DIMENSION = 4096;
@@ -25,14 +21,12 @@ const copy = {
   ko: {
     translateTitle: "사진 번역하기",
     translateIntro: "색약·색맹인이 사진 속 색의 차이를 더 구분하기 쉽게, 새 사진을 만들어요.",
-    simulateTitle: "시야 확인하기",
-    simulateIntro: "색약·색맹이 없는 사람이 색약·색맹인의 시야를 시뮬레이션으로 확인해요. 원본은 바꾸지 않아요.",
     drop: "여기에 사진을 놓아주세요",
     select: "사진 선택",
     camera: "카메라로 찍기",
     paste: "붙여넣기도 가능해요",
     privacy: "사진을 업로드해도 별도 서버에 저장되지 않아요. 모든 변환은 이 기기에서 이뤄져요.",
-    typeQuestion: "누구의 시야로 볼까요?",
+    typeQuestion: "어떤 시야를 기준으로 할까요?",
     strength: "번역 강도",
     severity: "시야 강도",
     mine: "내가 전할 장면",
@@ -63,14 +57,12 @@ const copy = {
   en: {
     translateTitle: "Translate a photo",
     translateIntro: "Create a new photo that makes color differences easier for color-blind people to distinguish.",
-    simulateTitle: "Check their view",
-    simulateIntro: "Check how a color-blind person sees the original photo now. The photo itself stays unchanged.",
     drop: "Drop a photo here",
     select: "Choose a photo",
     camera: "Take a photo",
     paste: "You can paste an image here, too.",
     privacy: "Your photo never leaves this device. Every transformation happens here.",
-    typeQuestion: "Whose view are you exploring?",
+    typeQuestion: "Which view should guide it?",
     strength: "Translation strength",
     severity: "View strength",
     mine: "The scene I share",
@@ -112,7 +104,7 @@ function ProcessingOverlay({ label, detail, progress }: { label: string; detail:
   </div>;
 }
 
-export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string }) {
+export function ImageEditor({ locale }: { locale: string }) {
   const text = locale === "ko" ? copy.ko : copy.en;
   const visionLabels = getVisionLabels(locale);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -121,7 +113,7 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [visionType, setVisionType] = useState<VisionType>(() => readVisionProfile()?.visionType ?? "deutan");
-  const [amount, setAmount] = useState(() => mode === "simulate" ? readVisionProfile()?.severity ?? 1 : 0.8);
+  const [amount, setAmount] = useState(0.8);
   const [divider, setDivider] = useState(50);
   const [dragging, setDragging] = useState(false);
   const [isDraggingFile, setIsDraggingFile] = useState(false);
@@ -201,9 +193,7 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
             input.data[index + 1]! / 255,
             input.data[index + 2]! / 255,
           ]);
-          const transformed = mode === "translate"
-            ? daltonize(linear, visionType as DaltonizeVisionType, 1, amount)
-            : simulate(linear, visionType, amount);
+          const transformed = daltonize(linear, visionType as DaltonizeVisionType, 1, amount);
           const [red, green, blue] = linearToRGB(transformed);
           result.data[index] = Math.round(clamp01(red) * 255);
           result.data[index + 1] = Math.round(clamp01(green) * 255);
@@ -248,7 +238,7 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
       cancelled = true;
       if (frameId !== null) window.cancelAnimationFrame(frameId);
     };
-  }, [amount, mode, source, text.invalid, visionType]);
+  }, [amount, source, text.invalid, visionType]);
 
   const updateDivider = (clientX: number, element: HTMLElement) => {
     const rect = element.getBoundingClientRect();
@@ -257,15 +247,15 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
 
   const compareLeft = originalUrl;
   const compareRight = resultUrl;
-  const leftLabel = mode === "translate" ? `${text.original} · ${text.mine}` : text.original;
-  const rightLabel = mode === "translate" ? `${text.translated} · ${text.theirs}` : text.simulated;
+  const leftLabel = `${text.original} · ${text.mine}`;
+  const rightLabel = `${text.translated} · ${text.theirs}`;
 
   const download = () => {
     if (!resultUrl) return;
     const link = document.createElement("a");
     const date = new Date().toISOString().slice(0, 10);
     link.href = resultUrl;
-    link.download = `iris-for-${visionType}-${date}.png`;
+    link.download = `nunbit-for-${visionType}-${date}.png`;
     link.click();
   };
 
@@ -273,10 +263,10 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
     <main className="mx-auto w-full max-w-[1184px] px-5 pb-12 pt-7 md:px-8 md:pt-10">
       <div className="mb-10 max-w-[620px] border-b border-[var(--color-border)] pb-7">
         <h1 className="min-w-0 text-[28px] font-semibold leading-9 tracking-[-0.035em] [overflow-wrap:anywhere] md:text-[32px] md:leading-10">
-          {mode === "translate" ? text.translateTitle : text.simulateTitle}
+          {text.translateTitle}
         </h1>
         <p className="mt-3 text-[16px] leading-[26px] text-[var(--color-text-sub)]">
-          {mode === "translate" ? text.translateIntro : text.simulateIntro}
+          {text.translateIntro}
         </p>
       </div>
 
@@ -304,8 +294,8 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
           <section>
             <div className="mb-3 flex items-start justify-between gap-5 text-[13px] font-medium text-[var(--color-text-sub)]">
-              <span className="min-w-0"><strong className="block text-[var(--color-primary)]">{mode === "translate" ? text.original : leftLabel}</strong>{mode === "translate" && <span>{text.mine}</span>}</span>
-              <span className="min-w-0 text-right"><strong className="block text-[var(--color-primary)]">{mode === "translate" ? text.translated : rightLabel}</strong>{mode === "translate" && <span>{text.theirs}</span>}</span>
+              <span className="min-w-0"><strong className="block text-[var(--color-primary)]">{text.original}</strong><span>{text.mine}</span></span>
+              <span className="min-w-0 text-right"><strong className="block text-[var(--color-primary)]">{text.translated}</strong><span>{text.theirs}</span></span>
             </div>
             <div
               role="slider"
@@ -328,7 +318,7 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
             >
               {compareLeft && <img src={compareLeft} alt={leftLabel} draggable={false} className="pointer-events-none absolute inset-0 size-full object-contain" />}
               {compareRight && <img src={compareRight} alt={rightLabel} draggable={false} className="pointer-events-none absolute inset-0 size-full object-contain" style={{ clipPath: `inset(0 0 0 ${divider}%)` }} />}
-              {isProcessing && <ProcessingOverlay label={mode === "translate" ? text.processingTranslate : text.processingSimulate} detail={text.processingDetail} progress={processingProgress} />}
+              {isProcessing && <ProcessingOverlay label={text.processingTranslate} detail={text.processingDetail} progress={processingProgress} />}
               <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 z-10 w-px bg-white shadow-[0_0_0_1px_rgba(36,52,71,0.2)]" style={{ left: `${divider}%` }}>
                 <span className="absolute left-1/2 top-1/2 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-[var(--color-border)] bg-white text-[var(--color-primary)] shadow-[var(--shadow-m)]">↔</span>
               </div>
@@ -343,18 +333,16 @@ export function ImageEditor({ mode, locale }: { mode: EditorMode; locale: string
               <div className="mt-4 space-y-4">
                 <div><p className="text-[13px] font-medium text-[var(--color-text-sub)]">{visionLabels.redGreen}</p><div className="mt-2 grid grid-cols-2 gap-2">{redGreenTypes.map((type) => <button key={type} type="button" onClick={() => setVisionType(type)} aria-pressed={visionType === type} className={`min-h-11 rounded-[var(--radius-s)] border px-3 text-left text-[14px] font-medium transition-colors ${visionType === type ? "border-[var(--color-primary)] bg-[var(--color-bg)]" : "border-[var(--color-border)] hover:bg-[var(--color-bg)]"}`}>{visionLabels.types[type]}</button>)}</div></div>
                 <div><p className="text-[13px] font-medium text-[var(--color-text-sub)]">{visionLabels.blueYellow}</p><button type="button" onClick={() => setVisionType("tritan")} aria-pressed={visionType === "tritan"} className={`mt-2 min-h-11 w-full rounded-[var(--radius-s)] border px-3 text-left text-[14px] font-medium transition-colors ${visionType === "tritan" ? "border-[var(--color-primary)] bg-[var(--color-bg)]" : "border-[var(--color-border)] hover:bg-[var(--color-bg)]"}`}>{visionLabels.types.tritan}</button></div>
-                {mode === "simulate" && <div><p className="text-[13px] font-medium text-[var(--color-text-sub)]">{visionLabels.fullColor}</p><button type="button" onClick={() => setVisionType("monochromacy")} aria-pressed={visionType === "monochromacy"} className={`mt-2 min-h-11 w-full rounded-[var(--radius-s)] border px-3 text-left text-[14px] font-medium transition-colors ${visionType === "monochromacy" ? "border-[var(--color-primary)] bg-[var(--color-bg)]" : "border-[var(--color-border)] hover:bg-[var(--color-bg)]"}`}>{visionLabels.types.monochromacy}</button></div>}
               </div>
             </fieldset>
             <div className="mt-7 border-t border-[var(--color-border)] pt-6">
-              <label htmlFor={`${mode}-amount`} className="flex items-center justify-between text-[16px] font-semibold"><span>{mode === "translate" ? text.strength : text.severity}</span><output className="tabular-nums text-[14px] font-medium text-[var(--color-text-sub)]">{Math.round(amount * 100)}%</output></label>
-              <input id={`${mode}-amount`} className="mt-4 w-full accent-[var(--color-primary)]" type="range" min="0" max="1" step="0.05" value={amount} onChange={(event) => setAmount(Number(event.target.value))} />
+              <label htmlFor="translation-amount" className="flex items-center justify-between text-[16px] font-semibold"><span>{text.strength}</span><output className="tabular-nums text-[14px] font-medium text-[var(--color-text-sub)]">{Math.round(amount * 100)}%</output></label>
+              <input id="translation-amount" className="mt-4 w-full accent-[var(--color-primary)]" type="range" min="0" max="1" step="0.05" value={amount} onChange={(event) => setAmount(Number(event.target.value))} />
             </div>
-            {mode === "translate" && <p className="mt-5 text-[13px] leading-5 text-[var(--color-text-sub)]">{text.unknownType}</p>}
+            <p className="mt-5 text-[13px] leading-5 text-[var(--color-text-sub)]">{text.unknownType}</p>
             <div className="mt-7 grid gap-3">
-              <button type="button" onClick={download} disabled={!resultUrl || isProcessing} className="h-12 whitespace-nowrap rounded-[var(--radius-m)] bg-[var(--color-primary)] px-4 text-[16px] font-medium text-white transition-colors hover:bg-[color-mix(in_srgb,var(--color-primary)_85%,var(--color-accent))] disabled:cursor-not-allowed disabled:opacity-50">{isProcessing ? (mode === "translate" ? text.processingTranslate : text.processingSimulate) : text.download}</button>
+              <button type="button" onClick={download} disabled={!resultUrl || isProcessing} className="h-12 whitespace-nowrap rounded-[var(--radius-m)] bg-[var(--color-primary)] px-4 text-[16px] font-medium text-white transition-colors hover:bg-[color-mix(in_srgb,var(--color-primary)_85%,var(--color-accent))] disabled:cursor-not-allowed disabled:opacity-50">{isProcessing ? text.processingTranslate : text.download}</button>
               <button type="button" onClick={() => fileInput.current?.click()} className="h-12 rounded-[var(--radius-m)] border border-[var(--color-border)] bg-white px-4 text-[16px] font-medium hover:bg-[var(--color-bg)]">{text.replace}</button>
-              {mode === "simulate" && <Link href="/translate" className="rounded-[var(--radius-m)] px-1 py-2 text-center text-[14px] font-medium underline underline-offset-4">{text.translateCta} →</Link>}
             </div>
             <input ref={fileInput} type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={(event) => { const file = event.target.files?.[0]; if (file) void loadFile(file); event.currentTarget.value = ""; }} />
           </aside>

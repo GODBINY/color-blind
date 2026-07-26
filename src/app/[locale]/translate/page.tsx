@@ -15,5 +15,5 @@ export default async function TranslatePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <ImageEditor mode="translate" locale={locale} />;
+  return <ImageEditor locale={locale} />;
 }

@@ -7,7 +7,6 @@ import type { Metadata } from "next";
 
 const TASK_ROUTES = {
   tileTranslate: "/translate",
-  tileSimulate: "/simulate",
   tileFindMyView: "/find-my-view",
   tileLive: "/live",
   tileColorPick: "/color-pick",
@@ -23,12 +22,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 const taskGroupsFor = (locale: string): { title: string; description: string; tasks: TaskKey[] }[] => locale === "ko"
   ? [
-      { title: "사진을 함께 보기", description: "같은 사진을 두 시야로 놓고, 보이는 차이를 함께 살펴봐요.", tasks: ["tileTranslate", "tileSimulate"] },
+      { title: "사진을 함께 보기", description: "사진 한 장으로 그 사람에게 전할 새 사진을 만들어요.", tasks: ["tileTranslate"] },
       { title: "색을 확인하고 기록하기", description: "지금 보이는 색을 확인하거나, 이미지 속 색상값을 저장해요.", tasks: ["tileLive", "tileColorPick"] },
       { title: "내 시야 알아보기", description: "사진 비교의 기준이 될 시야를 찾아보고, 색을 다르게 보는 방식도 알아봐요.", tasks: ["tileFindMyView", "tileLearn"] },
     ]
   : [
-      { title: "See a photo together", description: "Place the same photo side by side and explore the differences together.", tasks: ["tileTranslate", "tileSimulate"] },
+      { title: "See a photo together", description: "Make a new photo to share with them from one image.", tasks: ["tileTranslate"] },
       { title: "Check and record colors", description: "Check a color now or save precise values from an image.", tasks: ["tileLive", "tileColorPick"] },
       { title: "Understand a view", description: "Find a starting view for photo previews and learn about different ways of seeing color.", tasks: ["tileFindMyView", "tileLearn"] },
     ];
@@ -56,10 +55,7 @@ export default async function HomePage({
           <p className="mt-6 max-w-[440px] text-[16px] leading-[26px] text-[var(--color-text-sub)]">{t("intro")}</p>
           <div className="mt-8 flex flex-col gap-3 sm:items-start">
             <div className="sm:max-w-[360px]"><HomeUpload label={t("cta")} error={t("uploadError")} /><p className={`mt-1.5 text-[13px] leading-5 text-[var(--color-text-sub)] ${locale === "ko" ? "whitespace-pre-line" : ""}`}>{t("ctaBody")}</p></div>
-            <div className="sm:max-w-[360px]"><Link href="/simulate" className="inline-flex min-h-12 items-center justify-center rounded-[var(--radius-m)] border border-[var(--color-border)] bg-white px-6 text-[16px] font-medium transition-colors hover:bg-[var(--color-bg)]">
-              {t("secondaryCta")}
-            </Link><p className="mt-1.5 text-[13px] leading-5 text-[var(--color-text-sub)]">{t("secondaryCtaBody")}</p></div>
-            <Link href="/color-pick" className="inline-flex min-h-11 items-center gap-2 self-start px-1 text-[14px] font-medium text-[var(--color-text-sub)] underline underline-offset-4 transition-colors hover:text-[var(--color-primary)]">
+            <Link href="/color-pick" className="inline-flex min-h-12 items-center gap-2 self-start rounded-[var(--radius-m)] border border-[var(--color-border)] bg-white px-6 text-[16px] font-medium transition-colors hover:bg-[var(--color-bg)]">
               {t("colorPickCta")} <span aria-hidden="true">→</span>
             </Link>
           </div>

@@ -394,3 +394,18 @@ source_context: "src/app/globals.css"
 ```
 
 On desktop as well as mobile, the document itself must never horizontally scroll or bounce; keep any intentional image pan/zoom inside its own component.
+
+## 2026-07-26T12:31:16.000Z — remove-duplicated-view-checking-entry
+
+```omd-meta
+id: pref_ms1s1c26_f0dc4013
+timestamp: 2026-07-26T12:31:16.000Z
+scope: layout
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx, src/components/editor/ImageEditor.tsx"
+```
+
+Do not expose a separate view-checking entry when it repeats the same upload-and-comparison flow. The homepage should lead with photo translation and image HEX/RGB extraction only.

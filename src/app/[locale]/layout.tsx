@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Script from "next/script";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -54,9 +55,13 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        <Script id="google-tag-manager" strategy="beforeInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WGGZWCCN');`}
+        </Script>
         <script dangerouslySetInnerHTML={{ __html: "try { document.documentElement.dataset.theme = localStorage.getItem('iris-theme') === 'dark' ? 'dark' : 'light'; } catch {}" }} />
       </head>
       <body>
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WGGZWCCN" height="0" width="0" style={{ display: "none", visibility: "hidden" }} /></noscript>
         <NextIntlClientProvider>
           <header className="mx-auto flex max-w-[1184px] items-center justify-between border-b border-[var(--color-border)] px-5 py-5 md:px-8">
             <Link href="/" className="flex items-center gap-2 text-[21px] font-semibold tracking-[-0.05em]">

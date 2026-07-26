@@ -18,7 +18,6 @@
 | 페이지 | Primary | Secondary |
 |---|---|---|
 | `/translate` | colorblind friendly photo converter | daltonization tool online, colorblind color correction filter |
-| `/simulate` | **color blindness simulator** (볼륨 최대) | colorblind vision simulator, see like colorblind, colorblind photo filter |
 | `/live` | colorblind camera filter | live color identifier, what color is this |
 | `/find-my-view` | am i colorblind quick check | colorblind type quiz (※ "color blind test"는 Ishihara 계열이 장악 — 정면승부 대신 quiz/check 롱테일) |
 | `/learn/protanopia` | protanopia | protan color blindness, what does protanopia look like |
@@ -30,7 +29,6 @@
 | 페이지 | Primary | Secondary |
 |---|---|---|
 | `/translate` | 색약 보정 필터 | 색약 사진 변환, 색맹 보정 |
-| `/simulate` | **색약 시뮬레이터** | 색약이 보는 세상, 색맹 시야 |
 | `/find-my-view` | 색약 테스트 간단 | 색약 유형 확인 |
 | `/learn/*` | 적록색약 / 청황색약 / 색약 종류 | 색약 남자친구, 색약인 사람이 보는 색 |
 | Home | 브랜드명 | 색약인 애인에게 꽃 보여주기 (스토리형 롱테일 — 블로그 글감) |
@@ -43,11 +41,6 @@
   desc:  Convert your photo into colors your colorblind friend or partner
          can actually distinguish. Free, in your browser — photos never
          leave your device.
-
-/simulate (EN)
-  title: Color Blindness Simulator — See Through Their Eyes | NUNBIT
-  desc:  Upload a photo and see it as someone with protanopia, deuteranopia,
-         or tritanopia does. Compare side by side, free and private.
 
 /learn/deuteranopia (KO)
   title: 적녹색약(Deutan)이 보는 세상 — 사진으로 비교해보기 | NUNBIT

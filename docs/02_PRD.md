@@ -1,7 +1,7 @@
 # 02. PRD — 기능 요구사항
 
 > v1.0 — 2026-07-08
-> 범위: MVP. 핵심 기능은 **Translate (색 번역)**, 보조 기능은 Simulate (시뮬레이션).
+> 범위: MVP. 핵심 기능은 **Translate (색 번역)**이며, 색상 확인·기록과 내 시야 설정을 보조한다.
 > 이후 버전 기능은 [09_Roadmap.md](09_Roadmap.md) 참고.
 
 ---
@@ -11,7 +11,7 @@
 ```
 Home (/)
 ├── Translate      (/translate)      ← 핵심: 그 사람의 색으로 번역
-├── Simulate       (/simulate)       ← 보조: 그 사람의 시야로 보기
+├── Color Picker    (/color-pick)     ← 이미지에서 HEX·RGB 추출
 ├── Live Camera    (/live)
 ├── Find My View   (/find-my-view)  ← 1920년 공개 도메인 이시하라 8판 참고 + 사진 비교 시야 직접 선택
 └── Learn          (/learn)
@@ -24,7 +24,7 @@ Home (/)
 - 모든 기능은 Route 기반 (SEO를 위해 각 기능이 고유 URL을 가짐)
 - 도메인: 출시 전 NUNBIT 도메인 확정 필요 ([08_Brand.md](08_Brand.md))
 - i18n: `/en/...`, `/ko/...` prefix ([05_Architecture.md](05_Architecture.md))
-- Translate와 Simulate는 내부적으로 같은 에디터 컴포넌트를 모드만 바꿔 공유
+- 기존 `/simulate` 주소는 `/translate`로 리다이렉트한다. 사진 비교는 Translate 안의 원본 ↔ 번역본 한 흐름으로 제공한다.
 
 ## 2. Core User Flows
 
@@ -51,12 +51,6 @@ Home (/)
     └─ Live Camera: 실시간 번역 필터로 꽃밭/단풍 구경, 색 이름 확인
 ```
 
-### Flow C — 이해하고 싶은 사람
-```
-사진 업로드 → Simulate → Compare Slider로 원본 vs 그 사람의 시야
- → "이래서 번역이 필요하구나" → Translate로 유도
-```
-
 ### Returning Visit
 - LocalStorage의 `visionType` / `severity`가 있으면 업로드 즉시 해당 설정 적용. 유형 선택 단계를 건너뛴다.
 
@@ -69,7 +63,7 @@ Home (/)
 | H-1 | Hero: 핵심 카피 + 대표 이미지 (붉은 장미: 색약 시야 → 번역 후 시야 크로스페이드, "묻혀 있던 꽃이 떠오르는" 순간) | P0 |
 | H-2 | Hero 내 즉시 업로드 CTA (파일 선택 + 드래그&드롭 + 모바일 카메라/갤러리) | P0 |
 | H-3 | 업로드 시 `/translate`로 이동하며 이미지 전달 | P0 |
-| H-4 | 기능 카드: Translate / Simulate / Live Camera / Find My View / Learn | P0 |
+| H-4 | 기능 카드: Translate / 이미지 내 색상 추출 / Live Camera / Find My View / Learn | P0 |
 | H-5 | 언어 전환 (EN/KO) | P0 |
 
 ### 3.2 Translate (`/translate`) — 핵심 기능
@@ -93,18 +87,7 @@ Home (/)
 - Canvas 메모리 실패(구형 모바일) → 2048px로 재시도
 - 번역 효과가 미미한 이미지(이미 구분 가능한 색 구성) → "이 사진은 이미 잘 보여요 :)" 안내 (번역 전후 시뮬레이션 차이가 작을 때)
 
-### 3.3 Simulate (`/simulate`)
-
-| ID | 요구사항 | 우선순위 |
-|---|---|---|
-| S-1 | Translate와 동일한 업로드 UX (T-1, T-2 공유) | P0 |
-| S-2 | 유형 선택: Protan / Deutan / Tritan / Monochromacy(회색조) | P0 (Mono는 P1) |
-| S-3 | 강도(severity) 슬라이더 0–100%, 기본 100% (Machado 행렬 보간) | P1 |
-| S-4 | Compare Slider: 원본 ↔ 시뮬레이션 좌우 드래그 비교 (터치/키보드 지원) | P0 |
-| S-5 | 다운로드/공유 (T-7, T-8과 동일 규칙) | P1 |
-| S-6 | 하단 CTA: "이 사진, 그 사람이 잘 볼 수 있게 번역해 볼까요?" → `/translate` | P1 |
-
-### 3.4 Live Camera (`/live`)
+### 3.3 Live Camera (`/live`)
 
 | ID | 요구사항 | 우선순위 |
 |---|---|---|
@@ -118,7 +101,7 @@ Home (/)
 
 **Color Name 규칙**: 색 이름 사전(≈140색, CSS named colors 기반 + 한국어 번역)에서 Lab 거리 최근접 매칭 (MVP 단순화, [04_Tech.md](04_Tech.md)).
 
-### 3.5 Find My View (`/find-my-view`)
+### 3.4 Find My View (`/find-my-view`)
 
 **목적**: 의료 진단이 아니라, **서비스 기본값(visionType/severity) 설정을 위한 Quick Check**.
 

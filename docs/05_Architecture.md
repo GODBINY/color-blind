@@ -39,7 +39,7 @@
 |---|---|---|
 | `/[locale]` (Home) | SSG | SEO, LCP |
 | `/[locale]/translate` | SSG shell + Client | 에디터는 전부 클라이언트. 셸은 정적으로 즉시 표시 |
-| `/[locale]/simulate` | SSG shell + Client | 〃 |
+| `/[locale]/simulate` | Redirect | 이전 공유 링크를 `/[locale]/translate`로 이동 |
 | `/[locale]/live` | Client | 카메라 권한 필요 |
 | `/[locale]/find-my-view` | SSG shell + Client | 문항 생성은 클라이언트 랜덤 |
 | `/[locale]/learn/**` | **SSG (전체 정적)** | SEO 핵심 자산 |

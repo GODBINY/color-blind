@@ -5,7 +5,6 @@ import { siteUrl } from "@/lib/seo";
 const paths = [
   "",
   "/translate",
-  "/simulate",
   "/color-pick",
   "/live",
   "/find-my-view",
@@ -24,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: new URL(`/${locale}${path}`, base).toString(),
     lastModified,
     changeFrequency: "monthly" as const,
-    priority: path === "" ? 1 : path === "/translate" || path === "/simulate" ? 0.9 : 0.7,
+    priority: path === "" ? 1 : path === "/translate" ? 0.9 : 0.7,
     alternates: {
       languages: Object.fromEntries([
         ...routing.locales.map((alternateLocale) => [alternateLocale, new URL(`/${alternateLocale}${path}`, base).toString()]),
