@@ -25,7 +25,12 @@
     "tileFindMyView": "Find My View",
     "tileFindMyViewBody": "Спокойно узнайте особенности своего зрения",
     "tileLearn": "Learn",
-    "tileLearnBody": "Читайте о разных способах видеть цвет"
+    "tileLearnBody": "Читайте о разных способах видеть цвет",
+    "colorPickCta": "Extract HEX & RGB from an image",
+    "tileTranslate": "Translate a photo for their view",
+    "tileTranslateBody": "Make color differences easier to distinguish.",
+    "tileColorPick": "Image color extraction tool",
+    "tileColorPickBody": "Record HEX and RGB values from a paper figure, chart, or result image."
   },
   "RouteStub": { "back": "На главную", "preparing": "Этот экран ещё готовится" }
 }

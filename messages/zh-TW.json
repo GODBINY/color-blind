@@ -25,7 +25,12 @@
     "tileFindMyView": "Find My View",
     "tileFindMyViewBody": "慢慢認識自己的色彩視角",
     "tileLearn": "Learn",
-    "tileLearnBody": "閱讀關於不同色彩視覺的故事"
+    "tileLearnBody": "閱讀關於不同色彩視覺的故事",
+    "colorPickCta": "Extract HEX & RGB from an image",
+    "tileTranslate": "Translate a photo for their view",
+    "tileTranslateBody": "Make color differences easier to distinguish.",
+    "tileColorPick": "Image color extraction tool",
+    "tileColorPickBody": "Record HEX and RGB values from a paper figure, chart, or result image."
   },
   "RouteStub": { "back": "回到首頁", "preparing": "這個畫面還在準備中" }
 }

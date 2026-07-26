@@ -96,6 +96,7 @@ Shadow (은은하게, 병원 느낌의 flat 회색 금지):
 | `Button` | primary / secondary / ghost, sm / md / lg, loading, disabled | primary: bg-primary + white text, radius-m, h 48px(md). 문구는 [08_Brand.md](08_Brand.md) 버튼 카피 규칙 준수 |
 | `UploadZone` | idle / dragover / loading / error | 점선 border → dragover 시 accent 배경 + scale(1.01). "여기에 사진을 놓아주세요". 파일 선택·카메라 촬영 버튼 내장 |
 | `CompareSlider` | dragging / idle | 세로 핸들 + 좌우 라벨(모드별: "Original/Translated", "Before/After — their view"). 터치 44px 히트 영역. 키보드 ←→ 지원 |
+| `Hero vision tabs` | Protan / Deutan / Tritan | 홈 CompareSlider 아래의 탭으로 기준 시야를 선택한다. 선택하면 오른쪽 "번역한 뒤" 이미지가 해당 색약 시뮬레이션으로 바뀐다. |
 | `VisionTypeTabs` | selected / unselected | Protan / Deutan / Tritan (+ Mono, Simulate 전용). 텍스트 라벨 항상 노출, 선택은 배경+밑줄로 표시 (색만 사용 금지) |
 | `PreviewToggle` | my-eyes / their-eyes | Translate 전용. `내 눈으로 보기`는 원본↔번역본 드래그 비교다. `그 사람의 눈으로 보기`는 번역 후 완성 이미지를 단독으로 보여주는 결과 화면이며, 번역 전/후 드래그 비교는 "번역 전에는 어떻게 보였을까?"를 눌렀을 때만 연다. |
 | `StrengthSlider` | - | 번역 강도/시뮬레이션 severity 공용. 0–100%, 현재 값 수치 병기, 스텝 5% |
@@ -104,7 +105,14 @@ Shadow (은은하게, 병원 느낌의 flat 회색 금지):
 | `QuizCard` | idle / selected / answered | Find My View 문항. 고정 색값의 자체 제작 3카드 비교를 사용하며, 공식 Ishihara 플레이트나 진단 이미지를 복제하지 않는다. 선택 표시는 테두리 + 화살표 아이콘 |
 | `Toast` | info / error | 하단 중앙, 4s 자동 소멸, 아이콘+문구 |
 | `LangSwitch` | - | EN/KO 토글, 헤더 우측 |
-| `Footer` | - | 면책 한 줄 + 프라이버시 문구("사진은 서버로 전송되지 않아요") + 링크 |
+| `Footer` | - | 면책 한 줄 + 프라이버시 문구("사진을 업로드해도 별도 서버에 저장되지 않아요") + 링크 |
+
+### Home task menu
+
+- 메뉴는 감성 문구보다 사용자가 하려는 일을 먼저 이름 붙인다: `색약·색맹 시뮬레이션`, `라이브 카메라로 색 확인하기`, `내 시야 설정하기`, `이미지 내 색상 추출 도구`.
+- 각 항목 아래에는 쓰는 상황과 결과를 한 줄로 적는다. 색상 추출은 논문 그림·그래프·결과 이미지에서 특정 지점의 HEX/RGB 값을 기록하고 저장하는 도구임을 명시한다.
+- 홈의 작업 메뉴는 `사진을 함께 보기`, `색을 확인하고 기록하기`, `색을 다르게 보는 이야기`로 묶어, 사용자가 기능 이름을 읽기 전에 목적별로 훑을 수 있게 한다.
+- Learn의 각 유형 카드는 장식용 그래디언트 대신 같은 사진에 적용한 해당 유형의 색각 시뮬레이션 이미지를 사용한다. 이는 모델 기반 예시이며, 개인의 실제 경험을 단정하는 이미지는 아니다.
 
 ## 5. Wireframes (구조 스케치)
 
@@ -152,7 +160,7 @@ Shadow (은은하게, 병원 느낌의 flat 회색 금지):
 │   번역 전 시야 ┃ 번역 후  │                 │
 │   시야 비교               │ [ Download ]    │
 │                          │ [ 보내기 💌 ]    │
-│   사진은 서버로 전송되지   │                 │
+│   업로드해도 서버에 저장되지│                 │
 │   않아요                  │                 │
 ├──────────────────────────┴─────────────────┤
 │ 이 사진이 왜 다르게 보이는지 궁금하다면 → Learn │

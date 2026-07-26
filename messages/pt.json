@@ -25,7 +25,12 @@
     "tileFindMyView": "Find My View",
     "tileFindMyViewBody": "Conheça com calma como você vê as cores",
     "tileLearn": "Learn",
-    "tileLearnBody": "Leia sobre diferentes formas de ver"
+    "tileLearnBody": "Leia sobre diferentes formas de ver",
+    "colorPickCta": "Extract HEX & RGB from an image",
+    "tileTranslate": "Translate a photo for their view",
+    "tileTranslateBody": "Make color differences easier to distinguish.",
+    "tileColorPick": "Image color extraction tool",
+    "tileColorPickBody": "Record HEX and RGB values from a paper figure, chart, or result image."
   },
   "RouteStub": {
     "back": "Voltar ao início",

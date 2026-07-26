@@ -29,7 +29,7 @@ const copy = {
     select: "사진 선택",
     camera: "카메라로 찍기",
     paste: "붙여넣기도 가능해요",
-    privacy: "사진은 서버로 전송되지 않아요. 모든 변환은 이 기기 안에서 일어나요.",
+    privacy: "사진을 업로드해도 별도 서버에 저장되지 않아요. 모든 변환은 이 기기에서 이뤄져요.",
     typeQuestion: "누구의 시야로 볼까요?",
     strength: "번역 강도",
     severity: "시야 강도",

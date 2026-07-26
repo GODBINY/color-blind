@@ -2,7 +2,7 @@
   "Nav": {
     "brand": "Iris",
     "languageNav": "언어 선택",
-    "privacy": "사진은 이 기기를 떠나지 않아요."
+    "privacy": "사진을 업로드해도 별도 서버에 저장되지 않아요."
   },
   "Home": {
     "eyebrow": "서로의 색을 더 가까이",
@@ -11,21 +11,26 @@
     "cta": "사진 올리기",
     "uploadError": "JPG, PNG, WebP 파일만 20MB 이하로 올릴 수 있어요.",
     "secondaryCta": "그 사람의 시야 보기",
-    "privacy": "사진은 서버로 전송되지 않아요. 모든 변환은 이 기기 안에서 일어나요.",
+    "privacy": "사진을 업로드해도 별도 서버에 저장되지 않아요. 모든 변환은 이 기기에서 이뤄져요.",
     "before": "그 사람의 시야",
     "after": "번역한 뒤",
     "visualCaption": "드래그해 두 장의 차이를 살펴보세요",
-    "exploreEyebrow": "더 알아보기",
-    "exploreTitle": "색을 전하는 여러 가지 방법",
-    "exploreBody": "한 장의 사진에서 시작해, 서로의 시야를 더 잘 이해해 보세요.",
-    "tileSimulate": "그 사람의 시야",
-    "tileSimulateBody": "같은 장면을 다른 시선으로 살펴봐요",
-    "tileLive": "Live Camera",
-    "tileLiveBody": "지금 눈앞의 색을 바로 확인해요",
-    "tileFindMyView": "Find My View",
-    "tileFindMyViewBody": "내 시야의 특징을 차분히 알아봐요",
-    "tileLearn": "Learn",
-    "tileLearnBody": "색을 다르게 보는 이야기를 읽어봐요"
+    "colorPickCta": "이미지에서 HEX·RGB 추출하기",
+    "exploreEyebrow": "원하는 작업을 골라보세요",
+    "exploreTitle": "사진 비교와 색상 확인에 필요한 도구",
+    "exploreBody": "필요한 일을 골라 바로 시작해 보세요.",
+    "tileTranslate": "사진을 그 사람의 색으로 번역",
+    "tileTranslateBody": "색의 차이를 더 구분하기 쉽도록 사진을 바꿔요",
+    "tileSimulate": "색약·색맹 시뮬레이션",
+    "tileSimulateBody": "같은 이미지가 다른 시야에서 어떻게 보이는지 비교해요",
+    "tileLive": "라이브 카메라로 색 확인하기",
+    "tileLiveBody": "화면 속 지점의 색 이름과 값을 바로 확인해요",
+    "tileFindMyView": "내 시야 설정하기",
+    "tileFindMyViewBody": "나는 어떤 색약 유형에 가까울까? 사진 비교를 위한 시야 기준을 찾아봐요",
+    "tileColorPick": "이미지 내 색상 추출 도구",
+    "tileColorPickBody": "논문 그림·그래프·결과 이미지에서 원하는 지점의 HEX·RGB 값을 기록해요",
+    "tileLearn": "색을 다르게 보는 이야기",
+    "tileLearnBody": "색을 다르게 보는 방식과 도움 되는 정보를 읽어봐요"
   },
   "RouteStub": {
     "back": "홈으로",

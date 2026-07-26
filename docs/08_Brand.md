@@ -88,7 +88,7 @@ EN: Share the beauty you see —
 
 ### 면책/프라이버시 고정 문구
 - `(This is not a medical diagnosis)` / `(의학적 진단이 아니에요)`
-- `사진은 서버로 전송되지 않아요. 모든 변환은 이 기기 안에서 일어나요.` / `Your photos never leave your device.`
+- `사진을 업로드해도 별도 서버에 저장되지 않아요. 모든 변환은 이 기기에서 이뤄져요.` / `Your photos never leave your device.`
 
 ### 공유 메시지 기본 카피 (T-8)
 - KO: `네가 볼 수 있는 색으로 번역했어. 여기, 이렇게 예뻐.`

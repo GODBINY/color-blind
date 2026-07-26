@@ -3,6 +3,22 @@ export type LearnType = "protanopia" | "deuteranopia" | "tritanopia";
 
 export const learnTypes: LearnType[] = ["protanopia", "deuteranopia", "tritanopia"];
 
+const localizedNames: Record<string, Record<LearnType, string>> = {
+  ko: { protanopia: "적색약·적색맹 (Protan)", deuteranopia: "녹색약·녹색맹 (Deutan)", tritanopia: "청황색약·청황색맹 (Tritan)" },
+  ja: { protanopia: "1型色覚 (Protan)", deuteranopia: "2型色覚 (Deutan)", tritanopia: "3型色覚 (Tritan)" },
+  "zh-TW": { protanopia: "紅色盲／紅色弱 (Protan)", deuteranopia: "綠色盲／綠色弱 (Deutan)", tritanopia: "藍黃色盲／藍黃色弱 (Tritan)" },
+  de: { protanopia: "Rotblindheit/-schwäche (Protan)", deuteranopia: "Grünblindheit/-schwäche (Deutan)", tritanopia: "Blaublindheit/-schwäche (Tritan)" },
+  es: { protanopia: "Ceguera/debilidad al rojo (Protan)", deuteranopia: "Ceguera/debilidad al verde (Deutan)", tritanopia: "Ceguera/debilidad azul-amarilla (Tritan)" },
+  fr: { protanopia: "Déficience rouge (Protan)", deuteranopia: "Déficience verte (Deutan)", tritanopia: "Déficience bleu-jaune (Tritan)" },
+  pt: { protanopia: "Deficiência vermelha (Protan)", deuteranopia: "Deficiência verde (Deutan)", tritanopia: "Deficiência azul-amarela (Tritan)" },
+  ru: { protanopia: "Красная цветовая недостаточность (Protan)", deuteranopia: "Зелёная цветовая недостаточность (Deutan)", tritanopia: "Сине-жёлтая цветовая недостаточность (Tritan)" },
+  en: { protanopia: "Protanopia", deuteranopia: "Deuteranopia", tritanopia: "Tritanopia" },
+};
+
+export function getLocalizedLearnName(locale: string, type: LearnType) {
+  return localizedNames[locale]?.[type] ?? localizedNames.en?.[type] ?? type;
+}
+
 type TypeContent = {
   shortName: string;
   family: string;

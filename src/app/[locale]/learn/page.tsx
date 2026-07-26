@@ -1,6 +1,10 @@
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getLearnIndex } from "@/lib/learn/content";
+import { getLocalizedLearnName } from "@/lib/learn/content";
+import { VisionSimulationPreview } from "@/components/learn/VisionSimulationPreview";
+
+const simulationType = { protanopia: "protan", deuteranopia: "deutan", tritanopia: "tritan" } as const;
 
 export default async function LearnPage({
   params,
@@ -21,8 +25,8 @@ export default async function LearnPage({
     <section className="mt-12 grid gap-4 md:grid-cols-3">
       {page.types.map((type, index) => <Link key={type.type} href={`/learn/${type.type}`} className="group rounded-[var(--radius-l)] border border-[var(--color-border)] bg-white p-6 shadow-[var(--shadow-s)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-m)]">
         <p className="flex items-center justify-between text-[13px] font-medium text-[var(--color-text-sub)]"><span>0{index + 1}</span><span className="transition-transform group-hover:translate-x-1">→</span></p>
-        <div className={`mt-9 h-28 rounded-[var(--radius-m)] ${index === 0 ? "bg-[linear-gradient(135deg,var(--color-accent),color-mix(in_srgb,var(--color-primary)_58%,white))]" : index === 1 ? "bg-[linear-gradient(135deg,color-mix(in_srgb,var(--color-accent)_80%,white),var(--color-primary))]" : "bg-[linear-gradient(135deg,var(--color-primary),var(--color-accent))]"}`} />
-        <h2 className="mt-6 text-[21px] font-semibold tracking-[-0.03em]">{type.shortName}</h2>
+        <div className="mt-6 h-32 overflow-hidden rounded-[var(--radius-m)] bg-[var(--color-bg)]"><VisionSimulationPreview type={simulationType[type.type]} alt={type.photoAlt} /></div>
+        <h2 className="mt-6 text-[21px] font-semibold tracking-[-0.03em]">{getLocalizedLearnName(locale, type.type)}</h2>
         <p className="mt-2 text-[13px] leading-5 text-[var(--color-text-sub)]">{type.intro}</p>
       </Link>)}
     </section>

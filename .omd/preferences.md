@@ -109,3 +109,78 @@ source_context: "src/components/color-pick/ImageColorPicker.tsx"
 ```
 
 Image color picking must support zooming into small areas so users can select precise pixels.
+
+## 2026-07-26T00:00:00.000Z — clear-scenario-led-menu-copy
+
+```omd-meta
+id: pref_ms12ff4t_58449ee1
+timestamp: 2026-07-26T00:00:00.000Z
+scope: voice
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx, messages/ko.json"
+```
+
+Homepage menu copy should state each task plainly before its emotional framing. Position image color extraction for paper figures, charts, and result images where people need exact HEX and RGB values.
+
+## 2026-07-26T00:00:00.000Z — use-familiar-colorblind-tool-labels
+
+```omd-meta
+id: pref_ms12j27m_6a29dcfd
+timestamp: 2026-07-26T00:00:00.000Z
+scope: voice
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "messages/ko.json"
+```
+
+Use familiar, task-explicit Korean labels: “색약 시뮬레이션”, “라이브 카메라로 색 확인하기”, “내 시야 설정하기”, and “이미지 내 색상 추출 도구”.
+
+## 2026-07-26T00:00:00.000Z — inclusive-simulation-menu-label
+
+```omd-meta
+id: pref_ms12kitu_91adaf6a
+timestamp: 2026-07-26T00:00:00.000Z
+scope: voice
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "messages/ko.json, docs/03_UI_UX.md"
+```
+
+Name the simulation menu “색약·색맹 시뮬레이션” so its scope is immediately clear.
+
+## 2026-07-26T00:00:00.000Z — group-home-tools-by-user-goal
+
+```omd-meta
+id: pref_ms133uw9_c5c96afd
+timestamp: 2026-07-26T00:00:00.000Z
+scope: layout
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx"
+```
+
+Organize the homepage task menu into goal-based groups with brief context, not a flat list of feature rows.
+
+## 2026-07-26T00:00:00.000Z — learn-cards-use-real-simulations-and-local-names
+
+```omd-meta
+id: pref_ms13acz3_fe1173ac
+timestamp: 2026-07-26T00:00:00.000Z
+scope: visualTheme
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/learn/page.tsx, src/lib/learn/content.ts"
+```
+
+Learn cards use model-based color-vision simulations instead of decorative gradients, and non-English locales lead with localized type names plus the academic term in parentheses.
