@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { seoMetadata, type AppLocale } from "@/lib/seo";
+import { localizedUrl, seoMetadata, type AppLocale } from "@/lib/seo";
 import type { Metadata } from "next";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -40,6 +40,6 @@ export default async function LearnFaqPage({ params }: { params: Promise<{ local
   setRequestLocale(locale);
   const isKo = locale === "ko";
   const entries = questions[isKo ? "ko" : "en"];
-  const schema = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: entries.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) };
+  const schema = { "@context": "https://schema.org", "@type": "FAQPage", inLanguage: isKo ? "ko" : "en", url: localizedUrl(locale as AppLocale, "faq"), mainEntity: entries.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) };
   return <main className="mx-auto max-w-[820px] px-5 pb-20 pt-8 md:pb-28 md:pt-16"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} /><Link href="/learn" className="text-[14px] text-[var(--color-text-sub)] underline underline-offset-4">← {isKo ? "Learn으로" : "Back to Learn"}</Link><p className="mt-8 text-[13px] font-medium text-[var(--color-text-sub)]">Learn · FAQ</p><h1 className="mt-3 text-[32px] font-semibold leading-[40px] tracking-[-0.04em] md:text-[40px] md:leading-[48px]">{isKo ? "색을 나누는 대신,\n이해를 더해요" : "A little more clarity,\nwithout drawing lines"}</h1><p className="mt-5 text-[16px] leading-[26px] text-[var(--color-text-sub)]">{isKo ? "색을 다르게 보는 방식과 NUNBIT에 대해 자주 묻는 질문을 모았어요." : "A few common questions about seeing color differently and about NUNBIT."}</p><div className="mt-10 divide-y divide-[var(--color-border)] rounded-[var(--radius-l)] border border-[var(--color-border)] bg-white px-6 shadow-[var(--shadow-s)]">{entries.map(([question, answer], index) => <details key={question} className="group py-5" open={index === 0}><summary className="flex cursor-pointer list-none items-center justify-between gap-5 text-[16px] font-semibold"><span>{question}</span><span className="text-[20px] font-normal text-[var(--color-text-sub)] group-open:rotate-45">+</span></summary><p className="max-w-[660px] pt-4 text-[15px] leading-7 text-[var(--color-text-sub)]">{answer}</p></details>)}</div></main>;
 }

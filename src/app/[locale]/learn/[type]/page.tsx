@@ -1,10 +1,27 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { getLearnContent, getLocalizedLearnName, learnTypes, type LearnType } from "@/lib/learn/content";
+import { siteUrl } from "@/lib/seo";
+import type { Metadata } from "next";
 
 export function generateStaticParams() {
   return learnTypes.map((type) => ({ type }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; type: string }> }): Promise<Metadata> {
+  const { locale, type } = await params;
+  if (!learnTypes.includes(type as LearnType)) return {};
+  const item = getLearnContent(locale, type as LearnType);
+  const path = `/${locale}/learn/${type}`;
+  const languages = Object.fromEntries(routing.locales.map((itemLocale) => [itemLocale, `/${itemLocale}/learn/${type}`]));
+  return {
+    title: `${item.title} | NUNBIT`,
+    description: item.intro,
+    alternates: { canonical: path, languages: { ...languages, "x-default": `/en/learn/${type}` } },
+    openGraph: { type: "article", url: path, title: item.title, description: item.intro },
+  };
 }
 
 export default async function LearnTypePage({
@@ -18,8 +35,19 @@ export default async function LearnTypePage({
   const item = getLearnContent(locale, type as LearnType);
   const localizedName = getLocalizedLearnName(locale, type as LearnType);
   const isKo = locale === "ko";
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: item.title,
+    description: item.intro,
+    inLanguage: locale === "ko" ? "ko" : "en",
+    mainEntityOfPage: new URL(`/${locale}/learn/${type}`, siteUrl()).toString(),
+    publisher: { "@type": "Organization", name: "NUNBIT", url: siteUrl().toString() },
+    about: { "@type": "Thing", name: localizedName },
+  };
 
   return <main className="mx-auto max-w-[1120px] px-5 pb-20 pt-8 md:px-8 md:pb-28 md:pt-16">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
     <Link href="/learn" className="text-[14px] text-[var(--color-text-sub)] underline underline-offset-4">← {isKo ? "Learn으로" : "Back to Learn"}</Link>
     <section className="mt-8 max-w-[760px]"><p className="text-[13px] font-medium text-[var(--color-text-sub)]">{item.family} · {localizedName}</p><h1 className="mt-3 text-[32px] font-semibold leading-[40px] tracking-[-0.04em] md:text-[40px] md:leading-[48px]">{item.title}</h1><p className="mt-5 text-[17px] leading-7 text-[var(--color-text-sub)]">{item.intro}</p></section>
     <section className="mt-12 grid gap-5 md:grid-cols-2"><article className="rounded-[var(--radius-l)] border border-[var(--color-border)] bg-white p-6 shadow-[var(--shadow-s)]"><h2 className="text-[21px] font-semibold">{isKo ? "어떤 차이가 있을까요?" : "What can feel different?"}</h2><p className="mt-4 text-[15px] leading-7 text-[var(--color-text-sub)]">{item.definition}</p></article><article className="rounded-[var(--radius-l)] border border-[var(--color-border)] bg-white p-6 shadow-[var(--shadow-s)]"><h2 className="text-[21px] font-semibold">{isKo ? "한 사람의 경험으로 보기" : "Keeping it personal"}</h2><p className="mt-4 text-[15px] leading-7 text-[var(--color-text-sub)]">{item.prevalence}</p></article></section>

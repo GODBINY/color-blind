@@ -4,6 +4,8 @@ import { routing } from "@/i18n/routing";
 export type SeoPage = "home" | "translate" | "simulate" | "colorPick" | "live" | "findMyView" | "learn" | "faq";
 export type AppLocale = (typeof routing.locales)[number];
 
+export const PRODUCTION_SITE_URL = "https://nunbit.withint.com";
+
 const pagePaths: Record<SeoPage, string> = {
   home: "",
   translate: "/translate",
@@ -116,8 +118,7 @@ const localeToOpenGraph: Record<AppLocale, string> = {
 
 export function siteUrl() {
   const configured = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL;
-  const vercel = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined;
-  return new URL(configured ?? vercel ?? "http://localhost:3000");
+  return new URL(configured ?? PRODUCTION_SITE_URL);
 }
 
 export function localizedPath(locale: AppLocale, page: SeoPage = "home") {
@@ -159,8 +160,8 @@ export function appSchema(locale: AppLocale) {
         isAccessibleForFree: true,
         inLanguage: locale,
         featureList: locale === "ko"
-          ? ["색약·색맹 사진 변환", "색약·색맹 시야 시뮬레이션", "이미지 RGB·HEX 색상 추출"]
-          : ["Colorblind photo conversion", "Color vision simulation", "Image HEX and RGB color extraction"],
+          ? ["색약·색맹 사진 변환", "색을 다르게 보는 방식 알아보기", "이미지 RGB·HEX 색상 추출"]
+          : ["Colorblind photo conversion", "Learn about different color vision", "Image HEX and RGB color extraction"],
       },
       { "@type": "WebSite", name: "NUNBIT", url: baseUrl, inLanguage: locale },
       { "@type": "Organization", name: "NUNBIT", url: baseUrl, logo: new URL("/icon.svg", siteUrl()).toString() },

@@ -60,19 +60,22 @@
 - [x] Structured Data: `WebApplication` (Home) — 무료, 브라우저 기반 도구임을 명시
 - [x] 브랜드 파비콘 / Apple 아이콘 / 웹 앱 manifest / 정적 Open Graph 이미지
 - [x] Structured Data에 `WebSite`, `Organization`을 함께 제공
-- [ ] `FAQPage` (`/learn/faq`) — 화면에 보이는 다국어 FAQ 본문을 먼저 정비한 뒤 마크업을 확장
-- [ ] `Article` (Learn 각 페이지, 블로그)
+- [x] `FAQPage` (`/learn/faq`) — 화면에 보이는 질문·답변만 JSON-LD로 제공
+- [x] `Article` (Learn 각 유형 페이지) — 화면의 제목·요약·언어·정식 URL과 같은 JSON-LD를 제공
 - [ ] Core Web Vitals: LCP < 2.5s — Hero 이미지 `priority` + AVIF/WebP, 폰트 self-host `font-display: swap`
 - [ ] 내부 링크: Learn → 기능 페이지 CTA, 기능 → Learn 링크 (§1 전략의 실체)
 - [ ] 이미지 alt: 비교 이미지에 유형 명시 ("red rose as seen with deuteranopia")
 
 ### 배포 전 필수 환경 변수
 
-`NEXT_PUBLIC_SITE_URL`에 실제 공개 도메인을 넣는다. 예: `https://nunbit.example`. 이 값으로 canonical, hreflang, sitemap, robots의 절대 URL을 생성한다. 로컬 개발 환경에서는 `http://localhost:3000`을 사용한다.
+`NEXT_PUBLIC_SITE_URL`에 실제 공개 도메인 `https://nunbit.withint.com`을 넣는다. 이 값으로 canonical, hreflang, sitemap, robots의 절대 URL을 생성한다. Vercel의 임시 배포 URL은 sitemap이나 canonical에 사용하지 않는다. 환경 변수가 비어 있어도 코드의 production fallback은 이 정식 도메인을 사용한다.
+
+Vercel 프로젝트 설정에도 Production 환경 변수 `NEXT_PUBLIC_SITE_URL=https://nunbit.withint.com`을 추가한다. 코드 fallback이 있어도 대시보드 설정을 함께 유지해 배포 환경의 정식 URL 의도를 명확히 한다.
 
 ### AEO / GEO 원칙
 
 - 별도의 "GEO 메타태그"는 없다. AI 답변 엔진이 인용하기 쉬운 명확한 질문·답변, 사람에게도 보이는 근거, 일관된 구조화 데이터를 우선한다.
+- Learn 개별 유형 페이지는 화면에 보이는 제목·요약과 같은 `Article` JSON-LD를 제공한다. FAQ는 같은 질문·답변만 `FAQPage` JSON-LD로 제공한다. 검색 결과 모양은 보장하지 않으며, 구조화 데이터만을 위한 숨은 콘텐츠는 만들지 않는다.
 - `WebApplication`은 실제 기능(사진 변환, 시야 시뮬레이션, HEX·RGB 추출)만 적는다. 색각을 되돌리거나 의료적 판정을 한다고 주장하지 않는다.
 - FAQ 구조화 데이터는 화면에 공개된 답변과 정확히 같은 내용일 때만 사용한다. 검색 결과 노출은 보장되지 않는다.
 
