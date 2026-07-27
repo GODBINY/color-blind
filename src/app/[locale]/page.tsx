@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { HomeUpload } from "@/components/ui/HomeUpload";
 import { HeroCompare } from "@/components/ui/HeroCompare";
+import { KofiSupportLink } from "@/components/ui/KofiSupportLink";
 import { appSchema, seoMetadata, type AppLocale } from "@/lib/seo";
 import type { Metadata } from "next";
 
@@ -69,7 +70,7 @@ export default async function HomePage({
           <div className="mt-6 max-w-[440px] border-t border-[var(--color-border)] pt-5">
             <p className="text-[13px] leading-5 text-[var(--color-text-sub)]">{t("privacy")}</p>
             <p className="mt-4 text-[14px] leading-6 text-[var(--color-text-sub)]">{nav("supportMessage")}</p>
-            <a href="https://ko-fi.com/C1Y623WBYN" target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-[var(--radius-s)] border border-[var(--color-border)] bg-[var(--color-surface)] px-4 text-[13px] font-medium text-[var(--color-primary)] transition-colors hover:bg-[var(--color-bg)] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3"><span aria-hidden="true">♡</span>{nav("supportCta")}<span aria-hidden="true">↗</span></a>
+            <KofiSupportLink placement="home" className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-[var(--radius-s)] border border-[var(--color-border)] bg-[var(--color-surface)] px-4 text-[13px] font-medium text-[var(--color-primary)] transition-colors hover:bg-[var(--color-bg)] focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3"><span aria-hidden="true">♡</span>{nav("supportCta")}<span aria-hidden="true">↗</span></KofiSupportLink>
           </div>
         </div>
 

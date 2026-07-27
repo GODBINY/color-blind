@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { describeColor } from "@/lib/color/color-name";
+import { trackEvent } from "@/lib/analytics";
 
 type Pick = { id: number; x: number; y: number; rgb: [number, number, number] };
 
@@ -95,6 +96,7 @@ export function ImageColorPicker({ locale }: { locale: string }) {
       setPicks([]);
       setZoom(1);
       setNotice(null);
+      trackEvent("color_picker_started");
     } catch {
       setNotice(text.invalid);
     }
@@ -117,6 +119,7 @@ export function ImageColorPicker({ locale }: { locale: string }) {
     let red = 0; let green = 0; let blue = 0; let pixels = 0;
     for (let index = 0; index < data.length; index += 4) { red += data[index]!; green += data[index + 1]!; blue += data[index + 2]!; pixels++; }
     setPicks((current) => [...current, { id: current.length + 1, x: x / activeBitmap.width, y: y / activeBitmap.height, rgb: [Math.round(red / pixels), Math.round(green / pixels), Math.round(blue / pixels)] }]);
+    trackEvent("color_sample_added");
   }
 
   function saveImage() {
@@ -151,6 +154,7 @@ export function ImageColorPicker({ locale }: { locale: string }) {
     link.href = canvas.toDataURL("image/png");
     link.download = `nunbit-picked-colors-${new Date().toISOString().slice(0, 10)}.png`;
     link.click();
+    trackEvent("color_sample_exported", { sample_count: picks.length });
   }
 
   function removePick(id: number) {

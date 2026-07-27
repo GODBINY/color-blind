@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { getVisionLabels } from "@/lib/vision-labels";
 import { saveVisionProfile } from "@/lib/vision-profile";
 import { scoreVisionResponses } from "@/lib/vision-score";
+import { trackEvent } from "@/lib/analytics";
 
 type SelectableVision = "protan" | "deutan" | "tritan";
 
@@ -41,11 +42,13 @@ export function FindMyViewQuiz({ locale }: { locale: string }) {
     setResponses(next);
     setValue("");
     if (next.length < plates.length) setPosition((current) => current + 1);
+    else trackEvent("find_my_view_completed");
   }
 
   function saveSetting() {
     if (!selectedVision) return;
     saveVisionProfile({ visionType: selectedVision, severity: 1, source: "find-my-view" });
+    trackEvent("find_my_view_profile_saved", { vision_type: selectedVision });
   }
 
   function reset() {
@@ -68,7 +71,7 @@ export function FindMyViewQuiz({ locale }: { locale: string }) {
           <li>✓ {isKo ? "각 판은 보이는 숫자만 입력해 주세요. 답을 모르면 ‘?’를 입력해도 돼요." : "Enter only the number you see on each plate. If you are unsure, you can enter “?”."}</li>
           <li>✓ {isKo ? "온라인 판은 참고용이며 Protan·Deutan·Tritan을 확정하지 않아요." : "Online plates are a reference only; they do not identify Protan, Deutan, or Tritan."}</li>
         </ul>
-        <button onClick={() => setStarted(true)} className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-[var(--radius-m)] bg-[var(--color-primary)] px-6 text-[16px] font-medium text-white shadow-[var(--shadow-s)] transition-transform hover:-translate-y-0.5 sm:w-auto">{isKo ? "8장 확인하기" : "Check eight plates"}<span className="ml-2" aria-hidden="true">→</span></button>
+        <button onClick={() => { setStarted(true); trackEvent("find_my_view_started"); }} className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-[var(--radius-m)] bg-[var(--color-primary)] px-6 text-[16px] font-medium text-white shadow-[var(--shadow-s)] transition-transform hover:-translate-y-0.5 sm:w-auto">{isKo ? "8장 확인하기" : "Check eight plates"}<span className="ml-2" aria-hidden="true">→</span></button>
       </div>
     </section>;
   }

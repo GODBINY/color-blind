@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { takePendingImage } from "@/lib/pending-image";
 import { getVisionLabels, redGreenTypes } from "@/lib/vision-labels";
 import { readVisionProfile } from "@/lib/vision-profile";
+import { trackEvent } from "@/lib/analytics";
 import {
   clamp01,
   daltonize,
@@ -141,6 +142,7 @@ export function ImageEditor({ locale }: { locale: string }) {
       setOriginalUrl(null);
       setResultUrl(null);
       setDivider(50);
+      trackEvent("photo_translation_started", { entry_point: "editor" });
     } catch {
       setNotice(text.invalid);
     }
@@ -214,6 +216,7 @@ export function ImageEditor({ locale }: { locale: string }) {
         setResultUrl(toDataUrl(output));
         setDimensions({ width, height });
         setIsProcessing(false);
+        trackEvent("photo_translation_completed", { vision_type: visionType, translation_strength: Math.round(amount * 100) });
       };
 
       frameId = window.requestAnimationFrame(processChunk);
@@ -257,6 +260,7 @@ export function ImageEditor({ locale }: { locale: string }) {
     link.href = resultUrl;
     link.download = `nunbit-for-${visionType}-${date}.png`;
     link.click();
+    trackEvent("translated_image_saved", { vision_type: visionType });
   };
 
   return (

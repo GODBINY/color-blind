@@ -19,6 +19,11 @@
 | 테스트 | Vitest (색 변환 함수 단위 테스트 필수) + Playwright (핵심 플로우) | 행렬 연산은 스냅샷 값으로 검증 |
 | Lint/Format | ESLint + Prettier | |
 
+## Analytics events
+
+- The client emits privacy-preserving product events to `window.dataLayer`; no photo file, sampled colour value, or answer content is sent.
+- GTM forwards these events to GA4: `photo_translation_started`, `photo_translation_completed`, `translated_image_saved`, `color_picker_started`, `color_sample_added`, `color_sample_exported`, `find_my_view_started`, `find_my_view_completed`, `find_my_view_profile_saved`, and `kofi_support_clicked`.
+
 ## 2. 색 변환 파이프라인 개요
 
 두 기능은 하나의 파이프라인을 공유한다:

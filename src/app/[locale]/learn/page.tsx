@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { getLearnIndex } from "@/lib/learn/content";
 import { getLocalizedLearnName } from "@/lib/learn/content";
 import { VisionSimulationPreview } from "@/components/learn/VisionSimulationPreview";
+import { KofiSupportLink } from "@/components/ui/KofiSupportLink";
 import { seoMetadata, type AppLocale } from "@/lib/seo";
 import type { Metadata } from "next";
 
@@ -44,7 +45,7 @@ export default async function LearnPage({
     </section>
     <section className="mt-6 flex flex-col gap-5 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 md:flex-row md:items-center md:justify-between md:p-8">
       <p className="max-w-[580px] text-[16px] leading-[26px] text-[var(--color-text-sub)]">{nav("supportMessage")}</p>
-      <a href="https://ko-fi.com/C1Y623WBYN" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 self-start rounded-[var(--radius-m)] border border-[var(--color-border)] bg-[var(--color-surface)] px-5 text-[15px] font-medium text-[var(--color-primary)] transition-colors hover:bg-white focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3 md:self-auto"><span aria-hidden="true">♡</span>{nav("supportCta")}<span aria-hidden="true">↗</span></a>
+      <KofiSupportLink placement="learn" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 self-start rounded-[var(--radius-m)] border border-[var(--color-border)] bg-[var(--color-surface)] px-5 text-[15px] font-medium text-[var(--color-primary)] transition-colors hover:bg-white focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3 md:self-auto"><span aria-hidden="true">♡</span>{nav("supportCta")}<span aria-hidden="true">↗</span></KofiSupportLink>
     </section>
   </main>;
 }
