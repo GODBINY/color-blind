@@ -22,7 +22,8 @@
 ## Analytics events
 
 - The client emits privacy-preserving product events to `window.dataLayer`; no photo file, sampled colour value, or answer content is sent.
-- GTM forwards these events to GA4: `photo_translation_started`, `photo_translation_completed`, `translated_image_saved`, `color_picker_started`, `color_sample_added`, `color_sample_exported`, `find_my_view_started`, `find_my_view_completed`, `find_my_view_profile_saved`, and `kofi_support_clicked`.
+- GTM forwards these events to GA4: `home_translation_cta_clicked`, `home_translation_photo_added`, `home_color_picker_opened`, `home_simulation_opened`, `photo_translation_started`, `photo_translation_completed`, `translated_image_saved`, `photo_simulation_started`, `photo_simulation_completed`, `simulated_image_saved`, `color_picker_started`, `color_sample_added`, `color_sample_exported`, `find_my_view_started`, `find_my_view_completed`, `find_my_view_profile_saved`, and `kofi_support_clicked`.
+- `trackEvent` automatically adds the current `page_path` and locale. It never sends a photo, filename, picked color value, or quiz answer.
 
 ## 2. 색 변환 파이프라인 개요
 

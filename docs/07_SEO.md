@@ -105,3 +105,12 @@ Vercel 프로젝트 설정에도 Production 환경 변수 `NEXT_PUBLIC_SITE_URL=
 - Search Console: 쿼리별 노출/CTR/순위 — 월 1회 리뷰 ([06_Analytics.md](06_Analytics.md) Page 4)
 - 목표: 3개월 내 "color blindness simulator" 20위권, 6개월 내 10위권; Learn 페이지 오가닉 주 500세션
 - CTR이 낮은 페이지는 title/desc A/B 재작성
+
+## 8. 런칭 직후 유입 점검 순서
+
+초기 표본이 작을 때 `direct`만으로는 방문자가 어디서 링크를 열었는지 알 수 없다. 메신저·북마크·앱 내 브라우저도 direct로 분류될 수 있으므로, 검색 유입 부재를 단정하기보다 아래 순서로 확인한다.
+
+1. Search Console에서 정식 도메인 sitemap이 성공 처리되고, `/en`, `/ko`, `/translate`, `/color-pick`, Learn 페이지가 색인됐는지 확인한다.
+2. Search Console 성과 보고서에서 `색약 사진 변환`, `색맹 사진 변환`, `colorblind photo converter`, `image color picker hex rgb`의 노출부터 기록한다. 초기에는 클릭보다 노출 증가가 먼저다.
+3. 외부 공유는 게시물별 UTM(`utm_source`, `utm_medium`, `utm_campaign`)을 붙인다. 그래야 커뮤니티·SNS·개인 메시지 유입을 `direct`와 구분할 수 있다.
+4. GA4에서는 `translated_image_saved`를 대표 전환으로 보고, 유입 채널별 사진 추가→저장 전환율을 비교한다. 방문 수가 30명 이하인 기간에는 체류시간·이탈률만으로 디자인 결론을 내리지 않는다.

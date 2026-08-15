@@ -10,7 +10,8 @@
 
 ```
 Home (/)
-├── Translate      (/translate)      ← 핵심: 그 사람의 색으로 번역
+├── Simulate       (/simulate)       ← 일반인이 원본을 색약·색맹 시야로 비교
+├── Translate      (/translate)      ← 핵심: 그 사람의 색으로 새 사진 생성
 ├── Color Picker    (/color-pick)     ← 이미지에서 HEX·RGB 추출
 ├── Live Camera    (/live)
 ├── Find My View   (/find-my-view)  ← 1920년 공개 도메인 이시하라 8판 참고 + 사진 비교 시야 직접 선택
@@ -24,7 +25,7 @@ Home (/)
 - 모든 기능은 Route 기반 (SEO를 위해 각 기능이 고유 URL을 가짐)
 - 도메인: 출시 전 NUNBIT 도메인 확정 필요 ([08_Brand.md](08_Brand.md))
 - i18n: `/en/...`, `/ko/...` prefix ([05_Architecture.md](05_Architecture.md))
-- 기존 `/simulate` 주소는 `/translate`로 리다이렉트한다. 사진 비교는 Translate 안의 원본 ↔ 번역본 한 흐름으로 제공한다.
+- Simulate와 Translate은 같은 업로드·비교 컴포넌트를 쓰되 결과가 다르다. Simulate는 원본을 바꾸지 않고 시야를 재현하며, Translate는 색의 차이를 다른 단서로 옮긴 새 파일을 만든다.
 
 ## 2. Core User Flows
 
@@ -63,7 +64,7 @@ Home (/)
 | H-1 | Hero: 핵심 카피 + 대표 이미지 (붉은 장미: 색약 시야 → 번역 후 시야 크로스페이드, "묻혀 있던 꽃이 떠오르는" 순간) | P0 |
 | H-2 | Hero 내 즉시 업로드 CTA (파일 선택 + 드래그&드롭 + 모바일 카메라/갤러리) | P0 |
 | H-3 | 업로드 시 `/translate`로 이동하며 이미지 전달 | P0 |
-| H-4 | 기능 카드: Translate / 이미지 내 색상 추출 / Live Camera / Find My View / Learn | P0 |
+| H-4 | 기능 카드: Simulate / Translate / 이미지 내 색상 추출 / Live Camera / Find My View / Learn | P0 |
 | H-5 | 언어 전환 (EN/KO) | P0 |
 
 ### 3.2 Translate (`/translate`) — 핵심 기능
@@ -86,6 +87,15 @@ Home (/)
 - 초대형 이미지 → 자동 리사이즈 후 안내 (품질 이슈 방지)
 - Canvas 메모리 실패(구형 모바일) → 2048px로 재시도
 - 번역 효과가 미미한 이미지(이미 구분 가능한 색 구성) → "이 사진은 이미 잘 보여요 :)" 안내 (번역 전후 시뮬레이션 차이가 작을 때)
+
+### 3.2a Simulate (`/simulate`) — 일반인을 위한 시야 비교
+
+| ID | 요구사항 | 우선순위 |
+|---|---|---|
+| S-1 | 이미지 업로드: 파일 선택, 드래그&드롭, 붙여넣기, 모바일 촬영 | P0 |
+| S-2 | 원본 ↔ 선택한 Protan / Deutan / Tritan 시야 Compare Slider | P0 |
+| S-3 | 시야 강도 슬라이더 0–100%, 기본 100% | P1 |
+| S-4 | 원본 파일은 절대 변경하지 않음. 시뮬레이션 결과만 별도 저장 가능 | P0 |
 
 ### 3.3 Live Camera (`/live`)
 

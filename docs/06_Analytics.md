@@ -17,57 +17,69 @@
 
 **원칙**: 이벤트 파라미터에 이미지 내용, 파일명, 픽셀 색상값 등 사용자 콘텐츠를 절대 담지 않는다. 담는 것은 행위와 설정값뿐.
 
-## 2. 이벤트 스키마
+## 2. 현재 이벤트 스키마
 
-구현은 `lib/analytics.ts` 헬퍼로 통일: `track(event, params)`.
+구현은 `src/lib/analytics.ts`의 `trackEvent(event, params)`로 통일한다. 모든 이벤트에는 `page_path`와 `locale`이 자동으로 붙고, 사진·파일명·픽셀 색상값·답안 내용은 절대 전송하지 않는다.
 
-### 공통 파라미터 (모든 이벤트)
-`locale` (en|ko), `vision_type_setting` (protan|deutan|tritan|none), `page`
+| 이벤트 | 시점 | 추가 파라미터 | 핵심 이벤트 권장 |
+|---|---|---|---|
+| `home_translation_cta_clicked` | 홈의 사진 번역 버튼을 누름 | - | - |
+| `home_translation_photo_added` | 홈에서 유효한 사진을 선택·드롭하고 다음 화면으로 이동 | `entry_method` | - |
+| `home_color_picker_opened` | 홈에서 이미지 색상 추출로 이동 | - | - |
+| `home_simulation_opened` | 홈에서 시야 시뮬레이션으로 이동 | - | - |
+| `photo_translation_started` | 번역 화면에서 유효한 사진을 읽음 | `entry_point` | - |
+| `photo_translation_completed` | 새 사진 1장에 대한 첫 변환 완료 | `vision_type`, `translation_strength` | ✓ |
+| `translated_image_saved` | 번역한 사진 저장 | `vision_type` | ✓ — 대표 전환 |
+| `photo_simulation_started` | 시야 시뮬레이션에서 유효한 사진을 읽음 | `entry_point` | - |
+| `photo_simulation_completed` | 새 사진 1장에 대한 첫 시야 시뮬레이션 완료 | `vision_type`, `simulation_strength` | - |
+| `simulated_image_saved` | 시야 시뮬레이션 이미지 저장 | `vision_type` | - |
+| `color_picker_started` | 색상 추출 도구에서 유효한 사진을 읽음 | - | - |
+| `color_sample_added` | 이미지에서 색을 하나 고름 | - | - |
+| `color_sample_exported` | 점과 색 목록을 이미지로 저장 | `sample_count` | ✓ |
+| `find_my_view_started` | 참고 판 8장 확인 시작 | - | - |
+| `find_my_view_completed` | 8장 모두 입력 | - | ✓ |
+| `find_my_view_profile_saved` | 사진 비교에 쓸 시야를 저장 | `vision_type` | ✓ |
+| `kofi_support_clicked` | Ko-fi 지원 링크 클릭 | `placement` | - |
 
-### Translate (핵심 퍼널)
-| 이벤트 | 파라미터 | 시점 |
-|---|---|---|
-| `image_upload` | `source` (file|drag|paste|camera), `feature` (translate|simulate) | 디코드 성공 시 |
-| `translate_applied` | `target_type`, `strength` | 번역 렌더 완료 |
-| `preview_their_eyes` | `target_type` | "그 사람의 눈" 미리보기 토글 |
-| `compare_slider_used` | `feature` | 첫 드래그 시 1회/세션 |
-| `download` | `feature`, `target_type`, `format` | |
-| `share` | `feature`, `method` (webshare|copy) | |
-| `translate_no_effect_shown` | - | "이미 잘 보여요" 안내 노출 |
+`photo_translation_completed`는 강도나 시야를 바꿀 때마다 중복 집계하지 않고, 새 사진 1장당 한 번만 보낸다. 그래서 실제 퍼널 전환 수로 해석할 수 있다.
 
-### Simulate
-| 이벤트 | 파라미터 |
-|---|---|
-| `simulation_selected` | `type`, `severity` |
-| `simulate_to_translate_cta` | - (Simulate→Translate 전환 CTA 클릭) |
+> GA4의 자동 `click`은 주로 외부 링크 클릭을 수집한다. 내부 CTA 사용량 판단에는 위의 맞춤 이벤트를 사용한다.
 
-### Live Camera
-| 이벤트 | 파라미터 |
-|---|---|
-| `live_camera_start` / `live_camera_denied` | - |
-| `live_filter_selected` | `mode` (off|translate|simulate), `type` |
-| `color_pick` | - (freeze 시. 색상값은 담지 않음) |
+### GTM → GA4 연결
 
-### Find My View
-| 이벤트 | 파라미터 |
-|---|---|
-| `fmv_start` | `entry` (direct|shared_link|translate_cta) |
-| `fmv_question_answered` | `index`, `axis` |
-| `fmv_complete` | `result_type`, `confidence` |
-| `fmv_abandon` | `last_index` (beforeunload/이탈) |
-| `fmv_saved_as_default` | `result_type` |
-| `fmv_share_link_copied` | - (보내는 사람이 상대에게 링크 공유) |
+1. GTM에서 **Google 태그** 하나를 만들고 측정 ID `G-GQ068R40NN`을 넣는다. 트리거는 **Initialization – All Initialization Events**로 둔다.
+2. **Google 애널리틱스: GA4 이벤트** 태그를 만든다. 이벤트 이름은 `{{Event}}`로 넣는다.
+3. 새 **맞춤 이벤트** 트리거를 만들고 “정규 표현식 사용”을 켠 뒤 아래를 입력한다.
 
-### 온보딩/기타
-`onboarding_start`, `onboarding_complete`, `language_change`, `learn_page_view` (`type`), `exception` (`message` — 콘텐츠 미포함)
+   ```text
+   ^(home_translation_cta_clicked|home_translation_photo_added|home_color_picker_opened|home_simulation_opened|photo_translation_started|photo_translation_completed|translated_image_saved|photo_simulation_started|photo_simulation_completed|simulated_image_saved|color_picker_started|color_sample_added|color_sample_exported|find_my_view_started|find_my_view_completed|find_my_view_profile_saved|kofi_support_clicked)$
+   ```
+
+4. 태그의 **이벤트 매개변수**에도 아래 항목을 추가한다. 값은 같은 이름의 데이터 영역 변수(Data Layer Variable)를 새로 만들어 연결한다. `page_path`와 `locale`은 먼저 넣고, 나머지는 필요한 분석 축만 추가해도 된다.
+
+   | 이벤트 매개변수 | 데이터 영역 변수 이름 |
+   |---|---|
+   | `page_path` | `page_path` |
+   | `locale` | `locale` |
+   | `entry_method` | `entry_method` |
+   | `entry_point` | `entry_point` |
+   | `vision_type` | `vision_type` |
+   | `translation_strength` | `translation_strength` |
+   | `simulation_strength` | `simulation_strength` |
+   | `sample_count` | `sample_count` |
+   | `placement` | `placement` |
+
+   예: GTM 변수 이름은 `DLV – vision_type`, 데이터 영역 변수 이름은 `vision_type`; 이벤트 매개변수 값에는 `{{DLV – vision_type}}`를 선택한다. 값이 없는 이벤트에서는 해당 매개변수를 GA4가 비워 둔다.
+5. 위 트리거를 GA4 이벤트 태그에 붙여 **제출 → 게시**한다. 미리보기에서 사진 한 장을 번역·저장한 뒤 Tag Assistant에 두 이벤트가 모두 뜨는지 확인한다.
+6. GA4 관리자 → **데이터 표시 → 이벤트**에서 `translated_image_saved`, `photo_translation_completed`, `color_sample_exported`, `find_my_view_completed`, `find_my_view_profile_saved`를 **주요 이벤트로 표시**한다. 먼저 `translated_image_saved` 하나만 대표 전환으로 보는 편이 중복 해석을 피하기 쉽다.
 
 ## 3. 퍼널 정의 (GA4 탐색 보고서)
 
-1. **선물 퍼널 (North Star)**: `image_upload(translate)` → `translate_applied` → `preview_their_eyes` → `download|share`
-   - 목표: 업로드→공유 20%+
-2. **당사자 퍼널**: `fmv_start` → `fmv_complete` → `fmv_saved_as_default` → 이후 세션 `translate_applied|live_filter_selected(translate)`
-3. **이해 퍼널**: `simulation_selected` → `simulate_to_translate_cta` → `translate_applied`
-4. **공유 루프**: `fmv_share_link_copied` → (상대 기기) `fmv_start(entry=shared_link)` — 바이럴 계수 추정
+1. **사진 번역 퍼널 (North Star)**: `home_translation_cta_clicked` → `home_translation_photo_added` → `photo_translation_completed` → `translated_image_saved`
+   - 대표 전환: `translated_image_saved`; 목표는 사진 추가 대비 저장 비율을 먼저 기준선으로 잡은 뒤 개선한다.
+2. **색상 추출 퍼널**: `home_color_picker_opened` → `color_picker_started` → `color_sample_added` → `color_sample_exported`
+3. **시야 설정 퍼널**: `find_my_view_started` → `find_my_view_completed` → `find_my_view_profile_saved`
+4. **시야 시뮬레이션 퍼널**: `home_simulation_opened` → `photo_simulation_started` → `photo_simulation_completed` → `simulated_image_saved`
 
 ## 4. Dashboard 설계 (Looker Studio, GA4 연결)
 

@@ -1,6 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { HomeUpload } from "@/components/ui/HomeUpload";
+import { HomeColorPickLink } from "@/components/ui/HomeColorPickLink";
+import { HomeSimulateLink } from "@/components/ui/HomeSimulateLink";
 import { HeroCompare } from "@/components/ui/HeroCompare";
 import { KofiSupportLink } from "@/components/ui/KofiSupportLink";
 import { appSchema, seoMetadata, type AppLocale } from "@/lib/seo";
@@ -8,6 +10,7 @@ import type { Metadata } from "next";
 
 const TASK_ROUTES = {
   tileTranslate: "/translate",
+  tileSimulate: "/simulate",
   tileFindMyView: "/find-my-view",
   tileLive: "/live",
   tileColorPick: "/color-pick",
@@ -23,12 +26,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 const taskGroupsFor = (locale: string): { title: string; description: string; tasks: TaskKey[] }[] => locale === "ko"
   ? [
-      { title: "사진을 함께 보기", description: "사진 한 장으로 그 사람에게 전할 새 사진을 만들어요.", tasks: ["tileTranslate"] },
+      { title: "사진을 함께 보기", description: "원본이 어떻게 보이는지 확인하거나, 그 사람에게 전할 새 사진을 만들어요.", tasks: ["tileSimulate", "tileTranslate"] },
       { title: "색을 확인하고 기록하기", description: "지금 보이는 색을 확인하거나, 이미지 속 색상값을 저장해요.", tasks: ["tileLive", "tileColorPick"] },
       { title: "내 시야 알아보기", description: "사진 비교의 기준이 될 시야를 찾아보고, 색을 다르게 보는 방식도 알아봐요.", tasks: ["tileFindMyView", "tileLearn"] },
     ]
   : [
-      { title: "See a photo together", description: "Make a new photo to share with them from one image.", tasks: ["tileTranslate"] },
+      { title: "See a photo together", description: "See how the original appears, or make a new photo to share with them.", tasks: ["tileSimulate", "tileTranslate"] },
       { title: "Check and record colors", description: "Check a color now or save precise values from an image.", tasks: ["tileLive", "tileColorPick"] },
       { title: "Understand a view", description: "Find a starting view for photo previews and learn about different ways of seeing color.", tasks: ["tileFindMyView", "tileLearn"] },
     ];
@@ -57,13 +60,19 @@ export default async function HomePage({
           <p className="mt-6 max-w-[440px] text-[16px] leading-[26px] text-[var(--color-text-sub)]">{t("intro")}</p>
           <div className="mt-8 grid w-full max-w-[360px] gap-4">
             <div>
-              <HomeUpload label={t("cta")} error={t("uploadError")} />
+              <HomeUpload label={t("cta")} error={t("uploadError")} dropHint={t("dropHint")} />
               <p className={`mt-2 min-h-10 text-[13px] leading-5 text-[var(--color-text-sub)] ${locale === "ko" ? "whitespace-pre-line" : ""}`}>{t("ctaBody")}</p>
             </div>
             <div>
-              <Link href="/color-pick" className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[var(--radius-m)] border border-[var(--color-border)] bg-white px-6 text-[16px] font-medium transition-colors hover:bg-[var(--color-bg)]">
+              <HomeSimulateLink className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[var(--radius-m)] border border-[var(--color-border)] bg-[var(--color-surface)] px-6 text-[16px] font-medium transition-colors hover:bg-[var(--color-bg)]">
+                {t("secondaryCta")} <span aria-hidden="true">→</span>
+              </HomeSimulateLink>
+              <p className="mt-2 min-h-10 text-[13px] leading-5 text-[var(--color-text-sub)]">{t("secondaryCtaBody")}</p>
+            </div>
+            <div>
+              <HomeColorPickLink className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[var(--radius-m)] border border-[var(--color-border)] bg-white px-6 text-[16px] font-medium transition-colors hover:bg-[var(--color-bg)]">
                 {t("colorPickCta")} <span aria-hidden="true">→</span>
-              </Link>
+              </HomeColorPickLink>
               <p className="mt-2 min-h-10 text-[13px] leading-5 text-[var(--color-text-sub)]">{t("colorPickCtaBody")}</p>
             </div>
           </div>
@@ -74,7 +83,7 @@ export default async function HomePage({
           </div>
         </div>
 
-        <HeroCompare before={t("before")} after={t("after")} hint={t("visualCaption")} locale={locale} />
+        <HeroCompare before={t("heroOriginal")} after={t("heroSimulation")} hint={t("visualCaption")} locale={locale} />
       </section>
 
       <section aria-labelledby="tasks-title" className="mx-auto max-w-[1184px] px-5 pb-20 md:px-8 md:pb-28">
