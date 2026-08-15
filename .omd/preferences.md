@@ -424,3 +424,213 @@ source_context: "src/app/[locale]/layout.tsx"
 ```
 
 External support links must use NUNBIT’s own plum, berry, and lavender-white palette rather than the platform’s default brand colours.
+
+## 2026-08-16T00:10:00.000Z — separate-simulation-and-translation-by-outcome
+
+```omd-meta
+id: pref_msuix4b0_91c6ea38
+timestamp: 2026-08-16T00:10:00.000Z
+scope: layout
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx, src/components/editor/ImageEditor.tsx"
+```
+
+Homepage and tool navigation must distinguish color-vision simulation (show an unchanged original as it may appear to a color-blind viewer) from photo translation (create a new image with more distinguishable color differences). Never collapse the two flows merely because both begin with a photo upload.
+
+## 2026-08-15T15:38:26.632Z — keep-global-header-compact-and-navigable
+
+```omd-meta
+id: pref_msujj556_5fd8f4da
+timestamp: 2026-08-15T15:38:26.632Z
+scope: components.navigation
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/layout.tsx, src/components/ui/HeaderBackButton.tsx"
+```
+
+Keep the global header compact in height and show back navigation on every non-home route.
+
+## 2026-08-15T15:46:30.110Z — prioritize-home-hero-image-on-mobile
+
+```omd-meta
+id: pref_msujti74_de566c21
+timestamp: 2026-08-15T15:46:30.110Z
+scope: layout
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx"
+```
+
+On mobile home, keep the tagline compact and show the hero comparison image before task-selection controls.
+
+## 2026-08-15T15:49:39.898Z — keep-mobile-home-actions-compact
+
+```omd-meta
+id: pref_msujxkn0_18e00d08
+timestamp: 2026-08-15T15:49:39.898Z
+scope: layout
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx, messages/ko.json"
+```
+
+On mobile home, use outcome-led card titles, remove generic choice headings and duplicated support promotion, and keep vertical spacing compact.
+
+## 2026-08-15T15:57:03.492Z — name-colorblind-utility-groups-explicitly
+
+```omd-meta
+id: pref_msuk72x2_315a715f
+timestamp: 2026-08-15T15:57:03.492Z
+scope: voice
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx"
+```
+
+Name color-blind utility groups explicitly and include “tool” when it makes the practical purpose clearer.
+
+## 2026-08-15T15:59:29.126Z — keep-declarative-section-names
+
+```omd-meta
+id: pref_msuka7af_9db6fc9b
+timestamp: 2026-08-15T15:59:29.126Z
+scope: voice
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx, messages/ko.json"
+```
+
+Keep compact declarative section names above grouped actions; remove generic question headings, not the grouping label itself.
+
+## 2026-08-15T16:02:17.905Z — keep-home-section-hierarchy-consistent
+
+```omd-meta
+id: pref_msukdtiq_a04ab02c
+timestamp: 2026-08-15T16:02:17.905Z
+scope: layout
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx"
+```
+
+Use a consistent 20px section-heading treatment and a top divider for grouped homepage actions.
+
+## 2026-08-15T16:06:40.236Z — use-arrow-only-actions-in-home-cards
+
+```omd-meta
+id: pref_msukjfxp_05ba5b4a
+timestamp: 2026-08-15T16:06:40.236Z
+scope: components.card
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx, src/components/ui/HomeUpload.tsx"
+```
+
+Homepage action cards use whole-card navigation with a simple trailing arrow; do not add secondary sentence-style CTA buttons inside them, especially on mobile.
+
+## 2026-08-15T16:13:18.803Z — keep-home-photo-flows-at-equal-depth
+
+```omd-meta
+id: pref_msukrzh1_27ba16f8
+timestamp: 2026-08-15T16:13:18.803Z
+scope: layout
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx, src/components/ui/HomeUpload.tsx"
+```
+
+Keep homepage photo-based flows at equal entry depth: both simulation and translation cards open the image picker immediately and proceed to their respective editor.
+
+## 2026-08-15T16:16:54.488Z — simplify-mobile-non-home-header
+
+```omd-meta
+id: pref_msukwlw9_4f38b6a7
+timestamp: 2026-08-15T16:16:54.488Z
+scope: components.navigation
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/layout.tsx, src/components/ui/HeaderBrandLink.tsx"
+```
+
+On mobile non-home routes, show only the back control in the left header area; keep the brand logo on home and desktop.
+
+## 2026-08-15T16:16:54.490Z — enter-photo-tools-before-selecting
+
+```omd-meta
+id: pref_msukwlw9_3ae77a3f
+timestamp: 2026-08-15T16:16:54.490Z
+scope: layout
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/app/[locale]/page.tsx"
+```
+
+Homepage photo cards first navigate to their respective feature screens; photo selection happens inside the destination screen for both simulation and translation.
+
+## 2026-08-15T16:20:20.859Z — compact-mobile-detail-page-intros
+
+```omd-meta
+id: pref_msul114s_f0b84bb9
+timestamp: 2026-08-15T16:20:20.859Z
+scope: spacing
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/components/editor/ImageEditor.tsx"
+```
+
+Keep mobile detail-page intros compact by reducing outer top and bottom padding plus the spacing around title dividers; preserve the roomier desktop layout.
+
+## 2026-08-15T16:20:20.861Z — enlarge-mobile-back-control
+
+```omd-meta
+id: pref_msul114s_e23b8554
+timestamp: 2026-08-15T16:20:20.861Z
+scope: components.navigation
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/components/ui/HeaderBackButton.tsx"
+```
+
+Make the mobile back control and its arrow visibly larger while keeping the compact desktop sizing.
+
+## 2026-08-15T16:25:40.479Z — make-mobile-detail-intros-very-tight
+
+```omd-meta
+id: pref_msul7vr4_b844573a
+timestamp: 2026-08-15T16:25:40.479Z
+scope: spacing
+signal: user-correction
+confidence: explicit
+status: pending
+source_agent: codex
+source_context: "src/components/editor/ImageEditor.tsx"
+```
+
+Use a very tight mobile spacing rhythm for detail-page intros, with only 8–12px around the heading, description, and divider while retaining desktop spacing.

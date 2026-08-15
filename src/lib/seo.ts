@@ -160,8 +160,8 @@ export function appSchema(locale: AppLocale) {
         isAccessibleForFree: true,
         inLanguage: locale,
         featureList: locale === "ko"
-          ? ["색약·색맹 사진 변환", "색을 다르게 보는 방식 알아보기", "이미지 RGB·HEX 색상 추출"]
-          : ["Colorblind photo conversion", "Learn about different color vision", "Image HEX and RGB color extraction"],
+          ? ["색약·색맹 시야 시뮬레이션", "색약·색맹 사진 변환", "이미지 RGB·HEX 색상 추출"]
+          : ["Color vision simulation", "Colorblind photo conversion", "Image HEX and RGB color extraction"],
       },
       { "@type": "WebSite", name: "NUNBIT", url: baseUrl, inLanguage: locale },
       { "@type": "Organization", name: "NUNBIT", url: baseUrl, logo: new URL("/icon.svg", siteUrl()).toString() },

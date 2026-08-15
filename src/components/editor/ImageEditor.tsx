@@ -289,12 +289,12 @@ export function ImageEditor({ locale, mode = "translate" }: { locale: string; mo
   };
 
   return (
-    <main className="mx-auto w-full max-w-[1184px] px-5 pb-12 pt-7 md:px-8 md:pt-10">
-      <div className="mb-10 max-w-[620px] border-b border-[var(--color-border)] pb-7">
+    <main className="mx-auto w-full max-w-[1184px] px-5 pb-6 pt-2 md:px-8 md:pb-12 md:pt-10">
+      <div className="mb-3 max-w-[620px] border-b border-[var(--color-border)] pb-3 md:mb-10 md:pb-7">
         <h1 className="min-w-0 text-[28px] font-semibold leading-9 tracking-[-0.035em] [overflow-wrap:anywhere] md:text-[32px] md:leading-10">
           {isSimulation ? text.simulateTitle : text.translateTitle}
         </h1>
-        <p className="mt-3 text-[16px] leading-[26px] text-[var(--color-text-sub)]">
+        <p className="mt-2 text-[16px] leading-[26px] text-[var(--color-text-sub)] md:mt-3">
           {isSimulation ? text.simulateIntro : text.translateIntro}
         </p>
       </div>

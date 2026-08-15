@@ -5,7 +5,15 @@ import { useRouter } from "@/i18n/navigation";
 import { savePendingImage } from "@/lib/pending-image";
 import { trackEvent } from "@/lib/analytics";
 
-export function HomeUpload({ label, error, dropHint }: { label: string; error: string; dropHint: string }) {
+export function HomeUpload({
+  label,
+  error,
+  dropHint,
+}: {
+  label: string;
+  error: string;
+  dropHint: string;
+}) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState("");
@@ -31,7 +39,7 @@ export function HomeUpload({ label, error, dropHint }: { label: string; error: s
     className={`rounded-[var(--radius-m)] transition-[background-color,box-shadow] duration-150 ${isDragging ? "bg-[color-mix(in_srgb,var(--color-accent)_12%,var(--color-surface))] shadow-[var(--shadow-s)]" : ""}`}
   >
     <input ref={inputRef} className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => { openImage(event.target.files?.[0], "file_picker"); event.currentTarget.value = ""; }} />
-    <button type="button" onClick={() => { trackEvent("home_translation_cta_clicked"); inputRef.current?.click(); }} className="inline-flex min-h-12 w-full items-center justify-center rounded-[var(--radius-m)] bg-[var(--color-primary)] px-6 text-[16px] font-medium text-white shadow-[var(--shadow-m)] transition-transform duration-150 hover:-translate-y-0.5">{label} <span aria-hidden="true" className="ml-2">→</span></button>
+    <button type="button" onClick={() => { trackEvent("home_translation_cta_clicked"); inputRef.current?.click(); }} className="inline-flex min-h-12 w-full items-center justify-center rounded-[var(--radius-m)] bg-[var(--color-primary)] px-6 text-[16px] font-medium text-white shadow-[var(--shadow-m)] transition-transform duration-150 hover:-translate-y-0.5 focus-visible:outline-3 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-3">{label} <span aria-hidden="true" className="ml-2">→</span></button>
     <p className="mt-2 text-center text-[12px] leading-5 text-[var(--color-text-sub)]">{dropHint}</p>
     {message && <p role="alert" className="mt-2 text-[13px] text-[var(--color-error)]">{message}</p>}
   </div>;
