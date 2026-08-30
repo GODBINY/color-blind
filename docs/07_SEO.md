@@ -64,6 +64,7 @@
 - [x] Structured Data에 `WebSite`, `Organization`을 함께 제공
 - [x] `FAQPage` (`/learn/faq`) — 화면에 보이는 질문·답변만 JSON-LD로 제공
 - [x] `Article` (Learn 각 유형 페이지) — 화면의 제목·요약·언어·정식 URL과 같은 JSON-LD를 제공
+- [x] Learn/FAQ 색인 언어는 실제 본문이 있는 KO/EN으로 제한 — 그 외 언어의 Learn URL은 EN으로 영구 이동하고 sitemap·hreflang에서 제외
 - [ ] Core Web Vitals: LCP < 2.5s — Hero 이미지 `priority` + AVIF/WebP, 폰트 self-host `font-display: swap`
 - [ ] 내부 링크: Learn → 기능 페이지 CTA, 기능 → Learn 링크 (§1 전략의 실체)
 - [ ] 이미지 alt: 비교 이미지에 유형 명시 ("red rose as seen with deuteranopia")
@@ -71,6 +72,8 @@
 ### 배포 전 필수 환경 변수
 
 `NEXT_PUBLIC_SITE_URL`에 실제 공개 도메인 `https://nunbit.withint.com`을 넣는다. 이 값으로 canonical, hreflang, sitemap, robots의 절대 URL을 생성한다. Vercel의 임시 배포 URL은 sitemap이나 canonical에 사용하지 않는다. 환경 변수가 비어 있어도 코드의 production fallback은 이 정식 도메인을 사용한다.
+
+현재 sitemap은 실제 현지화된 기능 페이지 54개(6개 경로 × 9개 언어)와 KO/EN Learn 페이지 10개(5개 경로 × 2개 언어), 총 64개 URL을 제공한다. 번역되지 않은 Learn URL을 새 언어로 추가할 때는 본문 현지화를 먼저 완료한 뒤 `learnLocales`에 해당 언어를 추가한다.
 
 Vercel 프로젝트 설정에도 Production 환경 변수 `NEXT_PUBLIC_SITE_URL=https://nunbit.withint.com`을 추가한다. 코드 fallback이 있어도 대시보드 설정을 함께 유지해 배포 환경의 정식 URL 의도를 명확히 한다.
 

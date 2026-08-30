@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { permanentRedirect } from "next/navigation";
 import { Link } from "@/i18n/navigation";
-import { getLearnIndex } from "@/lib/learn/content";
-import { getLocalizedLearnName } from "@/lib/learn/content";
+import { getLearnIndex, getLocalizedLearnName, isLearnLocale, learnLocales } from "@/lib/learn/content";
 import { VisionSimulationPreview } from "@/components/learn/VisionSimulationPreview";
 import { KofiSupportLink } from "@/components/ui/KofiSupportLink";
 import { seoMetadata, type AppLocale } from "@/lib/seo";
@@ -11,7 +11,8 @@ const simulationType = { protanopia: "protan", deuteranopia: "deutan", tritanopi
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  return seoMetadata(locale as AppLocale, "learn");
+  const metadataLocale = isLearnLocale(locale) ? locale : "en";
+  return seoMetadata(metadataLocale as AppLocale, "learn", learnLocales);
 }
 
 export default async function LearnPage({
@@ -20,6 +21,7 @@ export default async function LearnPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  if (!isLearnLocale(locale)) permanentRedirect("/en/learn");
   setRequestLocale(locale);
   const isKo = locale === "ko";
   const page = getLearnIndex(locale);

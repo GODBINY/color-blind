@@ -6,6 +6,12 @@ export type AppLocale = (typeof routing.locales)[number];
 
 export const PRODUCTION_SITE_URL = "https://nunbit.withint.com";
 
+// Keep these tied to meaningful article changes. Do not advance them on deploy-only changes.
+export const LEARN_ARTICLE_DATES = {
+  published: "2026-07-20T00:19:46+09:00",
+  modified: "2026-07-27T23:43:49+09:00",
+} as const;
+
 const pagePaths: Record<SeoPage, string> = {
   home: "",
   translate: "/translate",
@@ -129,10 +135,14 @@ export function localizedUrl(locale: AppLocale, page: SeoPage = "home") {
   return new URL(localizedPath(locale, page), siteUrl()).toString();
 }
 
-export function seoMetadata(locale: AppLocale, page: SeoPage): Metadata {
+export function seoMetadata(
+  locale: AppLocale,
+  page: SeoPage,
+  alternateLocales: readonly AppLocale[] = routing.locales,
+): Metadata {
   const copy = seoCopy[locale][page];
   const canonical = localizedPath(locale, page);
-  const languages = Object.fromEntries(routing.locales.map((item) => [item, localizedPath(item, page)]));
+  const languages = Object.fromEntries(alternateLocales.map((item) => [item, localizedPath(item, page)]));
 
   return {
     title: copy.title,

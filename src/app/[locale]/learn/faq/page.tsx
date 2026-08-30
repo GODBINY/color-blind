@@ -1,11 +1,14 @@
 import { setRequestLocale } from "next-intl/server";
+import { permanentRedirect } from "next/navigation";
 import { Link } from "@/i18n/navigation";
+import { isLearnLocale, learnLocales } from "@/lib/learn/content";
 import { localizedUrl, seoMetadata, type AppLocale } from "@/lib/seo";
 import type { Metadata } from "next";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  return seoMetadata(locale as AppLocale, "faq");
+  const metadataLocale = isLearnLocale(locale) ? locale : "en";
+  return seoMetadata(metadataLocale as AppLocale, "faq", learnLocales);
 }
 
 const questions = {
@@ -37,6 +40,7 @@ const questions = {
 
 export default async function LearnFaqPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  if (!isLearnLocale(locale)) permanentRedirect("/en/learn/faq");
   setRequestLocale(locale);
   const isKo = locale === "ko";
   const entries = questions[isKo ? "ko" : "en"];

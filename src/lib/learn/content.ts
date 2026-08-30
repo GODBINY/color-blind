@@ -1,7 +1,12 @@
-export type LearnLocale = "ko" | "en";
+export const learnLocales = ["ko", "en"] as const;
+export type LearnLocale = (typeof learnLocales)[number];
 export type LearnType = "protanopia" | "deuteranopia" | "tritanopia";
 
 export const learnTypes: LearnType[] = ["protanopia", "deuteranopia", "tritanopia"];
+
+export function isLearnLocale(locale: string): locale is LearnLocale {
+  return learnLocales.includes(locale as LearnLocale);
+}
 
 const localizedNames: Record<string, Record<LearnType, string>> = {
   ko: { protanopia: "적녹색약 · 적색약 쪽 (Protan)", deuteranopia: "적녹색약 · 녹색약 쪽 (Deutan)", tritanopia: "청황색약 (Tritan)" },
