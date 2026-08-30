@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
 import sitemap from "@/app/sitemap";
+import { routing } from "@/i18n/routing";
 
 describe("SEO route discovery", () => {
+  it("keeps hreflang generation in page metadata and the sitemap", () => {
+    expect(routing.alternateLinks).toBe(false);
+  });
+
   it("publishes only unique, genuinely localized sitemap URLs", () => {
     const entries = sitemap();
     const urls = entries.map((entry) => entry.url);
