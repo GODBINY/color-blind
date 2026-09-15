@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { routing } from "@/i18n/routing";
 
-export type SeoPage = "home" | "translate" | "simulate" | "colorPick" | "live" | "findMyView" | "learn" | "faq";
+export type SeoPage = "home" | "translate" | "simulate" | "colorPick" | "live" | "findMyView" | "learn" | "faq" | "colorBlindTest";
 export type AppLocale = (typeof routing.locales)[number];
 
 export const PRODUCTION_SITE_URL = "https://nunbit.withint.com";
@@ -21,6 +21,7 @@ const pagePaths: Record<SeoPage, string> = {
   findMyView: "/find-my-view",
   learn: "/learn",
   faq: "/learn/faq",
+  colorBlindTest: "/learn/color-blind-test",
 };
 
 type SeoCopy = Record<SeoPage, { title: string; description: string }>;
@@ -35,6 +36,7 @@ const seoCopy: Record<AppLocale, SeoCopy> = {
     findMyView: { title: "색약·색맹 시야 유형 알아보기 | NUNBIT", description: "사진 비교를 위한 시야 기준을 찾아보세요. 이 도구는 의료적 확인을 대신하지 않으며, 결과는 참고용이에요." },
     learn: { title: "색약·색맹이 보는 색: 사진으로 비교하기 | NUNBIT", description: "적녹색약과 청황색약에서 색의 차이가 어떻게 다르게 느껴질 수 있는지 사진 예시와 함께 알아보세요." },
     faq: { title: "색약·색맹 사진 변환 도구 FAQ | NUNBIT", description: "색약·색맹 사진 변환, 시야 시뮬레이션, 사진 개인정보 처리, RGB·HEX 색상 추출에 관한 자주 묻는 질문입니다." },
+    colorBlindTest: { title: "무료 온라인 색약 테스트 (이시하라 판) | NUNBIT", description: "8장의 공개 도메인 이시하라 판으로 브라우저에서 색약 테스트를 가볍게 해봐요. 무료로 이 기기에서 처리되며, 의료적 확인을 대신하지 않아요." },
   },
   en: {
     home: { title: "Colorblind Photo Tools | NUNBIT", description: "Translate photos for colorblind viewers, simulate color vision, and extract image colors. Everything runs on your device." },
@@ -45,6 +47,7 @@ const seoCopy: Record<AppLocale, SeoCopy> = {
     findMyView: { title: "Explore a Color Vision Type | NUNBIT", description: "Find a starting color-vision profile for photo comparisons. This is a reference tool, not a medical assessment." },
     learn: { title: "Color Blindness: Photo Comparisons | NUNBIT", description: "Explore how protan, deutan, and tritan color vision can change color differences in everyday photos." },
     faq: { title: "Colorblind Photo Tools FAQ | NUNBIT", description: "Answers about colorblind photo conversion, color vision simulation, on-device photo privacy, and HEX and RGB color extraction." },
+    colorBlindTest: { title: "Free Online Color Blind Test (Ishihara) | NUNBIT", description: "Take a quick color blind test with 8 public-domain Ishihara plates in your browser. Free, on-device, and a starting point — not a medical diagnosis." },
   },
   ja: {
     home: { title: "色覚特性向け写真変換・色確認ツール | NUNBIT", description: "色覚特性に合わせた写真変換、見え方のシミュレーション、画像の色抽出をひとつに。写真は端末内で処理されます。" },
@@ -55,6 +58,7 @@ const seoCopy: Record<AppLocale, SeoCopy> = {
     findMyView: { title: "色の見え方の目安を探す | NUNBIT", description: "写真比較のための見え方の目安を探せます。医療的な判定を行うものではありません。" },
     learn: { title: "色覚特性と写真で見る色の違い | NUNBIT", description: "赤緑・青黄の色覚特性で、日常の写真にある色の違いがどう感じられるかを学べます。" },
     faq: { title: "色覚特性向け写真ツール FAQ | NUNBIT", description: "写真変換、色覚シミュレーション、写真のプライバシー、HEX・RGB色抽出についてのよくある質問です。" },
+    colorBlindTest: { title: "無料オンライン色覚テスト（石原式）| NUNBIT", description: "8枚のパブリックドメイン石原式カラープレートで、ブラウザ上で色覚テストを手軽に試せます。無料・端末内処理で、医学的な判定の代わりにはなりません。" },
   },
   "zh-TW": {
     home: { title: "色覺差異照片轉換與取色工具 | NUNBIT", description: "提供色覺差異照片轉換、視覺模擬與圖片取色工具；所有照片都在你的裝置上處理。" },
@@ -65,6 +69,7 @@ const seoCopy: Record<AppLocale, SeoCopy> = {
     findMyView: { title: "探索色覺類型 | NUNBIT", description: "為照片比較找出合適的色覺參考。這是參考工具，不能取代醫療評估。" },
     learn: { title: "色覺差異：用照片比較色彩 | NUNBIT", description: "透過照片了解紅綠與藍黃色覺差異，如何讓日常色彩的差別看起來不同。" },
     faq: { title: "色覺差異照片工具 FAQ | NUNBIT", description: "關於照片轉換、色覺模擬、裝置內隱私處理，以及 HEX、RGB 取色的常見問題。" },
+    colorBlindTest: { title: "免費線上色盲測試（石原氏檢測圖）| NUNBIT", description: "使用 8 張公共領域石原氏色盲檢測圖，在瀏覽器中輕鬆做色盲測試。免費、於裝置端處理，不能取代醫療評估。" },
   },
   ru: {
     home: { title: "Инструменты для фото при дальтонизме | NUNBIT", description: "Преобразуйте фото для людей с нарушением цветового зрения, имитируйте восприятие цветов и извлекайте цвета из изображений — всё на устройстве." },
@@ -75,6 +80,7 @@ const seoCopy: Record<AppLocale, SeoCopy> = {
     findMyView: { title: "Выберите профиль цветового зрения | NUNBIT", description: "Найдите исходный профиль для сравнения фотографий. Это справочный инструмент, а не медицинская оценка." },
     learn: { title: "Дальтонизм: сравнение цветов на фото | NUNBIT", description: "Узнайте на примерах фото, как протан-, деутан- и тритан-тип зрения могут менять различие цветов." },
     faq: { title: "FAQ об инструментах для фото при дальтонизме | NUNBIT", description: "Ответы о преобразовании фото, симуляции цветового зрения, приватности на устройстве и извлечении цветов HEX и RGB." },
+    colorBlindTest: { title: "Бесплатный онлайн-тест на дальтонизм (Исихара) | NUNBIT", description: "Пройдите короткий тест на дальтонизм по 8 таблицам Исихары в браузере. Бесплатно, обработка на устройстве — это не медицинская оценка." },
   },
   fr: {
     home: { title: "Outils photo pour daltonisme | NUNBIT", description: "Transformez des photos pour le daltonisme, simulez une vision des couleurs et prélevez les couleurs d'une image, directement sur votre appareil." },
@@ -85,6 +91,7 @@ const seoCopy: Record<AppLocale, SeoCopy> = {
     findMyView: { title: "Explorer un profil de vision des couleurs | NUNBIT", description: "Trouvez un profil de départ pour comparer des photos. Cet outil est indicatif et ne remplace pas un avis médical." },
     learn: { title: "Daltonisme : comparer les couleurs en photo | NUNBIT", description: "Découvrez comment les visions protan, deutan et tritan peuvent modifier les différences de couleur dans des photos quotidiennes." },
     faq: { title: "FAQ des outils photo pour daltonisme | NUNBIT", description: "Réponses sur la conversion de photos, la simulation visuelle, la confidentialité des photos et l'extraction de couleurs HEX et RGB." },
+    colorBlindTest: { title: "Test de daltonisme en ligne gratuit (Ishihara) | NUNBIT", description: "Faites un test de daltonisme rapide avec 8 planches d'Ishihara du domaine public, dans votre navigateur. Gratuit, traité sur l'appareil — pas un avis médical." },
   },
   de: {
     home: { title: "Foto-Tools für Farbfehlsichtigkeit | NUNBIT", description: "Fotos für Farbfehlsichtigkeit umwandeln, Farbsehen simulieren und Bildfarben auslesen — alles direkt auf deinem Gerät." },
@@ -95,6 +102,7 @@ const seoCopy: Record<AppLocale, SeoCopy> = {
     findMyView: { title: "Farbsehprofil erkunden | NUNBIT", description: "Finde einen Ausgangspunkt für Fotovergleiche. Dieses Werkzeug ist nur eine Orientierung und keine medizinische Beurteilung." },
     learn: { title: "Farbfehlsichtigkeit: Fotos vergleichen | NUNBIT", description: "Erfahre anhand von Fotos, wie Protan-, Deutan- und Tritan-Farbsehen Farbunterschiede verändern können." },
     faq: { title: "FAQ zu Foto-Tools für Farbfehlsichtigkeit | NUNBIT", description: "Antworten zu Foto-Umwandlung, Farbseh-Simulation, Foto-Datenschutz sowie HEX- und RGB-Farbwerten." },
+    colorBlindTest: { title: "Kostenloser Online-Test auf Farbfehlsichtigkeit | NUNBIT", description: "Mach einen kurzen Test mit 8 gemeinfreien Ishihara-Tafeln direkt im Browser. Kostenlos, auf dem Gerät verarbeitet — keine medizinische Beurteilung." },
   },
   es: {
     home: { title: "Herramientas de fotos para daltonismo | NUNBIT", description: "Transforma fotos para personas con daltonismo, simula la visión del color y extrae colores de imágenes. Todo se procesa en tu dispositivo." },
@@ -105,6 +113,7 @@ const seoCopy: Record<AppLocale, SeoCopy> = {
     findMyView: { title: "Explora un tipo de visión del color | NUNBIT", description: "Encuentra una referencia inicial para comparar fotos. Es una herramienta orientativa, no una evaluación médica." },
     learn: { title: "Daltonismo: comparar colores en fotos | NUNBIT", description: "Explora cómo las visiones protan, deutan y tritan pueden cambiar las diferencias de color en fotos cotidianas." },
     faq: { title: "Preguntas frecuentes de fotos y daltonismo | NUNBIT", description: "Respuestas sobre conversión de fotos, simulación de visión del color, privacidad y extracción de colores HEX y RGB." },
+    colorBlindTest: { title: "Test de daltonismo online gratis (Ishihara) | NUNBIT", description: "Haz un test de daltonismo rápido con 8 láminas de Ishihara de dominio público en tu navegador. Gratis, procesado en tu dispositivo — no es una evaluación médica." },
   },
   pt: {
     home: { title: "Ferramentas de foto para daltonismo | NUNBIT", description: "Transforme fotos para pessoas daltônicas, simule a visão de cores e extraia cores de imagens. Tudo é processado no seu dispositivo." },
@@ -115,6 +124,7 @@ const seoCopy: Record<AppLocale, SeoCopy> = {
     findMyView: { title: "Explore um tipo de visão de cores | NUNBIT", description: "Encontre uma referência inicial para comparar fotos. É uma ferramenta de referência, não uma avaliação médica." },
     learn: { title: "Daltonismo: compare cores em fotos | NUNBIT", description: "Explore como as visões protan, deutan e tritan podem mudar as diferenças de cor em fotos do dia a dia." },
     faq: { title: "Perguntas frequentes sobre fotos e daltonismo | NUNBIT", description: "Respostas sobre conversão de fotos, simulação de visão de cores, privacidade e extração de cores HEX e RGB." },
+    colorBlindTest: { title: "Teste de daltonismo online grátis (Ishihara) | NUNBIT", description: "Faça um teste de daltonismo rápido com 8 pranchas de Ishihara de domínio público no navegador. Grátis, processado no dispositivo — não é uma avaliação médica." },
   },
 };
 

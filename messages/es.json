@@ -4,7 +4,13 @@
     "languageNav": "Elegir idioma",
     "privacy": "Tus fotos no salen de este dispositivo.",
     "supportMessage": "Si NUNBIT te ayudó a compartir un poco más de color, tu apoyo nos ayuda a seguir creando.",
-    "supportCta": "Apoya a NUNBIT en Ko-fi"
+    "supportCta": "Apoya a NUNBIT en Ko-fi",
+    "siteNav": "Navegación del sitio",
+    "navTranslate": "Traducir",
+    "navFindMyView": "Find My View",
+    "navLive": "Live Camera",
+    "navColorPick": "Selector de color",
+    "navLearn": "Learn"
   },
   "Home": {
     "eyebrow": "Un poco más cerca, a través del color",

@@ -4,7 +4,13 @@
     "languageNav": "選擇語言",
     "privacy": "相片不會離開這台裝置。",
     "supportMessage": "如果 NUNBIT 讓你多分享了一點色彩，歡迎支持我們繼續前進。",
-    "supportCta": "在 Ko-fi 支持 NUNBIT"
+    "supportCta": "在 Ko-fi 支持 NUNBIT",
+    "siteNav": "網站導覽",
+    "navTranslate": "翻譯照片",
+    "navFindMyView": "Find My View",
+    "navLive": "Live Camera",
+    "navColorPick": "取色",
+    "navLearn": "Learn"
   },
   "Home": {
     "eyebrow": "透過色彩，靠近一點",

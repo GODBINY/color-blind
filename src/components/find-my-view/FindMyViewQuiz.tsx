@@ -64,6 +64,7 @@ export function FindMyViewQuiz({ locale }: { locale: string }) {
       <p className="text-[13px] font-medium text-[var(--color-text-sub)]">Find My View</p>
       <h1 className="mt-3 whitespace-pre-line text-[32px] font-semibold leading-[40px] tracking-[-0.04em] md:text-[40px] md:leading-[48px]">{isKo ? "색약·색맹 시야를\n사진으로 확인해요" : "Set a color-vision view\nfor photo comparisons"}</h1>
       <p className="mt-5 max-w-[580px] text-[16px] leading-[26px] text-[var(--color-text-sub)]">{isKo ? "1920년 공개 도메인 이시하라 원본 8장으로 적록 계열의 색 차이를 가볍게 확인한 뒤, 사진 비교에 쓸 시야를 직접 골라요." : "Use eight public-domain Ishihara plates from the 1920 original as a quick red–green screen, then choose the view you want to use for photo comparisons."}</p>
+      <Link href="/learn/color-blind-test" className="mt-3 inline-block text-[13px] text-[var(--color-text-sub)] underline underline-offset-4">{isKo ? "이시하라 판에 대해 더 알아보기" : "More about how this test works"}</Link>
       <div className="mt-10 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-m)]">
         <p className="text-[15px] font-semibold">{isKo ? "시작하기 전에" : "Before you begin"}</p>
         <ul className="mt-4 space-y-3 text-[14px] leading-6 text-[var(--color-text-sub)]">

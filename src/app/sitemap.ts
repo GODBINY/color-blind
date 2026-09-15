@@ -12,6 +12,7 @@ const paths = [
   { path: "/find-my-view", lastModified: "2026-07-27T23:02:23+09:00", locales: routing.locales },
   { path: "/learn", lastModified: LEARN_ARTICLE_DATES.modified, locales: learnLocales },
   { path: "/learn/faq", lastModified: LEARN_ARTICLE_DATES.modified, locales: learnLocales },
+  { path: "/learn/color-blind-test", lastModified: LEARN_ARTICLE_DATES.modified, locales: learnLocales },
   { path: "/learn/protanopia", lastModified: LEARN_ARTICLE_DATES.modified, locales: learnLocales },
   { path: "/learn/deuteranopia", lastModified: LEARN_ARTICLE_DATES.modified, locales: learnLocales },
   { path: "/learn/tritanopia", lastModified: LEARN_ARTICLE_DATES.modified, locales: learnLocales },

@@ -4,7 +4,13 @@
     "languageNav": "언어 선택",
     "privacy": "사진을 업로드해도 별도 서버에 저장되지 않아요.",
     "supportMessage": "NUNBIT이 더 많은 색의 차이를 전할 수 있도록, 응원해 주세요.",
-    "supportCta": "Ko-fi에서 NUNBIT 응원하기"
+    "supportCta": "Ko-fi에서 NUNBIT 응원하기",
+    "siteNav": "사이트 메뉴",
+    "navTranslate": "번역하기",
+    "navFindMyView": "Find My View",
+    "navLive": "Live Camera",
+    "navColorPick": "색상 추출",
+    "navLearn": "Learn"
   },
   "Home": {
     "eyebrow": "서로의 색을 더 가까이",

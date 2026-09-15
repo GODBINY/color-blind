@@ -41,9 +41,15 @@ export default async function LearnPage({
         <p className="mt-2 text-[13px] leading-5 text-[var(--color-text-sub)]">{type.intro}</p>
       </Link>)}
     </section>
-    <section className="mt-16 grid gap-6 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-white p-6 shadow-[var(--shadow-s)] md:grid-cols-[1fr_auto] md:items-center md:p-8">
-      <div><p className="text-[13px] font-medium text-[var(--color-text-sub)]">FAQ</p><h2 className="mt-2 text-[22px] font-semibold tracking-[-0.03em]">{isKo ? "궁금한 점을 차분히 풀어봐요" : "A few gentle answers"}</h2><p className="mt-2 text-[14px] leading-6 text-[var(--color-text-sub)]">{isKo ? "색을 다르게 보는 일, 그리고 사진을 함께 나누는 일에 대한 질문을 모았어요." : "Questions about seeing color differently, and sharing a photo with care."}</p></div>
-      <Link href="/learn/faq" className="inline-flex min-h-12 items-center justify-center rounded-[var(--radius-m)] border border-[var(--color-border)] px-5 text-[15px] font-medium">{isKo ? "FAQ 보기" : "Read the FAQ"}</Link>
+    <section className="mt-16 grid gap-4 md:grid-cols-2">
+      <div className="grid gap-6 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-white p-6 shadow-[var(--shadow-s)] md:p-8">
+        <div><p className="text-[13px] font-medium text-[var(--color-text-sub)]">{isKo ? "온라인 테스트" : "Online test"}</p><h2 className="mt-2 text-[22px] font-semibold tracking-[-0.03em]">{isKo ? "색약 테스트를 가볍게 해봐요" : "Try a color blind test"}</h2><p className="mt-2 text-[14px] leading-6 text-[var(--color-text-sub)]">{isKo ? "공개 도메인 이시하라 판 8장으로 적록 계열의 색 차이를 살펴봐요." : "Check red–green differences with eight public-domain Ishihara plates."}</p></div>
+        <Link href="/learn/color-blind-test" className="inline-flex min-h-12 items-center justify-center rounded-[var(--radius-m)] border border-[var(--color-border)] px-5 text-[15px] font-medium">{isKo ? "테스트 알아보기" : "Read about the test"}</Link>
+      </div>
+      <div className="grid gap-6 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-white p-6 shadow-[var(--shadow-s)] md:p-8">
+        <div><p className="text-[13px] font-medium text-[var(--color-text-sub)]">FAQ</p><h2 className="mt-2 text-[22px] font-semibold tracking-[-0.03em]">{isKo ? "궁금한 점을 차분히 풀어봐요" : "A few gentle answers"}</h2><p className="mt-2 text-[14px] leading-6 text-[var(--color-text-sub)]">{isKo ? "색을 다르게 보는 일, 그리고 사진을 함께 나누는 일에 대한 질문을 모았어요." : "Questions about seeing color differently, and sharing a photo with care."}</p></div>
+        <Link href="/learn/faq" className="inline-flex min-h-12 items-center justify-center rounded-[var(--radius-m)] border border-[var(--color-border)] px-5 text-[15px] font-medium">{isKo ? "FAQ 보기" : "Read the FAQ"}</Link>
+      </div>
     </section>
     <section className="mt-6 flex flex-col gap-5 rounded-[var(--radius-l)] border border-[var(--color-border)] bg-[var(--color-bg)] p-6 md:flex-row md:items-center md:justify-between md:p-8">
       <p className="max-w-[580px] text-[16px] leading-[26px] text-[var(--color-text-sub)]">{nav("supportMessage")}</p>

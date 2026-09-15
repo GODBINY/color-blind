@@ -4,7 +4,13 @@
     "languageNav": "言語を選ぶ",
     "privacy": "写真はこの端末から送信されません。",
     "supportMessage": "NUNBITがもっと多くの色の違いを届けられるよう、応援してください。",
-    "supportCta": "Ko-fiでNUNBITを応援"
+    "supportCta": "Ko-fiでNUNBITを応援",
+    "siteNav": "サイトナビゲーション",
+    "navTranslate": "翻訳する",
+    "navFindMyView": "Find My View",
+    "navLive": "Live Camera",
+    "navColorPick": "色を抽出",
+    "navLearn": "Learn"
   },
   "Home": {
     "eyebrow": "色を通して、もう少し近くに",
